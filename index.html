@@ -457,7 +457,7 @@ select.fi{cursor:pointer}
     <div class="cpanel">
       <div class="ctabs">
         <button class="ctab on" onclick="cTab('chat',this)">Chat</button>
-        <button class="ctab" onclick="cTab('people',this)">People (3)</button>
+        <button class="ctab" onclick="cTab('people',this)" id="people-tab">People (1)</button>
         <button class="ctab" onclick="cTab('security',this)">🔒</button>
       </div>
       <div id="p-chat" class="cmsgs">
@@ -934,18 +934,36 @@ function authTab(t) {
 function tpw(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'show':'hide';}
 function strChk(pw){var s=0;if(pw.length>=8)s++;if(pw.length>=12)s++;if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^A-Za-z0-9]/.test(pw))s++;var f=document.getElementById('sfill');f.style.width=Math.min(s/5*100,100)+'%';f.style.background=['#ef4444','#f97316','#eab308','#22c55e','#10b981'][Math.max(0,s-1)];}
 function doLogin(){
-  var e=document.getElementById('l-em').value;
-  if(!e){toast('⚠ Enter your email','wn');return;}
-  toast('🔐 Verifying…','');
-  setTimeout(function(){var n=e.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});setUser(n,e);showView('view-app');toast('✅ Signed in · E2E encryption active','ok');},900);
+  var e=document.getElementById('l-em').value.trim();
+  var pw=document.getElementById('l-pw').value;
+  // Allow login even without email - just use a default name
+  var name='User';
+  if(e&&e.includes('@')){
+    name=e.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+  } else if(e){
+    name=e.replace(/\b\w/g,function(c){return c.toUpperCase();});
+  }
+  var email=e||'user@zoum.app';
+  toast('🔐 Signing in…','');
+  setTimeout(function(){
+    setUser(name,email);
+    showView('view-app');
+    toast('✅ Welcome to Zoum · E2E encrypted','ok');
+  },600);
 }
 function doRegister(){
-  var n=document.getElementById('r-name').value,pw=document.getElementById('r-pw').value,pw2=document.getElementById('r-pw2').value;
+  var n=document.getElementById('r-name').value.trim();
+  var pw=document.getElementById('r-pw').value;
+  var pw2=document.getElementById('r-pw2').value;
+  var email=document.getElementById('r-em').value.trim()||'user@zoum.app';
   if(!n){toast('⚠ Enter your display name','wn');return;}
-  if(pw.length<12){toast('⚠ Password must be 12+ characters','wn');return;}
-  if(pw!==pw2){toast('⚠ Passwords do not match','wn');return;}
+  if(pw&&pw2&&pw!==pw2){toast('⚠ Passwords do not match','wn');return;}
   toast('🔐 Creating account…','');
-  setTimeout(function(){setUser(n,document.getElementById('r-em').value||'user@example.com');showView('view-app');toast('🎉 Account created · E2E enabled','ok');},900);
+  setTimeout(function(){
+    setUser(n,email);
+    showView('view-app');
+    toast('🎉 Welcome to Zoum · E2E encryption enabled','ok');
+  },600);
 }
 function doLogout(){
   stopProgTimer();
@@ -973,8 +991,16 @@ function gOAuth(target){
 function gStep2(){document.getElementById('g-step1').style.display='none';document.getElementById('g-step2').style.display='';setTimeout(function(){document.getElementById('g-em').focus();},60);}
 function gSelect(name,email){
   closeM('modal-google');
-  if(S.gTarget==='zoum'){toast('🔐 Signing in with Google…','');setTimeout(function(){setUser(name,email);showView('view-app');toast('✅ Signed in as '+name,'ok');},900);}
-  else{finishConnect(S.gTarget,'Google:'+email,'google');}
+  if(S.gTarget==='zoum'){
+    toast('🔐 Signing in with Google…','');
+    setTimeout(function(){
+      setUser(name,email);
+      showView('view-app');
+      toast('✅ Signed in as '+name,'ok');
+    },600);
+  } else {
+    finishConnect(S.gTarget,'Google:'+email,'google');
+  }
 }
 function gSubmit(){
   var e=document.getElementById('g-em').value.trim();
@@ -1042,7 +1068,11 @@ function finishConnect(key,email,method){
     if(card){card.classList.remove('spin');card.classList.add('con');}
     var st=document.getElementById('pst-'+key);if(st)st.textContent='Connected ✓';
     refreshSettings();
-    toast('✅ '+p.name+' connected securely','ok');
+    toast('✅ '+p.name+' connected! Tap a title to start watching.','ok');
+    // Immediately open browse catalog so user can pick content
+    if(CATALOG&&CATALOG[key]){
+      setTimeout(function(){openBrowseFor(key);},400);
+    }
   },1400);
 }
 function disconnectPlatform(key){
@@ -1300,7 +1330,7 @@ function renderPeoplePanel(){
     '<span class="pname2" style="color:var(--mut);font-size:.78rem">Invite someone…</span></div>';
   list.innerHTML=html;
   // Update tab count
-  var tab=document.querySelector('.ctab:nth-child(2)');
+  var tab=document.getElementById('people-tab')||document.querySelector('.ctab:nth-child(2)');
   if(tab)tab.textContent='People ('+(1+(S.room.invitees?S.room.invitees.length:0))+')';
 }
 
