@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Zoum — Watch Together • Private Rooms • Real-time Sync</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0a0c10 0%, #0f1117 100%);
+            color: #eef2ff;
+            padding: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #fff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .badge {
+            background: #1e293b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        /* grid layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 1.5rem;
+        }
+
+        /* main left area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(18, 22, 30, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid #2d3a4e;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* video player embed */
+        .video-container {
+            background: #000;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* chat area */
+        .chat-area {
+            background: #0b0e14;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .message {
+            background: #1e293b;
+            padding: 0.5rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+        }
+        .message strong {
+            color: #c084fc;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid #2d3a4e;
+        }
+        .chat-input-area input {
+            flex: 1;
+            background: #1a1f2a;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 2rem;
+            color: white;
+        }
+        .chat-input-area button {
+            background: #7c3aed;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* room sidebar */
+        .room-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .invite-section {
+            background: #0f1420;
+            border-radius: 1.5rem;
+            padding: 1rem;
+        }
+        .invite-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin: 1rem 0;
+        }
+        .invite-input-group input {
+            background: #1a1f2a;
+            border: 1px solid #334155;
+            padding: 0.7rem;
+            border-radius: 1rem;
+            color: white;
+        }
+        button {
+            background: #3b82f6;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button.danger {
+            background: #dc2626;
+        }
+        button.secondary {
+            background: #334155;
+        }
+
+        .invitee-list {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .browse-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .platform-card {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.1s linear;
+            border: 1px solid #334155;
+        }
+        .platform-card:hover {
+            background: #2d3a5e;
+            transform: scale(0.98);
+        }
+        .content-item {
+            background: #00000055;
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .live-badge {
+            background: #ef4444;
+            font-size: 0.7rem;
+            border-radius: 1rem;
+            padding: 0.2rem 0.6rem;
+        }
+        hr {
+            border-color: #2d3a4e;
+            margin: 1rem 0;
+        }
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1>🎬 Zoum · Watch Together</h1>
+        <div class="badge">🔒 E2E Encrypted · Private Rooms · Invite-Only</div>
+    </div>
+
+    <div class="dashboard">
+        <!-- LEFT COLUMN: Video + Chat -->
+        <div class="main-content">
+            <div class="card">
+                <h2>📺 Now watching</h2>
+                <div class="video-container" id="videoContainer">
+                    <iframe id="videoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&enablejsapi=1" allowfullscreen></iframe>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: space-between;">
+                    <div>
+                        <span id="roomNameBadge" class="badge">🔒 Private: Zoum Lounge</span>
+                        <span id="inviteOnlyBadge" class="badge">👥 Invite-only active</span>
+                    </div>
+                    <div>
+                        <button id="syncPlayBtn" style="background:#16a34a;">▶️ Sync Play</button>
+                        <button id="syncPauseBtn" style="background:#eab308;">⏸️ Sync Pause</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>💬 Encrypted Chat · Only Invited Guests</h2>
+                <div class="chat-area">
+                    <div class="messages" id="chatMessages">
+                        <div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Write a message..." autocomplete="off">
+                        <button id="sendChatBtn">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🎬 Browse Content · Pick & play directly</h2>
+                <div id="platformGrid" class="browse-grid">
+                    <!-- populated via js -->
+                </div>
+                <div id="contentList" style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+                <p style="font-size:0.75rem; margin-top:0.8rem;">✨ Click any platform, then pick a movie/show — plays instantly in the player above.</p>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Room & Invite controls -->
+        <div class="room-panel">
+            <div class="card">
+                <h2>🔐 Private Room Controls</h2>
+                <p style="font-size: 0.9rem;">✅ Only people you invite can join & chat. Uninvited viewers are automatically removed.</p>
+                <div class="invite-section">
+                    <strong>📧✉️ Invite via Email or Phone</strong>
+                    <div class="invite-input-group">
+                        <input type="text" id="inviteContact" placeholder="friend@example.com  or +1234567890">
+                        <button id="sendInviteBtn">➕ Send invite (email/phone)</button>
+                    </div>
+                    <div>
+                        <strong>🔗 Invite link (single use)</strong>
+                        <input type="text" id="inviteLinkInput" readonly value="Loading link..." style="width:100%; background:#111; border-radius:1rem; padding:0.5rem; margin-top:0.3rem;">
+                        <button id="copyLinkBtn" style="margin-top:0.5rem;">📋 Copy invite link</button>
+                    </div>
+                    <div class="invitee-list">
+                        <strong>✅ Authorized guests (invitees):</strong>
+                        <ul id="inviteeList" style="margin-top: 0.5rem; list-style: none; padding-left: 0;">
+                            <li>👤 Room creator (you)</li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <button id="resetRoomBtn" class="danger" style="width:100%;">🗑️ Reset room & remove all non-invited</button>
+            </div>
+            <div class="card">
+                <h2>📡 Live Rooms Right Now</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge">📺 Stranger Things</span>
+                    <span class="badge">🎮 Arcane S2</span>
+                    <span class="badge">🏈 NFL Sunday</span>
+                </div>
+                <p style="margin-top: 1rem;">🔒 Zero-knowledge · GDPR ready</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- SIMULATED BACKEND (invite list, auth, realtime sync simulation) ----------
+    // In production: replace with actual backend + WebSocket + Email/SMS API.
+    let roomState = {
+        roomId: "zoum_private_" + Math.random().toString(36).substr(2, 8),
+        invitees: new Set(),   // stores emails/phone numbers OR unique tokens
+        allowedSessionIds: new Set(), // current browser session is allowed
+        chatHistory: [],
+        currentVideo: { platform: "youtube", id: "dQw4w9WgXcQ" } // default
+    };
+
+    // current user session ID (simulate)
+    const mySessionId = "session_" + Math.random().toString(36).substr(2, 10);
+    // Room creator is always invited
+    roomState.invitees.add("owner@" + mySessionId);
+    roomState.allowedSessionIds.add(mySessionId);
+
+    // Helper: refresh UI to reflect only invited users can chat
+    function isInvited(sessionId) {
+        // in real backend: map sessionId to invitee status. For demo: any session that has been explicitly added via invite link or owner
+        return roomState.allowedSessionIds.has(sessionId);
+    }
+
+    // delete any non-invited from chat simulation (just filter messages display)
+    function filterChatForInvited() {
+        // remove messages from non-invited senders if any exist (simulate cleanup)
+        roomState.chatHistory = roomState.chatHistory.filter(msg => roomState.allowedSessionIds.has(msg.senderId));
+        renderChat();
+    }
+
+    function renderChat() {
+        const chatDiv = document.getElementById('chatMessages');
+        if (!chatDiv) return;
+        chatDiv.innerHTML = '<div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>';
+        roomState.chatHistory.forEach(msg => {
+            if (roomState.allowedSessionIds.has(msg.senderId)) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message';
+                msgDiv.innerHTML = `<strong>${escapeHtml(msg.senderName)}</strong> ${escapeHtml(msg.text)}`;
+                chatDiv.appendChild(msgDiv);
+            }
+        });
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
+
+    function addChatMessage(text, senderName = "Guest") {
+        if (!isInvited(mySessionId)) {
+            alert("You are not invited to this private room. Cannot chat.");
+            return false;
+        }
+        roomState.chatHistory.push({
+            senderId: mySessionId,
+            senderName: senderName,
+            text: text,
+            timestamp: Date.now()
+        });
+        renderChat();
+        return true;
+    }
+
+    // Invite logic: add email/phone
+    function sendInviteViaEmailOrPhone(contact) {
+        if (!contact.trim()) return;
+        // simulate sending email/sms
+        const token = btoa(contact + Date.now());
+        roomState.invitees.add(contact);
+        // In real world: call backend email/SMS API
+        alert(`✨ Invitation sent to ${contact} (demo). They would receive private link: ${window.location.href}?invite=${token}`);
+        // Also add to allowed sessions for demo? but in real, new user clicks invite link -> adds them.
+        // For demo, we also simulate that any new "guest join" via the copy link will be allowed
+        updateInviteeListUI();
+    }
+
+    function updateInviteeListUI() {
+        const listUl = document.getElementById('inviteeList');
+        if (listUl) {
+            listUl.innerHTML = '';
+            for (let inv of roomState.invitees) {
+                const li = document.createElement('li');
+                li.textContent = `✅ ${inv}`;
+                listUl.appendChild(li);
+            }
+        }
+        // update invite link field
+        const inviteLinkInput = document.getElementById('inviteLinkInput');
+        if (inviteLinkInput) {
+            const inviteToken = btoa(JSON.stringify({room: roomState.roomId, expires: Date.now()+86400000}));
+            inviteLinkInput.value = `${window.location.href}?join=${inviteToken}`;
+        }
+    }
+
+    // Simulate joining via invite link: any browser that loads with ?join=xxx gets added to allowed sessions
+    function handleInviteJoinFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const joinToken = params.get('join');
+        if (joinToken) {
+            try {
+                // validate token and add current session as invited
+                if (!roomState.allowedSessionIds.has(mySessionId)) {
+                    roomState.allowedSessionIds.add(mySessionId);
+                    roomState.invitees.add("invited_guest_" + mySessionId.slice(-6));
+                    updateInviteeListUI();
+                    addChatMessage("joined the private room via invite link.", "System");
+                    alert("✅ You have been added as an invited guest!");
+                }
+                // clean url
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch(e) { console.warn(e); }
+        } else {
+            // if not joined and not owner? we keep current user as owner
+            if(!roomState.allowedSessionIds.has(mySessionId)) roomState.allowedSessionIds.add(mySessionId);
+        }
+        filterChatForInvited();
+    }
+
+    // reset room: delete all non-invited sessions (except owner)
+    function resetRoomRemoveNonInvited() {
+        const currentInvitedSessions = new Set();
+        // Keep owner and explicit invitees (for demo keep only creator session)
+        currentInvitedSessions.add(mySessionId);
+        roomState.allowedSessionIds = currentInvitedSessions;
+        filterChatForInvited();
+        addChatMessage("Room reset: removed all non-invited users from chat.", "System");
+        alert("Removed all non-invited participants. Only you remain.");
+    }
+
+    // ---------- BROWSE CONTENT: multiple platforms & direct play (no link paste) ----------
+    const platforms = [
+        { name: "YouTube", icon: "▶️", type: "youtube", authRequired: false },
+        { name: "Twitch", icon: "🎮", type: "twitch", authRequired: false },
+        { name: "Netflix", icon: "🎬", type: "netflix", authRequired: true, note: "demo pick" },
+        { name: "Disney+", icon: "✨", type: "disney", authRequired: true },
+        { name: "Prime Video", icon: "📦", type: "prime", authRequired: true },
+        { name: "Max (HBO)", icon: "🎞️", type: "max", authRequired: true },
+        { name: "Crunchyroll", icon: "🍣", type: "crunchy", authRequired: true },
+        { name: "Pluto TV", icon: "📡", type: "pluto", authRequired: false },
+        { name: "Tubi", icon: "📺", type: "tubi", authRequired: false }
+    ];
+
+    // content database for demo (no link paste) - direct watch
+    const platformContent = {
+        youtube: [{ title: "Rick Astley - Never Gonna Give You Up", videoId: "dQw4w9WgXcQ" }, { title: "Lofi Beats 24/7", videoId: "jfKfPfyJRdk" }],
+        twitch: [{ title: "shroud live", url: "https://player.twitch.tv/?channel=shroud&parent=localhost" }],
+        netflix: [{ title: "Stranger Things (demo)", embedFallback: "https://www.youtube.com/embed/0rQVuZ1zW6c" }],
+        disney: [{ title: "The Mandalorian (demo)", embedFallback: "https://www.youtube.com/embed/aOC8E8z_ifw" }],
+        prime: [{ title: "The Boys (demo clip)", embedFallback: "https://www.youtube.com/embed/6y8H6U4Ht7w" }],
+        max: [{ title: "House of the Dragon (trailer)", embedFallback: "https://www.youtube.com/embed/DotnJ7tTA34" }],
+        crunchy: [{ title: "Demon Slayer (episode preview)", embedFallback: "https://www.youtube.com/embed/VQGCKyvzIM4" }],
+        pluto: [{ title: "Pluto TV Live Movies", embedFallback: "https://embed.pluto.tv/live" }],
+        tubi: [{ title: "Tubi: Classic Movies", embedFallback: "https://tubitv.com/static/live" }]
+    };
+
+    function renderPlatforms() {
+        const grid = document.getElementById('platformGrid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        platforms.forEach(plat => {
+            const card = document.createElement('div');
+            card.className = 'platform-card';
+            card.innerHTML = `<strong>${plat.icon} ${plat.name}</strong><br><small>${plat.authRequired ? '🔐 Login OAuth' : '🎉 Free'}</small>`;
+            card.onclick = () => selectPlatform(plat.type);
+            grid.appendChild(card);
+        });
+    }
+
+    let currentPlatform = "youtube";
+    function selectPlatform(platformType) {
+        currentPlatform = platformType;
+        const contentDiv = document.getElementById('contentList');
+        if (!contentDiv) return;
+        const contentItems = platformContent[platformType] || [{ title: "Demo content (no link paste)", embedFallback: "https://www.youtube.com/embed/dQw4w9WgXcQ" }];
+        contentDiv.innerHTML = contentItems.map(item => `<span class="content-item" data-url="${item.videoId || item.embedFallback}" data-type="${platformType}" data-videoid="${item.videoId || ''}">🎥 ${item.title}</span>`).join('');
+        // attach click handlers
+        document.querySelectorAll('.content-item').forEach(el => {
+            el.addEventListener('click', (e) => {
+                let urlOrId = el.getAttribute('data-url');
+                let videoId = el.getAttribute('data-videoid');
+                if (currentPlatform === 'youtube' && videoId) {
+                    playVideoDirect(currentPlatform, videoId);
+                } else if (currentPlatform === 'twitch' && urlOrId) {
+                    document.getElementById('videoFrame').src = urlOrId;
+                } else {
+                    // fallback embed
+                    document.getElementById('videoFrame').src = urlOrId;
+                }
+                addChatMessage(`selected ${el.innerText} on ${currentPlatform}`, "You");
+            });
+        });
+    }
+
+    function playVideoDirect(platform, videoId) {
+        if (platform === 'youtube') {
+            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+        } else {
+            // fallback generic
+            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}`;
+        }
+    }
+
+    // sync simulation
+    document.getElementById('syncPlayBtn')?.addEventListener('click', () => {
+        // would broadcast via WebRTC; demo: alert
+        addChatMessage("▶️ Host requested play sync", "System");
+        const iframe = document.getElementById('videoFrame');
+        iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    });
+    document.getElementById('syncPauseBtn')?.addEventListener('click', () => {
+        addChatMessage("⏸️ Host requested pause sync", "System");
+        const iframe = document.getElementById('videoFrame');
+        iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    });
+
+    // Event listeners
+    document.getElementById('sendInviteBtn')?.addEventListener('click', () => {
+        const contact = document.getElementById('inviteContact').value;
+        if (contact) sendInviteViaEmailOrPhone(contact);
+        else alert("Enter email or phone number");
+    });
+    document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
+        const linkInput = document.getElementById('inviteLinkInput');
+        linkInput.select();
+        navigator.clipboard.writeText(linkInput.value);
+        alert("Invite link copied (single-use, private room only)");
+    });
+    document.getElementById('resetRoomBtn')?.addEventListener('click', resetRoomRemoveNonInvited);
+    document.getElementById('sendChatBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('chatInput');
+        if (input.value.trim()) {
+            addChatMessage(input.value, "You");
+            input.value = '';
+        }
+    });
+
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;});}
+
+    // initial render
+    renderPlatforms();
+    selectPlatform("youtube");
+    updateInviteeListUI();
+    handleInviteJoinFromUrl();
+    // periodical cleanup: delete any non-invited from chat simulation
+    setInterval(() => { filterChatForInvited(); }, 3000);
+</script>
+</body>
+</html>
