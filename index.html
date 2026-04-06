@@ -756,13 +756,6 @@ var SEARCH_INDEX = [
   {name:'Encanto',type:'Disney+ Room',icon:'🌺',action:function(){joinRoom('Encanto','disney','https://www.youtube.com/embed/ByXuk9QqQkk?enablejsapi=1&rel=0');}},
   {name:'Severance',type:'Apple TV+ Room',icon:'🏢',action:function(){joinRoom('Severance','appletv','https://www.youtube.com/embed/mPLAHR8VLCA?enablejsapi=1&rel=0');}},
 ];
-  {name:'Netflix',type:'Streaming Service',icon:'🔴',action:function(){connectPlatform('netflix');}},
-  {name:'Disney+',type:'Streaming Service',icon:'🏰',action:function(){connectPlatform('disney');}},
-  {name:'YouTube',type:'Streaming Service',icon:'▶️',action:function(){connectPlatform('youtube');}},
-  {name:'HBO Max',type:'Streaming Service',icon:'📺',action:function(){connectPlatform('hbo');}},
-  {name:'Hulu',type:'Streaming Service',icon:'🟢',action:function(){connectPlatform('hulu');}},
-  {name:'Prime Video',type:'Streaming Service',icon:'📦',action:function(){connectPlatform('prime');}},
-];
 function onYouTubeIframeAPIReady(){S.playerReady=true;}
 function initPlayer(videoUrl) {
   var match = videoUrl.match(/embed\/([^?]+)/);
