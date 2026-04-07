@@ -1,1925 +1,689 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Zoum — Watch Together</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#070b12;--sur:#0c1118;--card:#111825;--card2:#151e2a;
-  --b1:rgba(255,255,255,.07);--b2:rgba(255,255,255,.13);--b3:rgba(255,255,255,.2);
-  --acc:#4f7df3;--acc2:#3d6be0;--acd:rgba(79,125,243,.15);--acb:rgba(79,125,243,.08);
-  --pur:#a855f7;--purd:rgba(168,85,247,.12);
-  --grn:#22d3a5;--grnd:rgba(34,211,165,.1);
-  --red:#f87171;--redd:rgba(248,113,113,.1);
-  --amb:#fbbf24;--ambd:rgba(251,191,36,.08);
-  --txt:#dde4f5;--mut:#5f7098;--hin:#2a3352;
-  --r:10px;--r2:14px;--r3:20px;
-  --sh:0 12px 40px rgba(0,0,0,.6);--sh2:0 4px 18px rgba(0,0,0,.4);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
-.view{display:none;min-height:100vh;flex-direction:column}
-.view.active{display:flex}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:'DM Sans',sans-serif}
-#view-auth{align-items:center;justify-content:center;padding:1.5rem;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(79,125,243,.2) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(168,85,247,.12) 0%,transparent 60%),var(--bg)}
-.auth-wrap{width:100%;max-width:420px}
-.auth-brand{text-align:center;margin-bottom:2rem}
-.brand-icon{width:56px;height:56px;background:linear-gradient(135deg,var(--acc),var(--pur));border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px;box-shadow:0 8px 28px rgba(79,125,243,.45)}
-.auth-brand h1{font-size:2.5rem;font-weight:800;letter-spacing:-.05em;background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.auth-brand p{color:var(--mut);font-size:.875rem;margin-top:4px}
-.auth-card{background:rgba(12,17,24,.92);border:1px solid var(--b2);border-radius:var(--r3);padding:2.25rem;backdrop-filter:blur(20px);box-shadow:var(--sh)}
-.atabs{display:flex;background:rgba(0,0,0,.35);border-radius:10px;padding:3px;margin-bottom:1.75rem;gap:3px}
-.atab{flex:1;padding:8px;border-radius:8px;font-size:.875rem;font-weight:600;cursor:pointer;color:var(--mut);border:none;background:none;transition:all .22s;font-family:'Syne',sans-serif}
-.atab.on{background:var(--acc);color:#fff;box-shadow:0 2px 12px rgba(79,125,243,.4)}
-.fg{margin-bottom:1.1rem}
-.fg label{display:block;font-size:.68rem;font-weight:600;color:var(--mut);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.fi{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--b2);border-radius:8px;padding:11px 14px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s,box-shadow .2s}
-.fi:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acd)}
-.fi::placeholder{color:var(--hin)}
-.fi-wrap{position:relative}.fi-wrap .fi{padding-right:46px}
-.tpw{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--mut);font-size:.72rem;font-family:'DM Sans',sans-serif;padding:4px;transition:color .15s}
-.tpw:hover{color:var(--txt)}
-select.fi{cursor:pointer}
-.str-bar{height:3px;border-radius:2px;background:var(--b1);margin-top:6px;overflow:hidden}
-.str-fill{height:100%;border-radius:2px;width:0;transition:all .35s}
-.btnp{width:100%;padding:12px;background:var(--acc);color:#fff;border:none;border-radius:9px;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .22s;box-shadow:0 4px 14px rgba(79,125,243,.35)}
-.btnp:hover{background:var(--acc2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,125,243,.45)}
-.div{text-align:center;font-size:.75rem;color:var(--hin);margin:.9rem 0;position:relative}
-.div::before,.div::after{content:'';position:absolute;top:50%;width:calc(50% - 18px);height:1px;background:var(--b1)}
-.div::before{left:0}.div::after{right:0}
-.boauth{width:100%;padding:11px 14px;border:1px solid var(--b2);border-radius:9px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:8px;color:var(--txt);background:rgba(255,255,255,.04)}
-.boauth:hover{background:rgba(255,255,255,.08);border-color:var(--b3)}
-.boauth.google{background:#fff;border-color:#dadce0;color:#3c4043}
-.boauth.google:hover{background:#f8f9fa;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.boauth.apple{background:#000;border-color:#333;color:#fff}
-.boauth.apple:hover{background:#111}
-.auth-foot{text-align:center;font-size:.72rem;color:var(--hin);margin-top:1.25rem}
-.tnav{display:flex;align-items:center;padding:0 1.5rem;height:58px;border-bottom:1px solid var(--b1);background:rgba(7,11,18,.88);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;gap:1rem;flex-shrink:0}
-.nlogo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;letter-spacing:-.04em;color:var(--txt);flex-shrink:0}
-.nlogo .ic{width:26px;height:26px;background:linear-gradient(135deg,var(--acc),var(--pur));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
-.nsrch{flex:1;max-width:320px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:9px;padding:8px 12px;transition:border-color .2s}
-.nsrch:focus-within{border-color:var(--acc)}
-.nsrch input{background:none;border:none;outline:none;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;flex:1;width:100%}
-.nsrch input::placeholder{color:var(--hin)}
-.nrt{display:flex;align-items:center;gap:9px;margin-left:auto}
-.bcreate{display:flex;align-items:center;gap:5px;background:var(--acc);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;transition:all .2s;white-space:nowrap;box-shadow:0 2px 10px rgba(79,125,243,.3)}
-.bcreate:hover{background:var(--acc2)}
-.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--pur));border:none;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#fff;font-family:'Syne',sans-serif;flex-shrink:0;transition:transform .15s}
-.nav-av:hover{transform:scale(1.08)}
-.abody{display:flex;flex:1;min-height:0}
-.sbar{width:210px;flex-shrink:0;border-right:1px solid var(--b1);background:var(--sur);padding:1rem 0;display:flex;flex-direction:column;overflow-y:auto}
-.slbl{padding:5px 1.1rem 3px;font-size:.63rem;font-weight:700;color:var(--hin);letter-spacing:.09em;text-transform:uppercase;margin-top:.25rem}
-.slink{display:flex;align-items:center;gap:9px;padding:8px 1.1rem;color:var(--mut);font-size:.84rem;font-weight:500;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent}
-.slink:hover{color:var(--txt);background:rgba(255,255,255,.04)}
-.slink.on{color:var(--acc);background:var(--acb);border-left-color:var(--acc)}
-.sico{font-size:13px;width:17px;text-align:center;flex-shrink:0}
-.sbadge{margin-left:auto;background:var(--acc);color:#fff;border-radius:99px;font-size:.58rem;font-weight:700;padding:2px 6px;font-family:'Syne',sans-serif}
-.sbadge.live{background:var(--grn);color:#042b1e;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.55}}
-.sbot{margin-top:auto;padding:.875rem 1.1rem;border-top:1px solid var(--b1)}
-.sec-chip{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--grn);font-weight:500}
-.sdot{width:6px;height:6px;border-radius:50%;background:var(--grn);animation:blink 2.5s infinite;flex-shrink:0}
-.cnt{flex:1;overflow-y:auto;padding:1.75rem 1.75rem 3rem}
-.pg-hd{margin-bottom:1.75rem}
-.pg-hd h2{font-size:1.5rem;font-weight:700;letter-spacing:-.03em}
-.pg-hd p{color:var(--mut);font-size:.84rem;margin-top:3px}
-.slb{font-size:.67rem;font-weight:700;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.875rem;display:flex;align-items:center;gap:8px}
-.ldot{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:blink 1.8s infinite;flex-shrink:0}
-.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.875rem;margin-bottom:2.5rem}
-.rcard{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .22s}
-.rcard:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:var(--sh2)}
-.rthumb{height:128px;position:relative;display:flex;align-items:center;justify-content:center;font-size:2.4rem;overflow:hidden}
-.rthumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.75) 100%)}
-.rltag{position:absolute;top:8px;left:8px;background:var(--grn);color:#042b1e;border-radius:5px;font-size:.58rem;font-weight:700;padding:3px 7px;font-family:'Syne',sans-serif;z-index:2;letter-spacing:.05em}
-.rloc{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);border:1px solid var(--b1);color:var(--amb);border-radius:5px;font-size:.64rem;padding:2px 7px;z-index:2}
-.rinfo{padding:10px 12px}
-.rtitle{font-size:.88rem;font-weight:600;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rmeta{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--mut)}
-.ravs{display:flex;margin-left:auto}
-.rav{width:18px;height:18px;border-radius:50%;border:2px solid var(--card);margin-left:-4px;font-size:.52rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;color:#fff}
-.psec{margin-bottom:2.5rem}
-.plat-intro{font-size:.82rem;color:var(--mut);margin-bottom:1.5rem;line-height:1.65;max-width:600px}
-.plat-intro strong{color:var(--grn)}
-.cat-hd{display:flex;align-items:center;gap:10px;margin-bottom:.75rem}
-.catlbl{font-size:.67rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
-.catline{flex:1;height:1px;background:var(--b1)}
-.cattag{font-size:.6rem;padding:2px 7px;border-radius:4px;font-weight:600;font-family:'Syne',sans-serif;white-space:nowrap}
-.cattag.free{background:var(--grnd);color:var(--grn);border:1px solid rgba(34,211,165,.2)}
-.cattag.prem{background:var(--acd);color:var(--acc);border:1px solid rgba(79,125,243,.25)}
-.cattag.cabl{background:var(--ambd);color:var(--amb);border:1px solid rgba(251,191,36,.2)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:.7rem;margin-bottom:1.5rem}
-.pc{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);padding:1rem .875rem .875rem;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .22s;position:relative;text-align:center;overflow:hidden}
-.pc:hover{border-color:var(--b2);transform:translateY(-3px);box-shadow:var(--sh2)}
-.pc.con{border-color:var(--grn);background:rgba(34,211,165,.04)}
-.pc.spin{border-color:var(--acc);opacity:.75;pointer-events:none}
-.pc-ck{position:absolute;top:7px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--grn);display:none;align-items:center;justify-content:center;font-size:.55rem;color:#042b1e;font-weight:900}
-.pc.con .pc-ck{display:flex}
-.plogo{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.pname{font-size:.77rem;font-weight:600;color:var(--txt);line-height:1.2}
-.pc.con .pname{color:var(--grn)}
-.pst{font-size:.63rem;color:var(--mut)}
-.pc.con .pst{color:var(--grn)}
-.ptag{font-size:.59rem;padding:2px 6px;border-radius:4px;font-weight:600;font-family:'Syne',sans-serif}
-.ptag.free{background:var(--grnd);color:var(--grn)}
-.ptag.prem{background:var(--acd);color:var(--acc)}
-.ptag.cabl{background:var(--ambd);color:var(--amb)}
-.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px)}
-.mov.open{display:flex}
-@keyframes mup{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
-.mbox{background:var(--sur);border:1px solid var(--b2);border-radius:var(--r3);width:100%;animation:mup .25s ease;box-shadow:var(--sh);position:relative}
-.mbox.sm{max-width:400px;padding:2rem}
-.mbox.md{max-width:440px;padding:2rem}
-.mbox.lg{max-width:480px;padding:2rem}
-.mhd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.4rem;gap:.875rem}
-.mhd h3{font-size:1.05rem;font-weight:700}
-.bx{width:28px;height:28px;background:rgba(255,255,255,.06);border:1px solid var(--b1);border-radius:7px;color:var(--mut);display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all .15s;flex-shrink:0;cursor:pointer}
-.bx:hover{border-color:var(--red);color:var(--red);background:var(--redd)}
-.trow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--b1);gap:1rem}
-.trow:last-of-type{border-bottom:none}
-.trow .lb{font-size:.84rem;font-weight:500}
-.trow .sb{font-size:.7rem;color:var(--mut);margin-top:2px}
-.tog{width:38px;height:21px;border-radius:11px;background:var(--hin);border:none;cursor:pointer;position:relative;transition:background .22s;flex-shrink:0}
-.tog.on{background:var(--acc)}
-.tog::after{content:'';position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .22s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.tog.on::after{left:19.5px}
-.mtabs{display:flex;gap:5px;margin-bottom:1.2rem}
-.mtab{flex:1;padding:8px;border-radius:8px;border:1px solid var(--b1);background:rgba(0,0,0,.2);color:var(--mut);font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;font-family:'Syne',sans-serif}
-.mtab.on{border-color:var(--acc);background:var(--acd);color:var(--acc)}
-.mnotice{background:var(--grnd);border:1px solid rgba(34,211,165,.22);border-radius:9px;padding:10px 13px;margin-bottom:1.2rem;display:flex;align-items:flex-start;gap:8px;font-size:.74rem;color:var(--grn);line-height:1.5}
-.pm-brand{display:flex;align-items:center;gap:14px;padding:1rem 1.25rem;border-radius:12px;margin-bottom:1.25rem}
-.pm-logo{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.4)}
-.pm-name{font-size:1.1rem;font-weight:700}
-.pm-sub{font-size:.74rem;color:var(--mut);margin-top:2px}
-.pm-sec{display:flex;align-items:center;gap:5px;font-size:.67rem;color:var(--grn);margin-top:5px;font-weight:500}
-#view-room{background:var(--bg)}
-.rtbar{display:flex;align-items:center;gap:.875rem;padding:0 1.25rem;height:52px;background:rgba(7,11,18,.92);border-bottom:1px solid var(--b1);flex-shrink:0;backdrop-filter:blur(10px)}
-.bback{background:none;border:1px solid var(--b1);border-radius:7px;color:var(--mut);padding:5px 10px;font-size:.8rem;transition:all .15s}
-.bback:hover{border-color:var(--b2);color:var(--txt)}
-.rtitle-bar{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700}
-.e2eb{display:flex;align-items:center;gap:5px;background:var(--grnd);border:1px solid rgba(34,211,165,.22);border-radius:20px;padding:4px 10px;font-size:.68rem;color:var(--grn);margin-left:auto;font-weight:600;white-space:nowrap}
-.rlayout{display:flex;flex:1;min-height:0}
-.player-wrap{flex:1;display:flex;flex-direction:column;min-height:0;background:#000}
-.player-area{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0}
-#yt-player{width:100%;height:100%;position:absolute;inset:0;z-index:1}
-.player-overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.7);transition:opacity .3s}
-.player-overlay.hidden{opacity:0;pointer-events:none}
-.big-play{width:72px;height:72px;border-radius:50%;background:rgba(79,125,243,.2);border:2px solid var(--acc);display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;transition:all .22s;margin-bottom:1rem}
-.big-play:hover{background:var(--acc);transform:scale(1.07);box-shadow:0 0 30px rgba(79,125,243,.5)}
-.player-hint{font-size:.84rem;color:rgba(255,255,255,.5);text-align:center;margin-top:.5rem;font-size:.75rem}
-.sync-chip{position:absolute;top:.875rem;right:.875rem;z-index:10;background:rgba(0,0,0,.78);border:1px solid var(--b1);border-radius:8px;padding:5px 11px;font-size:.7rem;color:var(--grn);display:flex;align-items:center;gap:6px;font-weight:500}
-.player-controls{display:flex;align-items:center;gap:8px;padding:8px 1rem;background:#000;border-top:1px solid rgba(255,255,255,.05);flex-shrink:0;z-index:5}
-.pc-btn{width:30px;height:30px;background:none;border:none;color:rgba(255,255,255,.6);font-size:.95rem;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s}
-.pc-btn:hover{background:rgba(255,255,255,.1);color:#fff}
-.pc-btn.on{color:var(--acc)}
-.prog-wrap{flex:1;display:flex;flex-direction:column;gap:4px}
-.prog-bar{width:100%;height:3px;background:rgba(255,255,255,.15);border-radius:2px;cursor:pointer;position:relative;margin-top:2px}
-.prog-fill{height:100%;background:var(--acc);border-radius:2px;transition:width .5s linear;pointer-events:none}
-.prog-thumb{position:absolute;top:-4px;width:11px;height:11px;border-radius:50%;background:var(--acc);transform:translateX(-50%);opacity:0;transition:opacity .2s;pointer-events:none}
-.prog-bar:hover .prog-thumb{opacity:1}
-.time-lbl{font-size:.68rem;color:rgba(255,255,255,.45);white-space:nowrap;display:flex;gap:6px}
-.vol-wrap{display:flex;align-items:center;gap:5px}
-.vol-bar{width:60px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;cursor:pointer;position:relative}
-.vol-fill{height:100%;background:rgba(255,255,255,.5);border-radius:2px;transition:width .1s}
-.stream-bar{display:flex;align-items:center;gap:7px;padding:7px 1.1rem;background:rgba(12,17,24,.95);border-top:1px solid var(--b1);flex-shrink:0;flex-wrap:wrap;min-height:44px}
-.stream-bar>span{font-size:.7rem;color:var(--mut);flex-shrink:0;font-weight:500}
-.pill{background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:99px;padding:4px 11px;font-size:.72rem;color:var(--txt);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px;cursor:pointer}
-.pill:hover{border-color:var(--acc);color:var(--acc)}
-.pill.on{border-color:var(--acc);background:var(--acd);color:var(--acc)}
-.cpanel{width:305px;flex-shrink:0;border-left:1px solid var(--b1);background:var(--sur);display:flex;flex-direction:column}
-.ctabs{display:flex;border-bottom:1px solid var(--b1)}
-.ctab{flex:1;padding:11px;text-align:center;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--mut);border:none;background:none;transition:all .15s;border-bottom:2px solid transparent;font-family:'Syne',sans-serif}
-.ctab.on{color:var(--acc);border-bottom-color:var(--acc)}
-.cmsgs{flex:1;overflow-y:auto;padding:.875rem;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
-.cmsg{display:flex;gap:7px;animation:mup .2s ease}
-.cav{width:26px;height:26px;border-radius:50%;flex-shrink:0;font-size:.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;color:#fff}
-.cmeta{display:flex;align-items:baseline;gap:5px;margin-bottom:2px}
-.cname{font-size:.74rem;font-weight:700}
-.ctime{font-size:.62rem;color:var(--hin)}
-.ctxt{font-size:.83rem;color:var(--mut);line-height:1.45}
-.cinarea{border-top:1px solid var(--b1);display:flex;flex-direction:column;flex-shrink:0}
-.cinput{flex:1;background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:8px;padding:8px 11px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:border-color .15s}
-.cinput:focus{border-color:var(--acc)}
-.cinput::placeholder{color:var(--hin)}
-.csend{width:32px;height:32px;background:var(--acc);border:none;border-radius:8px;color:#fff;font-size:.82rem;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
-.csend:hover{background:var(--acc2)}
-.vbar{display:flex;align-items:center;gap:6px;padding:8px .875rem;border-top:1px solid var(--b1);background:rgba(0,0,0,.2);flex-shrink:0}
-.vbtn{width:31px;height:31px;border-radius:50%;border:1px solid var(--b1);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:.78rem;color:var(--mut);transition:all .15s}
-.vbtn:hover{border-color:var(--acc);color:var(--acc)}
-.vbtn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.vbtn.red{background:var(--redd);border-color:var(--red);color:var(--red)}
-.plist{padding:.875rem;display:flex;flex-direction:column;gap:6px;overflow-y:auto;flex:1}
-.prow{display:flex;align-items:center;gap:8px;padding:7px 9px;background:rgba(0,0,0,.2);border-radius:9px;border:1px solid var(--b1)}
-.pav2{width:29px;height:29px;border-radius:50%;font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;color:#fff;flex-shrink:0}
-.pname2{font-size:.83rem;font-weight:500;flex:1}
-.pst2{font-size:.7rem;color:var(--mut)}
-.phost{font-size:.58rem;background:var(--acd);color:var(--acc);padding:2px 5px;border-radius:4px;font-weight:700;font-family:'Syne',sans-serif}
-.pspk{color:var(--grn);animation:blink 1.2s infinite}
-.secp{padding:1.1rem;overflow-y:auto;flex:1}
-.secrow{display:flex;align-items:flex-start;gap:10px;padding:11px 0;border-bottom:1px solid var(--b1)}
-.secrow:last-child{border-bottom:none}
-.secico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0}
-.secico.g{background:var(--grnd)}.secico.b{background:var(--acd)}.secico.a{background:var(--ambd)}
-.sect{font-size:.83rem;font-weight:600;margin-bottom:2px}
-.secd{font-size:.72rem;color:var(--mut);line-height:1.45}
-.secs{font-size:.68rem;margin-top:3px;font-weight:500}
-.secs.ok{color:var(--grn)}.secs.wn{color:var(--amb)}
-#view-settings{background:var(--bg)}
-.stbody{max-width:600px;margin:0 auto;padding:1.75rem;width:100%}
-.stsc{background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);margin-bottom:1.1rem;overflow:hidden}
-.stst{padding:11px 1.25rem;font-size:.67rem;font-weight:700;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--b1);background:rgba(0,0,0,.2)}
-.strow{display:flex;align-items:center;justify-content:space-between;padding:11px 1.25rem;border-bottom:1px solid var(--b1)}
-.strow:last-child{border-bottom:none}
-.stlb{font-size:.84rem;font-weight:500}
-.stsb{font-size:.7rem;color:var(--mut);margin-top:2px}
-.stsvc{padding:.875rem 1.25rem}
-.invbox{background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:8px;margin-top:.875rem}
-.invbox code{flex:1;font-size:.75rem;color:var(--acc);font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bcopy{background:var(--acd);border:1px solid var(--acc);color:var(--acc);border-radius:6px;padding:5px 10px;font-size:.72rem;font-weight:500;transition:all .15s}
-.bcopy:hover{background:var(--acc);color:#fff}
-.twrap{position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
-.tst{background:var(--card2);border:1px solid var(--b2);border-radius:9px;padding:9px 16px;font-size:.83rem;white-space:nowrap;animation:mup .3s ease;display:flex;align-items:center;gap:8px;box-shadow:var(--sh);pointer-events:auto;border-left:3px solid var(--acc)}
-.tst.ok{border-left-color:var(--grn)}
-.tst.wn{border-left-color:var(--amb)}
-.search-results{position:absolute;top:100%;left:0;right:0;background:var(--card2);border:1px solid var(--b2);border-radius:12px;box-shadow:var(--sh);z-index:200;overflow:hidden;margin-top:6px;display:none}
-.search-results.open{display:block}
-.sr-item{display:flex;align-items:center;gap:11px;padding:10px 14px;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--b1)}
-.sr-item:last-child{border-bottom:none}
-.sr-item:hover{background:rgba(255,255,255,.05)}
-.sr-thumb{width:36px;height:36px;border-radius:8px;background:var(--acd);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.sr-name{font-size:.84rem;font-weight:500}
-.sr-type{font-size:.7rem;color:var(--mut);margin-top:1px}
-.gbox{background:#fff;border-radius:20px;width:100%;max-width:390px;overflow:hidden;animation:mup .25s ease}
-.grow{display:flex;align-items:center;gap:13px;padding:9px 13px;cursor:pointer;border-radius:9px;transition:background .15s;margin:2px 6px}
-.grow:hover{background:#f1f3f4}
-.gav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:600;color:#fff;flex-shrink:0}
-.ginf{flex:1;min-width:0}
-.gnm{font-family:'DM Sans',sans-serif;font-size:.875rem;font-weight:500;color:#202124}
-.gem{font-family:'DM Sans',sans-serif;font-size:.72rem;color:#5f6368}
-.garr{color:#5f6368;font-size:1rem}
-.ginput{width:100%;border:1px solid #dadce0;border-radius:4px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;color:#202124;box-sizing:border-box;transition:border-color .2s}
-.ginput:focus{border-color:#1a73e8;box-shadow:0 0 0 2px rgba(26,115,232,.15)}
-.gfooter{background:#f1f3f4;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e8eaed}
-.abox2{background:#1c1c1e;border:1px solid rgba(255,255,255,.1);border-radius:18px;width:100%;max-width:350px;padding:26px 22px 18px;animation:mup .25s ease}
-.ainput{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.12);padding:12px 13px;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.875rem;outline:none;box-sizing:border-box}
-.ainput::placeholder{color:rgba(255,255,255,.32)}
-.abtn{width:100%;background:#fff;color:#000;border:none;border-radius:10px;padding:12px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.95rem;font-weight:600;margin-bottom:7px;transition:background .15s}
-.abtn:hover{background:#e5e5e5}
-.acanc{width:100%;background:transparent;color:rgba(255,255,255,.32);border:none;padding:8px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.82rem}
-.emoji-bar{display:flex;gap:3px;padding:5px .875rem 0;flex-shrink:0}
-.emoj-btn{background:none;border:none;font-size:1.1rem;padding:3px 5px;border-radius:6px;cursor:pointer;transition:transform .15s,background .15s;opacity:.7}
-.emoj-btn:hover{transform:scale(1.3);background:rgba(255,255,255,.08);opacity:1}
-.reaction-float{position:fixed;font-size:1.8rem;pointer-events:none;z-index:9998;animation:floatUp 1.8s ease forwards}
-@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(1.4)}}
-.friends-list{display:flex;flex-direction:column;gap:.5rem;max-width:520px}
-.friend-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--b1);border-radius:var(--r2);transition:border-color .15s}
-.friend-row:hover{border-color:var(--b2)}
-.notif-list{display:flex;flex-direction:column;gap:.5rem;max-width:520px}
-.notif-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--b1);border-radius:var(--r2)}
-/* ── BROWSE CONTENT ── */
-.browse-modal{max-width:700px!important;padding:0!important;overflow:hidden}
-.browse-tabs{display:flex;border-bottom:1px solid var(--b1);background:var(--bg);overflow-x:auto;flex-shrink:0;padding:0 1rem}
-.browse-tab{padding:11px 14px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--mut);border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;font-family:'Syne',sans-serif;flex-shrink:0}
-.browse-tab.on{color:var(--acc);border-bottom-color:var(--acc)}
-.browse-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;padding:1.1rem;overflow-y:auto;max-height:460px}
-.content-card{background:var(--card);border:1px solid var(--b1);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s}
-.content-card:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:var(--sh2)}
-.cc-thumb{height:88px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative}
-.cc-info{padding:7px 8px}
-.cc-title{font-size:.72rem;font-weight:600;line-height:1.3;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cc-meta{font-size:.62rem;color:var(--mut)}
-.cc-live{position:absolute;top:5px;right:5px;background:var(--grn);color:#042b1e;font-size:.55rem;font-weight:700;padding:2px 5px;border-radius:3px;font-family:'Syne',sans-serif}
-.cc-new{position:absolute;top:5px;left:5px;background:var(--acc);color:#fff;font-size:.55rem;font-weight:700;padding:2px 5px;border-radius:3px;font-family:'Syne',sans-serif}
-.browse-header{padding:1rem 1.1rem .75rem;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-/* ── INVITE CHIPS ── */
-.inv-chip{display:flex;align-items:center;gap:7px;padding:6px 10px;background:rgba(34,211,165,.06);border:1px solid rgba(34,211,165,.2);border-radius:8px}
-.inv-chip.phone{background:rgba(79,125,243,.06);border-color:rgba(79,125,243,.2)}
-.inv-chip-label{flex:1;font-size:.78rem;font-weight:500}
-.inv-chip-status{font-size:.65rem;color:var(--grn);font-weight:600}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--b1);border-radius:2px}
-@media(max-width:900px){.sbar{display:none}}
-@media(max-width:680px){.cpanel{display:none}.pgrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Zoum — Watch Together • Private Rooms • Invite-Only</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0a0c10 0%, #0f1117 100%);
+            color: #eef2ff;
+            padding: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #fff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .badge {
+            background: #1e293b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 0.5rem;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 1.5rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(18, 22, 30, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid #2d3a4e;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .chat-area {
+            background: #0b0e14;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+        
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .message {
+            background: #1e293b;
+            padding: 0.5rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .message strong {
+            color: #c084fc;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid #2d3a4e;
+        }
+        
+        .chat-input-area input {
+            flex: 1;
+            background: #1a1f2a;
+            border: none;
+            padding: 0.7rem 1rem;
+            border-radius: 2rem;
+            color: white;
+        }
+        
+        .chat-input-area button {
+            background: #7c3aed;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+
+        .room-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .invite-section {
+            background: #0f1420;
+            border-radius: 1.5rem;
+            padding: 1rem;
+        }
+        
+        .invite-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin: 1rem 0;
+        }
+        
+        .invite-input-group input {
+            background: #1a1f2a;
+            border: 1px solid #334155;
+            padding: 0.7rem;
+            border-radius: 1rem;
+            color: white;
+        }
+        
+        button {
+            background: #3b82f6;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        button.danger {
+            background: #dc2626;
+        }
+        
+        button.secondary {
+            background: #334155;
+        }
+
+        .invitee-list {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .invitee-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .invitee-list li {
+            padding: 0.3rem 0;
+            color: #86efac;
+        }
+
+        .browse-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .platform-card {
+            background: #1e293b;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.1s linear;
+            border: 1px solid #334155;
+        }
+        
+        .platform-card:hover {
+            background: #2d3a5e;
+            transform: scale(0.98);
+        }
+        
+        .content-item {
+            background: #3b82f6;
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin: 0.3rem;
+            transition: 0.1s;
+        }
+        
+        .content-item:hover {
+            background: #2563eb;
+            transform: scale(0.98);
+        }
+        
+        hr {
+            border-color: #2d3a4e;
+            margin: 1rem 0;
+        }
+        
+        .sync-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .status-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
-<div id="view-auth" class="view active">
-<div class="auth-wrap">
-  <div class="auth-brand">
-    <div class="brand-icon">🎬</div>
-    <h1>Zoum</h1>
-    <p>Watch together · Anywhere · Encrypted</p>
-  </div>
-  <div class="auth-card">
-    <div class="atabs">
-      <button class="atab on" onclick="authTab('login')">Sign In</button>
-      <button class="atab" onclick="authTab('register')">Create Account</button>
+<div class="container">
+    <div class="hero">
+        <h1>🎬 Zoum · Watch Together</h1>
+        <div class="badge">🔒 E2E Encrypted · Private Rooms · Invite-Only</div>
+        <div class="badge">✨ No Login Required · Works on GitHub Pages</div>
     </div>
-    <div id="auth-login">
-      <button class="boauth google" onclick="gOAuth('zoum')"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
-      <button class="boauth apple" onclick="appleOAuth()"><svg width="16" height="19" viewBox="0 0 814 1000" fill="#fff"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 376.7 0 228.6 0 88.7c0-84.6 34.2-162.9 95.8-219.8 49.6-47.1 116.3-75 181.8-75 71.6 0 133.8 32.3 175.1 32.3 39.5 0 101.9-35.5 178.3-35.5 28.9 0 130.5 2.6 198.6 99.9zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/></svg>Continue with Apple</button>
-      <div class="div">or sign in with email</div>
-      <div class="fg"><label>Email</label><input class="fi" type="email" id="l-em" placeholder="you@example.com" autocomplete="email"></div>
-      <div class="fg"><label>Password</label><div class="fi-wrap"><input class="fi" type="password" id="l-pw" placeholder="Password" autocomplete="current-password"><button class="tpw" onclick="tpw('l-pw',this)">show</button></div></div>
-      <button class="btnp" onclick="doLogin()">Sign In →</button>
-    </div>
-    <div id="auth-register" style="display:none">
-      <button class="boauth google" onclick="gOAuth('zoum')" style="margin-bottom:6px"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Sign up with Google</button>
-      <div class="div">or create with email</div>
-      <div class="fg"><label>Display name</label><input class="fi" type="text" id="r-name" placeholder="Your name"></div>
-      <div class="fg"><label>Email</label><input class="fi" type="email" id="r-em" placeholder="you@example.com" autocomplete="email"></div>
-      <div class="fg"><label>Password</label><div class="fi-wrap"><input class="fi" type="password" id="r-pw" placeholder="Min 12 characters" autocomplete="new-password" oninput="strChk(this.value)"><button class="tpw" onclick="tpw('r-pw',this)">show</button></div><div class="str-bar"><div class="str-fill" id="sfill"></div></div></div>
-      <div class="fg"><label>Confirm Password</label><div class="fi-wrap"><input class="fi" type="password" id="r-pw2" placeholder="Repeat password" autocomplete="new-password"></div></div>
-      <button class="btnp" onclick="doRegister()">Create Account →</button>
-    </div>
-    <div class="auth-foot">🔒 E2E Encrypted · Zero-knowledge · GDPR compliant</div>
-  </div>
-</div>
-</div>
-<div id="view-app" class="view">
-  <nav class="tnav">
-    <div class="nlogo"><div class="ic">🎬</div>Zoum</div>
-    <div class="nsrch" style="position:relative">
-      <svg width="13" height="13" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;opacity:.35"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2.2"/><path d="m15 15 3 3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-      <input type="text" id="search-input" placeholder="Search shows, rooms, friends…" oninput="doSearch(this.value)" onfocus="showSearch()" onblur="setTimeout(hideSearch,200)">
-      <div class="search-results" id="search-results"></div>
-    </div>
-    <div class="nrt">
-      <button class="bcreate" onclick="openM('modal-create')">+ Create Room</button>
-      <button class="nav-av" onclick="showView('view-settings')" id="nav-av">ZU</button>
-    </div>
-  </nav>
-  <div class="abody">
-    <aside class="sbar">
-      <div class="slbl">Discover</div>
-      <button class="slink on" onclick="stab(this,'home');showHomeContent()"><span class="sico">🏠</span>Home</button>
-      <button class="slink" onclick="stab(this,'trending');showPage('trending',this)"><span class="sico">🔥</span>Trending<span class="sbadge live">Live</span></button>
-      <button class="slink" onclick="stab(this,'movies');showPage('movies',this)"><span class="sico">🎬</span>Movies</button>
-      <button class="slink" onclick="stab(this,'tvshows');showPage('tvshows',this)"><span class="sico">📺</span>TV Shows</button>
-      <button class="slink" onclick="stab(this,'sports');showPage('sports',this)"><span class="sico">🏟</span>Live Sports</button>
-      <div class="slbl" style="margin-top:.5rem">Social</div>
-      <button class="slink" onclick="stab(this,'friends');showPage('friends',this)"><span class="sico">👥</span>Friends<span class="sbadge" id="friends-badge">3</span></button>
-      <button class="slink" onclick="stab(this,'myrooms');showPage('myrooms',this)"><span class="sico">📌</span>My Rooms</button>
-      <button class="slink" onclick="stab(this,'notifications');showPage('notifications',this);this.querySelector('.sbadge').style.display='none'"><span class="sico">🔔</span>Notifications<span class="sbadge" id="notif-badge">2</span></button>
-      <div class="slbl" style="margin-top:.5rem">Setup</div>
-      <button class="slink" onclick="stab(this,'home');showHomeContent();document.getElementById('psec').scrollIntoView({behavior:'smooth'})"><span class="sico">📡</span>Connect Services</button>
-      <button class="slink" onclick="showView('view-settings')"><span class="sico">⚙</span>Settings</button>
-      <div class="sbot"><div class="sec-chip"><div class="sdot"></div>Secure · E2E Encrypted</div></div>
-    </aside>
-    <main class="cnt" id="main-content">
-      <div class="pg-hd"><h2 id="greeting">Good evening 👋</h2><p>Join a live room or start your own watch party below</p></div>
-      <div class="slb"><div class="ldot"></div>Live Rooms Right Now</div>
-      <div class="rgrid">
-        <div class="rcard" onclick="joinRoom('Stranger Things S4','netflix','https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#1a0d2e,#0f1a38)">📺<div class="rltag">LIVE</div></div>
-          <div class="rinfo"><div class="rtitle">Stranger Things S4 Rewatch</div><div class="rmeta"><span>Netflix · 47m</span><div class="ravs"><div class="rav" style="background:#4f7df3">A</div><div class="rav" style="background:#a855f7">J</div><div class="rav" style="background:#22d3a5">+3</div></div></div></div>
-        </div>
-        <div class="rcard" onclick="joinRoom('Arcane S2 Finale','netflix','https://www.youtube.com/embed/4Ps6nV4wiCE?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#1c0a30,#0a1e3a)">🎮<div class="rltag">LIVE</div><div class="rloc">🔒 Private</div></div>
-          <div class="rinfo"><div class="rtitle">Arcane Season 2 Finale</div><div class="rmeta"><span>Netflix · 23m</span><div class="ravs"><div class="rav" style="background:#e11d48">M</div><div class="rav" style="background:#0ea5e9">S</div></div></div></div>
-        </div>
-        <div class="rcard" onclick="joinRoom('NFL Sunday Night','espn','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#0a1f0a,#0d1a2e)">🏈<div class="rltag">LIVE</div></div>
-          <div class="rinfo"><div class="rtitle">NFL Sunday Night Football</div><div class="rmeta"><span>ESPN · Live</span><div class="ravs"><div class="rav" style="background:#16a34a">T</div><div class="rav" style="background:#ca8a04">R</div><div class="rav" style="background:#4f7df3">+8</div></div></div></div>
-        </div>
-        <div class="rcard" onclick="joinRoom('Demon Slayer Night','crunchyroll','https://www.youtube.com/embed/VQGCKyvzIM4?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#1f0a0a,#200d30)">⚔️<div class="rltag">LIVE</div></div>
-          <div class="rinfo"><div class="rtitle">Demon Slayer Movie Night</div><div class="rmeta"><span>Crunchyroll · 58m</span><div class="ravs"><div class="rav" style="background:#dc2626">H</div><div class="rav" style="background:#7c3aed">Y</div><div class="rav" style="background:#0891b2">+4</div></div></div></div>
-        </div>
-        <div class="rcard" onclick="joinRoom('House of the Dragon','hbo','https://www.youtube.com/embed/DrVVHRHlMJQ?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#1a0505,#2d0a00)">🐉<div class="rltag">LIVE</div></div>
-          <div class="rinfo"><div class="rtitle">House of the Dragon S2</div><div class="rmeta"><span>Max · 1h 12m</span><div class="ravs"><div class="rav" style="background:#f97316">R</div><div class="rav" style="background:#6366f1">L</div><div class="rav" style="background:#ec4899">+2</div></div></div></div>
-        </div>
-        <div class="rcard" onclick="joinRoom('Lo-fi Study Session','youtube','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0')">
-          <div class="rthumb" style="background:linear-gradient(135deg,#0a0f1e,#1a1040)">🎵<div class="rltag">LIVE</div></div>
-          <div class="rinfo"><div class="rtitle">Lo-fi Study Beats 🎵</div><div class="rmeta"><span>YouTube · 24/7</span><div class="ravs"><div class="rav" style="background:#8b5cf6">P</div><div class="rav" style="background:#06b6d4">N</div><div class="rav" style="background:#10b981">+12</div></div></div></div>
-        </div>
-      </div>
-      <div id="psec" class="psec">
-        <div class="slb">Streaming Services</div>
-        <p class="plat-intro">Connect your accounts once — Zoum uses <strong>secure OAuth</strong>. We never see or store your passwords. Tap any service to link it.</p>
-        <div class="cat-hd"><span class="catlbl">Free &amp; Open</span><div class="catline"></div><span class="cattag free">No Login Needed</span></div>
-        <div class="pgrid" id="grid-free"></div>
-        <div class="cat-hd"><span class="catlbl">Premium Streaming</span><div class="catline"></div><span class="cattag prem">Subscription Required</span></div>
-        <div class="pgrid" id="grid-premium"></div>
-        <div class="cat-hd"><span class="catlbl">Live TV &amp; Sports</span><div class="catline"></div><span class="cattag cabl">Cable / Provider Login</span></div>
-        <div class="pgrid" id="grid-cable"></div>
-      </div>
-    </main>
-  </div>
-</div>
-<div id="view-room" class="view">
-  <div class="rtbar">
-    <button class="bback" onclick="leaveRoom()">← Leave</button>
-    <div class="rtitle-bar" id="r-title">Room</div>
-    <div class="e2eb">🔒 E2E Encrypted</div>
-    <div id="viewer-count-chip" style="display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.3);border:1px solid var(--b1);border-radius:20px;padding:3px 9px;font-size:.68rem;color:var(--mut);margin-left:6px">👁 <span id="viewer-count">14</span></div>
-    <button style="background:var(--card);border:1px solid var(--b1);border-radius:7px;color:var(--mut);padding:4px 9px;font-size:.72rem;margin-left:6px" onclick="togglePiP()" title="Picture in Picture">⧉</button>
-    <button style="background:var(--card);border:1px solid var(--b1);border-radius:7px;color:var(--mut);padding:4px 9px;font-size:.72rem;margin-left:4px" onclick="openM('modal-invite')">+ Invite</button>
-  </div>
-  <div class="rlayout">
-    <div class="player-wrap">
-      <div class="player-area">
-        <div id="yt-player" style="width:100%;height:100%;position:absolute;inset:0"></div>
-        <div class="player-overlay" id="player-overlay">
-          <div class="big-play" onclick="startStream()" id="big-play-btn">▶</div>
-          <div style="font-size:.84rem;color:rgba(255,255,255,.55);margin-bottom:4px" id="player-msg">Tap to start watching together</div>
-          <div class="player-hint" id="player-hint">Content will sync for all viewers</div>
-        </div>
-        <div class="sync-chip" id="sync-chip" style="display:none"><div class="ldot"></div><span id="sync-txt">Synced · 0ms</span></div>
-      </div>
-      <div id="video-title-bar" style="display:none;padding:5px 1rem;background:#000;border-top:1px solid rgba(255,255,255,.06);font-size:.75rem;color:rgba(255,255,255,.5);font-family:'Syne',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-      <div class="player-controls" id="player-ctrls" style="display:none">
-        <button class="pc-btn" id="play-pause-btn" onclick="togglePlay()" title="Play/Pause">⏸</button>
-        <button class="pc-btn" onclick="skipBack()" title="-10s">⏪</button>
-        <div class="prog-wrap">
-          <div class="prog-bar" id="prog-bar" onclick="seekTo(event)">
-            <div class="prog-fill" id="prog-fill" style="width:0%"></div>
-            <div class="prog-thumb" id="prog-thumb" style="left:0%"></div>
-          </div>
-          <div class="time-lbl"><span id="time-cur">0:00</span><span style="opacity:.4">/</span><span id="time-dur">0:00</span></div>
-        </div>
-        <button class="pc-btn" onclick="skipFwd()" title="+10s">⏩</button>
-        <div class="vol-wrap">
-          <button class="pc-btn" id="mute-btn" onclick="toggleMute()" title="Mute">🔊</button>
-          <div class="vol-bar" id="vol-bar" onclick="setVol(event)"><div class="vol-fill" id="vol-fill" style="width:80%"></div></div>
-        </div>
-        <button class="pc-btn" onclick="toggleFS()" title="Fullscreen">⛶</button>
-      </div>
-      <div class="stream-bar"><span>Stream via:</span><div id="r-pills" style="display:flex;gap:5px;flex-wrap:wrap"></div><button style="margin-left:auto;background:var(--acd);border:1px solid var(--acc);border-radius:99px;padding:4px 11px;font-size:.72rem;color:var(--acc);cursor:pointer;white-space:nowrap;font-weight:600" onclick="openBrowse()">🎬 Browse Content</button></div>
-    </div>
-    <div class="cpanel">
-      <div class="ctabs">
-        <button class="ctab on" onclick="cTab('chat',this)">Chat</button>
-        <button class="ctab" onclick="cTab('people',this)" id="people-tab">People (1)</button>
-        <button class="ctab" onclick="cTab('security',this)">🔒</button>
-      </div>
-      <div id="p-chat" class="cmsgs">
-        <div class="cmsg sys-msg"><div class="ctxt" style="font-size:.75rem;color:var(--grn);text-align:center;width:100%">🔒 Private room · E2E encrypted · invite only</div></div>
-      </div>
-      <div id="p-people" style="display:none;flex:1;overflow-y:auto">
-        <div class="plist" id="people-list">
-          <!-- dynamically populated from S.room.invitees -->
-        </div>
-        <div style="padding:.875rem;padding-top:0">
-          <button class="btnp" style="font-size:.78rem;padding:8px" onclick="openM('modal-invite')">+ Invite Someone</button>
-        </div>
-      </div>
-      <div id="p-security" style="display:none">
-        <div class="secp">
-          <div class="secrow"><div class="secico g">🔒</div><div><div class="sect">End-to-End Encryption</div><div class="secd">Chat &amp; voice encrypted with AES-256-GCM before leaving your device.</div><div class="secs ok">✓ Active — Session key: …f3a9</div></div></div>
-          <div class="secrow"><div class="secico b">🛡️</div><div><div class="sect">Zero-Knowledge Voice</div><div class="secd">Peer-to-peer WebRTC. Zoum servers never receive audio.</div><div class="secs ok">✓ P2P tunnel active</div></div></div>
-          <div class="secrow"><div class="secico g">👁</div><div><div class="sect">Private Room</div><div class="secd">Signed, expiring invite links only. No public join.</div><div class="secs ok">✓ Private</div></div></div>
-          <div class="secrow"><div class="secico g">🧹</div><div><div class="sect">Auto-Delete Chat</div><div class="secd">All messages erased when room closes.</div><div class="secs ok">✓ Enabled</div></div></div>
-        </div>
-      </div>
-      <div class="vbar">
-        <button class="vbtn on" id="mic-btn" onclick="togMic(this)">🎙</button>
-        <button class="vbtn on" id="audio-btn" onclick="togAudio(this)">🎧</button>
-        <button class="vbtn" onclick="toast('📹 Zoum is voice-only — no camera required','')">📷</button>
-        <button class="vbtn red" onclick="leaveRoom()" style="margin-left:auto" title="Leave">📵</button>
-      </div>
-      <div class="cinarea">
-        <div class="emoji-bar">
-          <button class="emoj-btn" onclick="sendReaction('🔥')">🔥</button>
-          <button class="emoj-btn" onclick="sendReaction('😂')">😂</button>
-          <button class="emoj-btn" onclick="sendReaction('😱')">😱</button>
-          <button class="emoj-btn" onclick="sendReaction('❤️')">❤️</button>
-          <button class="emoj-btn" onclick="sendReaction('👏')">👏</button>
-          <button class="emoj-btn" onclick="sendReaction('🍿')">🍿</button>
-        </div>
-        <div style="display:flex;gap:7px;align-items:center;padding:.7rem .875rem">
-          <input type="text" class="cinput" id="cinput" placeholder="Encrypted message…" onkeydown="if(event.key==='Enter')sendMsg()">
-          <button class="csend" onclick="sendMsg()">→</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="view-settings" class="view">
-  <div class="tnav"><button class="bback" onclick="showView('view-app')">← Back</button><h2 style="font-size:.95rem;font-weight:700">Settings &amp; Security</h2></div>
-  <div class="stbody">
-    <div class="stsc">
-      <div class="stst">Account</div>
-      <div class="strow"><div><div class="stlb">Email</div><div class="stsb" id="st-email">user&#64;example.com</div></div><button style="font-size:.72rem;color:var(--acc);background:none;border:none">Change</button></div>
-      <div class="strow"><div><div class="stlb">Password</div><div class="stsb">Last changed 14 days ago</div></div><button style="font-size:.72rem;color:var(--acc);background:none;border:none">Update</button></div>
-      <div class="strow"><div><div class="stlb">Two-Factor Authentication</div><div class="stsb">Extra sign-in security</div></div><button class="tog" onclick="togV(this)"></button></div>
-    </div>
-    <div class="stsc">
-      <div class="stst">Privacy &amp; Security</div>
-      <div class="strow"><div><div class="stlb">End-to-end encrypt messages</div><div class="stsb">AES-256-GCM — always on</div></div><button class="tog on" onclick="toast('🔒 E2E cannot be disabled','')"></button></div>
-      <div class="strow"><div><div class="stlb">Auto-delete chat history</div><div class="stsb">Wipe on room close</div></div><button class="tog on" onclick="togV(this)"></button></div>
-      <div class="strow"><div><div class="stlb">Private profile</div><div class="stsb">Hide from public search</div></div><button class="tog" onclick="togV(this)"></button></div>
-      <div class="strow"><div><div class="stlb">Zero-knowledge voice</div><div class="stsb">P2P — server never hears you</div></div><button class="tog on" onclick="toast('🛡 Always on','')"></button></div>
-    </div>
-    <div class="stsc">
-      <div class="stst">Connected Streaming Services</div>
-      <div class="stsvc" id="st-svc"><span style="font-size:.8rem;color:var(--mut)">No services connected yet</span></div>
-    </div>
-    <button style="width:100%;padding:11px;background:var(--redd);border:1px solid rgba(248,113,113,.2);border-radius:9px;color:var(--red);font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:500;margin-top:.25rem" onclick="doLogout()">Sign Out of All Devices</button>
-  </div>
-</div>
-<div class="mov" id="modal-create">
-<div class="mbox md">
-  <div class="mhd"><h3>Create a Watch Room</h3><button class="bx" onclick="closeM('modal-create')">✕</button></div>
-  <div class="fg"><label>Room Name</label><input class="fi" type="text" id="new-room-name" placeholder="e.g. Movie Night 🍿"></div>
-  <div class="trow"><div><div class="lb">Private Room</div><div class="sb" style="font-size:.7rem;color:var(--mut)">Invite-only</div></div><button class="tog on" onclick="togV(this)"></button></div>
-  <div class="trow"><div><div class="lb">Passcode</div><div class="sb" style="font-size:.7rem;color:var(--mut)">Extra lock</div></div><button class="tog" id="t-pw" onclick="togRoomPw(this)"></button></div>
-  <div id="room-pw-f" style="display:none;margin:8px 0 0"><input class="fi" type="password" placeholder="Set a passcode…"></div>
-  <div class="trow"><div><div class="lb">E2E Chat Encryption</div><div class="sb" style="font-size:.7rem;color:var(--mut)">Always on</div></div><button class="tog on" onclick="toast('🔒 Always on','')"></button></div>
-  <div class="trow" style="border:none"><div><div class="lb">Auto-delete messages</div><div class="sb" style="font-size:.7rem;color:var(--mut)">On room close</div></div><button class="tog on" onclick="togV(this)"></button></div>
-  <button class="btnp" style="margin-top:1.25rem" onclick="createRoom()">Launch Room →</button>
-</div>
-</div>
-<div class="mov" id="modal-invite">
-<div class="mbox md">
-  <div class="mhd"><h3>Invite to Room</h3><button class="bx" onclick="closeM('modal-invite')">✕</button></div>
-  <p style="font-size:.82rem;color:var(--mut);line-height:1.5;margin-bottom:1.1rem">Only people you invite can join this private room.</p>
 
-  <!-- Invite by Email -->
-  <div class="fg">
-    <label>Invite by Email</label>
-    <div style="display:flex;gap:7px">
-      <input class="fi" type="email" id="inv-email" placeholder="friend@example.com" style="flex:1">
-      <button class="btnp" style="width:auto;padding:10px 16px;flex-shrink:0" onclick="sendInviteEmail()">Send</button>
-    </div>
-  </div>
+    <div class="dashboard">
+        <div class="main-content">
+            <div class="card">
+                <h2>📺 Now Watching</h2>
+                <div class="video-container">
+                    <iframe id="videoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="sync-controls">
+                    <button id="syncPlayBtn" style="background:#16a34a;">▶️ Sync Play</button>
+                    <button id="syncPauseBtn" style="background:#eab308;">⏸️ Sync Pause</button>
+                </div>
+            </div>
 
-  <!-- Invite by Phone -->
-  <div class="fg">
-    <label>Invite by Phone / SMS</label>
-    <div style="display:flex;gap:7px">
-      <input class="fi" type="tel" id="inv-phone" placeholder="+1 (555) 000-0000" style="flex:1">
-      <button class="btnp" style="width:auto;padding:10px 16px;flex-shrink:0" onclick="sendInviteSMS()">Send</button>
-    </div>
-  </div>
+            <div class="card">
+                <h2>💬 Private Chat · Invited Guests Only</h2>
+                <div class="chat-area">
+                    <div class="messages" id="chatMessages">
+                        <div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Write a message..." autocomplete="off">
+                        <button id="sendChatBtn">Send</button>
+                    </div>
+                </div>
+            </div>
 
-  <!-- Invited list -->
-  <div id="inv-list-wrap" style="display:none;margin-bottom:1rem">
-    <div style="font-size:.68rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Invites Sent</div>
-    <div id="inv-list" style="display:flex;flex-direction:column;gap:5px"></div>
-  </div>
+            <div class="card">
+                <h2>🎬 Browse Content · Play Directly (No Link Pasting)</h2>
+                <div id="platformGrid" class="browse-grid"></div>
+                <div id="contentList" style="margin-top: 1rem;"></div>
+                <p style="font-size:0.75rem; margin-top:0.8rem; color:#94a3b8;">✨ Click any platform, then choose content — plays instantly above</p>
+            </div>
+        </div>
 
-  <!-- Shareable link -->
-  <div style="font-size:.7rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem">Or share link</div>
-  <div class="invbox">
-    <code id="inv-link">https://zoum.app/r/x7k2-p9nq-enc</code>
-    <button class="bcopy" onclick="copyInv()">Copy</button>
-  </div>
-  <div style="font-size:.68rem;color:var(--hin);margin-top:.6rem">🔒 Signed · tamper-proof · expires 24h · private room only</div>
-</div>
-</div>
-<div class="mov" id="modal-platform">
-<div class="mbox lg">
-  <div id="pm-brand"></div>
-  <div class="mnotice">🔒 <strong>Secure OAuth</strong> — Zoum never sees or stores your password. You authenticate directly on the platform's servers.</div>
-  <div class="mtabs" id="pm-tabs">
-    <button class="mtab on" id="pm-t-oauth" onclick="pmTab('oauth')">Sign In (OAuth)</button>
-    <button class="mtab" id="pm-t-cable" onclick="pmTab('cable')" style="display:none">Cable Provider</button>
-  </div>
-  <div id="pm-oauth">
-    <div id="pm-g-row" style="display:none;margin-bottom:.875rem">
-      <button class="boauth google" onclick="pmGoog()"><svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
-      <div class="div" style="margin:.6rem 0">or with email</div>
+        <div class="room-panel">
+            <div class="card">
+                <h2>🔐 Private Room Controls</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">✅ Only invited people can join, chat, and watch</p>
+                
+                <div class="invite-section">
+                    <strong>📧 Invite via Email or Phone</strong>
+                    <div class="invite-input-group">
+                        <input type="text" id="inviteContact" placeholder="friend@example.com or +1234567890">
+                        <button id="sendInviteBtn">Send Invite</button>
+                    </div>
+                    
+                    <strong>🔗 Invite Link (Single Use)</strong>
+                    <div class="invite-input-group">
+                        <input type="text" id="inviteLinkInput" readonly style="background:#111; font-size:0.8rem;">
+                        <button id="copyLinkBtn">Copy Invite Link</button>
+                    </div>
+                    
+                    <div class="invitee-list">
+                        <strong>✅ Authorized Guests:</strong>
+                        <ul id="inviteeList">
+                            <li>👑 Room Creator (you)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <hr>
+                <button id="resetRoomBtn" class="danger" style="width:100%;">🗑️ Remove Uninvited Users</button>
+            </div>
+            
+            <div class="card">
+                <h2>📡 Live Rooms Right Now</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span class="badge">📺 Stranger Things</span>
+                    <span class="badge">🎮 Arcane S2</span>
+                    <span class="badge">🏈 NFL Sunday</span>
+                    <span class="badge">🎵 Lo-Fi Beats</span>
+                </div>
+                <p style="margin-top: 1rem; font-size:0.8rem;">🔒 Zero-knowledge · GDPR ready</p>
+            </div>
+        </div>
     </div>
-    <div class="fg"><label id="pm-elbl">Email / Username</label><input class="fi" type="email" id="pm-em" placeholder="your@email.com" autocomplete="email"></div>
-    <div class="fg"><label>Password</label><div class="fi-wrap"><input class="fi" type="password" id="pm-pw" placeholder="Password" autocomplete="current-password"><button class="tpw" onclick="tpw('pm-pw',this)">show</button></div></div>
-    <div id="pm-hint" style="font-size:.72rem;color:var(--hin);margin-bottom:1rem;line-height:1.55;padding:8px 11px;background:rgba(0,0,0,.2);border-radius:7px;border:1px solid var(--b1)"></div>
-    <button class="btnp" onclick="submitPM()">Connect Securely →</button>
-  </div>
-  <div id="pm-cable" style="display:none">
-    <div class="fg"><label>TV Provider</label><select class="fi" id="pm-prov"><option>Xfinity / Comcast</option><option>DIRECTV</option><option>Spectrum</option><option>AT&amp;T TV</option><option>Dish Network</option><option>Cox</option><option>Verizon Fios</option><option>YouTube TV</option><option>Hulu Live TV</option><option>FuboTV</option><option>Other</option></select></div>
-    <div class="fg"><label>Provider Email</label><input class="fi" type="email" id="pm-ce" placeholder="provider@email.com"></div>
-    <div class="fg"><label>Provider Password</label><div class="fi-wrap"><input class="fi" type="password" id="pm-cp" placeholder="Provider password"><button class="tpw" onclick="tpw('pm-cp',this)">show</button></div></div>
-    <div style="font-size:.72rem;color:var(--hin);margin-bottom:1rem;line-height:1.55;padding:8px 11px;background:rgba(0,0,0,.2);border-radius:7px;border:1px solid var(--b1)">Credentials go directly to your provider via encrypted tunnel. Zoum never stores them.</div>
-    <button class="btnp" onclick="submitCable()">Connect Cable →</button>
-  </div>
-  <button class="bx" style="position:absolute;top:1.5rem;right:1.5rem" onclick="closeM('modal-platform')">✕</button>
 </div>
-</div>
-<div class="mov" id="modal-google" style="z-index:2000">
-<div class="gbox">
-  <div style="padding:28px 24px 12px;text-align:center">
-    <svg width="66" height="22" viewBox="0 0 132 40"><text x="0" y="34" font-family="Arial,sans-serif" font-size="38" font-weight="bold"><tspan fill="#4285F4">G</tspan><tspan fill="#EA4335">o</tspan><tspan fill="#FBBC05">o</tspan><tspan fill="#4285F4">g</tspan><tspan fill="#34A853">l</tspan><tspan fill="#EA4335">e</tspan></text></svg>
-    <div style="font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;color:#202124;margin:13px 0 3px">Sign in</div>
-    <div style="font-family:'DM Sans',sans-serif;font-size:.82rem;color:#5f6368">to continue to <strong>Zoum</strong></div>
-  </div>
-  <div id="g-step1" style="padding:6px 0 4px">
-    <div style="font-family:'DM Sans',sans-serif;font-size:.73rem;color:#5f6368;text-align:center;padding:5px 0 7px">Choose an account</div>
-    <div class="grow" onclick="gSelect('Alex Johnson','alex@gmail.com')"><div class="gav" style="background:#4285F4">A</div><div class="ginf"><div class="gnm">Alex Johnson</div><div class="gem">alex&#64;gmail.com</div></div><div class="garr">›</div></div>
-    <div class="grow" onclick="gSelect('Jordan Kim','jordan&#46;kim&#64;gmail&#46;com')"><div class="gav" style="background:#EA4335">J</div><div class="ginf"><div class="gnm">Jordan Kim</div><div class="gem">jordan.kim&#64;gmail.com</div></div><div class="garr">›</div></div>
-    <div class="grow" onclick="gStep2()"><div class="gav" style="background:#e0e0e0;color:#5f6368;font-weight:400;font-size:1.1rem">+</div><div class="ginf"><div class="gnm" style="color:#1a73e8">Use another account</div></div><div class="garr" style="color:#1a73e8">›</div></div>
-  </div>
-  <div id="g-step2" style="display:none;padding:5px 20px">
-    <button onclick="document.getElementById('g-step1').style.display='';this.parentElement.style.display='none'" style="background:none;border:none;color:#1a73e8;font-size:.82rem;cursor:pointer;padding:8px 0 12px;font-family:'DM Sans',sans-serif;display:block">← Back</button>
-    <div style="font-family:'DM Sans',sans-serif;font-size:.95rem;color:#202124;font-weight:500;margin-bottom:12px">Enter your email</div>
-    <input class="ginput" type="email" id="g-em" placeholder="Email or phone">
-    <div style="font-family:'DM Sans',sans-serif;font-size:.7rem;color:#5f6368;margin:9px 0 14px">Not your computer? Use Guest mode to sign in privately.</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:18px">
-      <a href="#" onclick="return false" style="color:#1a73e8;font-family:'DM Sans',sans-serif;font-size:.82rem">Create account</a>
-      <button onclick="gSubmit()" style="background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:9px 24px;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:500">Next</button>
-    </div>
-  </div>
-  <div class="gfooter">
-    <div style="display:flex;gap:16px"><a href="#" onclick="return false" style="font-family:'DM Sans',sans-serif;font-size:.7rem;color:#5f6368">Help</a><a href="#" onclick="return false" style="font-family:'DM Sans',sans-serif;font-size:.7rem;color:#5f6368">Privacy</a><a href="#" onclick="return false" style="font-family:'DM Sans',sans-serif;font-size:.7rem;color:#5f6368">Terms</a></div>
-    <button onclick="closeM('modal-google')" style="background:none;border:1px solid #dadce0;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.7rem;color:#5f6368;padding:5px 12px">Cancel</button>
-  </div>
-</div>
-</div>
-<div class="mov" id="modal-apple" style="z-index:2000">
-<div class="abox2">
-  <div style="text-align:center;margin-bottom:18px">
-    <svg width="32" height="38" viewBox="0 0 814 1000" fill="#fff" style="display:block;margin:0 auto 10px"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 376.7 0 228.6 0 88.7c0-84.6 34.2-162.9 95.8-219.8 49.6-47.1 116.3-75 181.8-75 71.6 0 133.8 32.3 175.1 32.3 39.5 0 101.9-35.5 178.3-35.5 28.9 0 130.5 2.6 198.6 99.9zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/></svg>
-    <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:1.05rem;font-weight:600;color:#fff">Sign in with Apple</div>
-    <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.75rem;color:rgba(255,255,255,.4);margin-top:3px">Zoum wants to use your Apple ID</div>
-  </div>
-  <div style="background:rgba(255,255,255,.05);border-radius:11px;overflow:hidden;margin-bottom:12px">
-    <input class="ainput" type="email" id="ap-em" placeholder="Apple ID (email or phone)">
-    <input class="ainput" type="password" id="ap-pw" placeholder="Password">
-  </div>
-  <label style="display:flex;align-items:flex-start;gap:8px;margin-bottom:15px;cursor:pointer">
-    <input type="checkbox" id="ap-hide" style="margin-top:2px;accent-color:#0a84ff;width:14px;height:14px;flex-shrink:0">
-    <span style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:.73rem;color:rgba(255,255,255,.55);line-height:1.45">Hide my email — share a private relay address with Zoum instead</span>
-  </label>
-  <button class="abtn" onclick="appleSubmit()">Continue</button>
-  <button class="acanc" onclick="closeM('modal-apple')">Cancel</button>
-</div>
-</div>
-<div class="mov" id="modal-browse">
-<div class="mbox browse-modal" style="max-height:90vh;display:flex;flex-direction:column">
-  <div class="browse-header">
-    <div>
-      <div id="browse-plat-name" style="font-size:1rem;font-weight:700;font-family:'Syne',sans-serif">Browse Content</div>
-      <div id="browse-plat-sub" style="font-size:.72rem;color:var(--mut);margin-top:1px">Select something to watch</div>
-    </div>
-    <button class="bx" onclick="closeM('modal-browse')">✕</button>
-  </div>
-  <div class="browse-tabs" id="browse-tabs"></div>
-  <div class="browse-grid" id="browse-grid"></div>
-</div>
-</div>
-<div class="twrap" id="twrap"></div>
-<script src="https://www.youtube.com/iframe_api"></script>
+
 <script>
-var S = {
-  user:{name:'Zoum User',initials:'ZU',email:'user@example.com'},
-  connected:{},
-  curPK:'',
-  gTarget:'zoum',
-  room:{name:'',url:'',playing:false},
-  player:null,
-  playerReady:false,
-  duration:0,
-  currentTime:0,
-  progTimer:null,
-  syncTimer:null,
-  botTimer:null,
-  vol:80,
-  muted:false,
-  micOn:true,
-  audioOn:true
-};
-var PD = {
-  youtube:{name:'YouTube',color:'#ff0000',cat:'free',google:true,cable:false,free:false,
-    hint:'Sign in with your Google account to watch YouTube together in perfect sync.',
-    logo:'<svg width="26" height="18" viewBox="0 0 26 18"><path fill="#fff" d="M25.4 2.8a3.2 3.2 0 0 0-2.3-2.3C21.1 0 13 0 13 0S4.9 0 2.9.5A3.2 3.2 0 0 0 .6 2.8C0 4.8 0 9 0 9s0 4.2.6 6.2A3.2 3.2 0 0 0 2.9 17.5C4.9 18 13 18 13 18s8.1 0 10.1-.5a3.2 3.2 0 0 0 2.3-2.3C26 13.2 26 9 26 9s0-4.2-.6-6.2zM10.4 12.9V5.1L17.1 9l-6.7 3.9z"/></svg>'},
-  twitch:{name:'Twitch',color:'#9147ff',cat:'free',google:false,cable:false,free:false,
-    hint:'Log in with your Twitch account to co-watch live streams together.',
-    logo:'<svg width="22" height="22" viewBox="0 0 24 28"><path fill="#fff" d="M2.1 0L0 5.3v19.4h6.6V28l4-3.3h5.3L24 16V0H2.1zm19.6 14.7l-4 4h-5.3l-3.6 3.3v-3.3H4V2.7h17.7v12z"/><rect x="10.7" y="5.3" width="2.7" height="8" fill="#fff"/><rect x="17.3" y="5.3" width="2.7" height="8" fill="#fff"/></svg>'},
-  pluto:{name:'Pluto TV',color:'#1a1a2e',cat:'free',google:false,cable:false,free:true,
-    hint:'Pluto TV is completely free — no account needed.',
-    logo:'<svg width="26" height="26" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="25" cy="25" r="10" fill="none" stroke="#fff" stroke-width="3"/><circle cx="25" cy="25" r="4" fill="#fff"/></svg>'},
-  tubi:{name:'Tubi',color:'#fa541c',cat:'free',google:false,cable:false,free:true,
-    hint:'Tubi is completely free — no login required.',
-    logo:'<svg viewBox="0 0 60 28" width="34" height="18"><text x="2" y="22" font-family="Arial Black,sans-serif" font-size="22" font-weight="900" fill="#fff">tubi</text></svg>'},
-  netflix:{name:'Netflix',color:'#e50914',cat:'premium',google:false,cable:false,free:false,
-    hint:'Enter your Netflix email and password. Zoum uses read-only OAuth — subscription verify only.',
-    logo:'<svg width="20" height="28" viewBox="0 0 20 28"><path fill="#fff" d="M0 0h5.2L10 15.1 14.8 0H20L11.4 28H8.6z"/></svg>'},
-  disney:{name:'Disney+',color:'#040714',cat:'premium',google:false,cable:false,free:false,
-    hint:'Sign in with your Disney+ credentials. Content goes directly to Disney servers.',
-    logo:'<svg viewBox="0 0 60 28" width="36" height="22"><text x="2" y="22" font-family="Arial,sans-serif" font-size="22" font-weight="bold" fill="#fff">D+</text></svg>'},
-  hbo:{name:'Max (HBO)',color:'#002be0',cat:'premium',google:false,cable:false,free:false,
-    hint:'Log in with your Max account for HBO, Discovery, and Max Originals.',
-    logo:'<svg viewBox="0 0 70 28" width="38" height="20"><text x="2" y="22" font-family="Georgia,serif" font-size="21" font-weight="bold" fill="#fff">Max</text></svg>'},
-  hulu:{name:'Hulu',color:'#1ce783',cat:'premium',google:false,cable:false,free:false,
-    hint:'Sign in with your Hulu account — works with Hulu and Hulu Live TV.',
-    logo:'<svg viewBox="0 0 70 28" width="36" height="20"><text x="2" y="22" font-family="Arial,sans-serif" font-size="22" font-weight="bold" fill="#000">hulu</text></svg>'},
-  prime:{name:'Prime Video',color:'#00a8e0',cat:'premium',google:false,cable:false,free:false,
-    hint:'Sign in with your Amazon account email and password for Prime Video.',
-    logo:'<svg viewBox="0 0 48 50" width="24" height="28"><text x="3" y="38" font-family="Arial,sans-serif" font-size="38" font-weight="bold" fill="#fff">a</text></svg>'},
-  appletv:{name:'Apple TV+',color:'#1c1c1e',cat:'premium',google:false,cable:false,free:false,
-    hint:'Sign in with your Apple ID to access Apple TV+ originals.',
-    logo:'<svg width="18" height="22" viewBox="0 0 814 1000" fill="#fff"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 376.7 0 228.6 0 88.7c0-84.6 34.2-162.9 95.8-219.8 49.6-47.1 116.3-75 181.8-75 71.6 0 133.8 32.3 175.1 32.3 39.5 0 101.9-35.5 178.3-35.5 28.9 0 130.5 2.6 198.6 99.9zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/></svg>'},
-  peacock:{name:'Peacock',color:'#111',cat:'premium',google:false,cable:false,free:false,
-    hint:'Log in with your Peacock account for NBC content and live sports.',
-    logo:'<span style="font-size:1.5rem;line-height:1">🦚</span>'},
-  paramount:{name:'Paramount+',color:'#0064ff',cat:'premium',google:false,cable:false,free:false,
-    hint:'Sign in with your Paramount+ credentials for CBS, Paramount films, and sports.',
-    logo:'<svg viewBox="0 0 60 28" width="30" height="18"><text x="2" y="22" font-family="Georgia,serif" font-size="22" font-weight="bold" fill="#fff">P+</text></svg>'},
-  crunchyroll:{name:'Crunchyroll',color:'#f47521',cat:'premium',google:false,cable:false,free:false,
-    hint:'Log in with your Crunchyroll account for simulcast anime.',
-    logo:'<svg width="24" height="24" viewBox="0 0 52 52"><circle cx="26" cy="26" r="23" fill="none" stroke="#fff" stroke-width="4.5"/><circle cx="26" cy="26" r="11" fill="none" stroke="#fff" stroke-width="3.5"/><circle cx="26" cy="26" r="4.5" fill="#fff"/></svg>'},
-  espn:{name:'ESPN',color:'#cc0000',cat:'cable',google:false,cable:true,free:false,
-    hint:'Authenticate with your cable provider or ESPN+ to watch live sports.',
-    logo:'<svg viewBox="0 0 68 24" width="34" height="16"><text x="0" y="20" font-family="Arial Black,sans-serif" font-size="20" font-weight="900" fill="#fff">ESPN</text></svg>'},
-  nbc:{name:'NBC',color:'#0066cc',cat:'cable',google:false,cable:true,free:false,
-    hint:'Authenticate via your cable provider to stream NBC live.',
-    logo:'<svg viewBox="0 0 58 24" width="30" height="16"><text x="0" y="20" font-family="Arial Black,sans-serif" font-size="20" font-weight="900" fill="#fff">NBC</text></svg>'},
-  abc:{name:'ABC',color:'#222',cat:'cable',google:false,cable:true,free:false,
-    hint:'Authenticate via your cable provider to stream ABC live.',
-    logo:'<svg viewBox="0 0 58 24" width="30" height="16"><text x="0" y="20" font-family="Arial Black,sans-serif" font-size="20" font-weight="900" fill="#fff">ABC</text></svg>'},
-  fox:{name:'FOX',color:'#111',cat:'cable',google:false,cable:true,free:false,
-    hint:'Authenticate via your cable provider to stream FOX live.',
-    logo:'<svg viewBox="0 0 60 24" width="32" height="16"><text x="2" y="20" font-family="Arial Black,sans-serif" font-size="20" font-weight="900" fill="#fff">FOX</text></svg>'},
-  cbs:{name:'CBS',color:'#003087',cat:'cable',google:false,cable:true,free:false,
-    hint:'Authenticate via your cable provider to stream CBS live.',
-    logo:'<svg viewBox="0 0 58 24" width="30" height="16"><text x="0" y="20" font-family="Arial Black,sans-serif" font-size="20" font-weight="900" fill="#fff">CBS</text></svg>'},
-  fubo:{name:'FuboTV',color:'#e8002d',cat:'cable',google:false,cable:true,free:false,
-    hint:'Sign in with your FuboTV account for live sports and TV.',
-    logo:'<svg viewBox="0 0 58 24" width="32" height="16"><text x="0" y="19" font-family="Arial,sans-serif" font-size="18" font-weight="bold" fill="#fff">fubo</text></svg>'}
-};
-var SEARCH_INDEX = [
-  {name:'Stranger Things S4',type:'Netflix Room · LIVE',icon:'📺',action:function(){joinRoom('Stranger Things S4','netflix','https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0');}},
-  {name:'Arcane Season 2',type:'Netflix Room · LIVE',icon:'🎮',action:function(){joinRoom('Arcane S2','netflix','https://www.youtube.com/embed/4Ps6nV4wiCE?enablejsapi=1&rel=0');}},
-  {name:'NFL Sunday Night Football',type:'ESPN Room · LIVE',icon:'🏈',action:function(){joinRoom('NFL Sunday Night','espn','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0');}},
-  {name:'Demon Slayer Movie Night',type:'Crunchyroll Room · LIVE',icon:'⚔️',action:function(){joinRoom('Demon Slayer','crunchyroll','https://www.youtube.com/embed/VQGCKyvzIM4?enablejsapi=1&rel=0');}},
-  {name:'House of the Dragon S2',type:'Max Room · LIVE',icon:'🐉',action:function(){joinRoom('House of the Dragon','hbo','https://www.youtube.com/embed/DrVVHRHlMJQ?enablejsapi=1&rel=0');}},
-  {name:'Lo-fi Study Session',type:'YouTube Room · 24/7',icon:'🎵',action:function(){joinRoom('Lo-fi Study Beats','youtube','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0');}},
-  {name:'Rings of Power',type:'Prime Video Room',icon:'💍',action:function(){joinRoom('Rings of Power','prime','https://www.youtube.com/embed/3WqqJemi39E?enablejsapi=1&rel=0');}},
-  {name:'The Bear',type:'Hulu Room',icon:'🍳',action:function(){joinRoom('The Bear','hulu','https://www.youtube.com/embed/VwZy3Sl3tFA?enablejsapi=1&rel=0');}},
-  {name:'Encanto',type:'Disney+ Room',icon:'🌺',action:function(){joinRoom('Encanto','disney','https://www.youtube.com/embed/ByXuk9QqQkk?enablejsapi=1&rel=0');}},
-  {name:'Severance',type:'Apple TV+ Room',icon:'🏢',action:function(){joinRoom('Severance','appletv','https://www.youtube.com/embed/mPLAHR8VLCA?enablejsapi=1&rel=0');}},
-];
-function onYouTubeIframeAPIReady(){S.playerReady=true;}
-function initPlayer(videoUrl) {
-  var match = videoUrl.match(/embed\/([^?]+)/);
-  if(!match) return;
-  var vid = match[1].split('?')[0];
-  if(S.player) {
-    try { S.player.destroy(); } catch(e){}
-    S.player = null;
-  }
-  var container = document.getElementById('yt-player');
-  container.innerHTML = '';
-  var div = document.createElement('div');
-  div.id = 'yt-player-inner';
-  container.appendChild(div);
-  S.player = new YT.Player('yt-player-inner', {
-    videoId: vid,
-    playerVars:{autoplay:1,controls:0,rel:0,modestbranding:1,iv_load_policy:3,fs:1,enablejsapi:1,origin:window.location.origin},
-    events:{
-      onReady: function(e) {
-        S.duration = e.target.getDuration();
-        document.getElementById('time-dur').textContent = fmtTime(S.duration||0);
-        e.target.setVolume(S.vol);
-        showVideoTitle(vid);
-        startStream();
-      },
-      onError: function(e) {
-        console.warn('YouTube player error:', e.data);
-        var codes={2:'Invalid video ID',5:'HTML5 error',100:'Video not found',101:'Embed not allowed',150:'Embed not allowed'};
-        toast('⚠ Video unavailable: '+(codes[e.data]||'Error '+e.data),'wn');
-      },
-      onStateChange: function(e) {
-        if(e.data === YT.PlayerState.PLAYING) {
-          document.getElementById('play-pause-btn').textContent = '⏸';
-          S.room.playing = true;
-          startProgTimer();
-          simulateSync();
-        } else if(e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-          document.getElementById('play-pause-btn').textContent = '▶';
-          S.room.playing = false;
-          stopProgTimer();
+    // Room State Management
+    const roomState = {
+        roomId: 'room_' + Math.random().toString(36).substr(2, 9),
+        invitees: new Set(),
+        allowedSessions: new Set(),
+        chatHistory: []
+    };
+    
+    const currentSession = 'user_' + Math.random().toString(36).substr(2, 9);
+    roomState.invitees.add('creator_' + currentSession);
+    roomState.allowedSessions.add(currentSession);
+    
+    // Helper Functions
+    function showStatus(message) {
+        const statusDiv = document.createElement('div');
+        statusDiv.className = 'status-message';
+        statusDiv.textContent = message;
+        document.body.appendChild(statusDiv);
+        setTimeout(() => statusDiv.remove(), 3000);
+    }
+    
+    function isAllowed(sessionId) {
+        return roomState.allowedSessions.has(sessionId);
+    }
+    
+    function addChatMessage(text, senderName = 'System') {
+        if (!isAllowed(currentSession)) {
+            showStatus('❌ You are not invited to this private room');
+            return false;
         }
-      }
+        
+        roomState.chatHistory.push({
+            id: Date.now(),
+            senderId: currentSession,
+            senderName: senderName,
+            text: text
+        });
+        renderChat();
+        return true;
     }
-  });
-}
-function startProgTimer() {
-  stopProgTimer();
-  S.progTimer = setInterval(function(){
-    if(!S.player || !S.room.playing) return;
-    try {
-      var cur = S.player.getCurrentTime();
-      var dur = S.player.getDuration();
-      S.currentTime = cur;
-      if(dur > 0) {
-        var pct = (cur/dur)*100;
-        document.getElementById('prog-fill').style.width = pct+'%';
-        document.getElementById('prog-thumb').style.left = pct+'%';
-      }
-      document.getElementById('time-cur').textContent = fmtTime(cur);
-      document.getElementById('time-dur').textContent = fmtTime(dur);
-    } catch(e){}
-  }, 500);
-}
-function stopProgTimer() {
-  if(S.progTimer) { clearInterval(S.progTimer); S.progTimer=null; }
-}
-function fmtTime(s) {
-  s=Math.floor(s||0);
-  var m=Math.floor(s/60); s=s%60;
-  return m+':'+(s<10?'0':'')+s;
-}
-function simulateSync() {
-  var chip = document.getElementById('sync-chip');
-  var txt = document.getElementById('sync-txt');
-  chip.style.display = 'flex';
-  if(S.syncTimer) clearInterval(S.syncTimer);
-  txt.textContent = 'Synced · '+Math.floor(Math.random()*12)+'ms';
-  S.syncTimer = setInterval(function(){
-    txt.textContent = 'Synced · '+Math.floor(Math.random()*18)+'ms';
-  }, 3500);
-}
-function startStream() {
-  var overlay = document.getElementById('player-overlay');
-  if(!overlay.classList.contains('hidden')) {
-    overlay.classList.add('hidden');
-    document.getElementById('player-ctrls').style.display = 'flex';
-  }
-  if(S.player && typeof S.player.playVideo === 'function') {
-    try { S.player.playVideo(); } catch(e){}
-  }
-  if(!S.room.playing) toast('🎬 Playback started · All viewers synced','ok');
-  startBotChat();
-}
-function togglePlay() {
-  if(!S.player) return;
-  try {
-    if(S.room.playing) { S.player.pauseVideo(); toast('⏸ Paused for all viewers',''); }
-    else { S.player.playVideo(); toast('▶ Playing · Synced for all viewers','ok'); }
-  } catch(e){}
-}
-function skipBack() {
-  if(!S.player) return;
-  try { S.player.seekTo(Math.max(0, S.player.getCurrentTime()-10), true); toast('⏪ −10 seconds',''); } catch(e){}
-}
-function skipFwd() {
-  if(!S.player) return;
-  try { S.player.seekTo(S.player.getCurrentTime()+10, true); toast('⏩ +10 seconds',''); } catch(e){}
-}
-function seekTo(e) {
-  var bar = document.getElementById('prog-bar');
-  var rect = bar.getBoundingClientRect();
-  var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  if(!S.player) return;
-  try {
-    var dur = S.player.getDuration();
-    S.player.seekTo(pct * dur, true);
-    toast('⏩ Seeking… syncing all viewers','');
-  } catch(e2){}
-}
-function setVol(e) {
-  var bar = document.getElementById('vol-bar');
-  var rect = bar.getBoundingClientRect();
-  var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  S.vol = Math.round(pct * 100);
-  document.getElementById('vol-fill').style.width = S.vol+'%';
-  if(S.player) try { S.player.setVolume(S.vol); } catch(e2){}
-  if(S.vol === 0) { document.getElementById('mute-btn').textContent = '🔇'; }
-  else { document.getElementById('mute-btn').textContent = '🔊'; }
-}
-function toggleMute() {
-  S.muted = !S.muted;
-  document.getElementById('mute-btn').textContent = S.muted ? '🔇' : '🔊';
-  if(S.player) try { if(S.muted) S.player.mute(); else S.player.unMute(); } catch(e){}
-}
-function toggleFS() {
-  var el = document.querySelector('.player-area');
-  if(!document.fullscreenElement) {
-    el.requestFullscreen && el.requestFullscreen();
-  } else {
-    document.exitFullscreen && document.exitFullscreen();
-  }
-}
-var BOT_MSGS = [
-  {av:'A',color:'#4f7df3',name:'Alex',msgs:['omg this part 😱','wait WHAT just happened','this is SO good','no spoilers in chat!!','I forgot how good this was']},
-  {av:'J',color:'#a855f7',name:'Jordan',msgs:['I\'m 2 seconds behind, someone sync me?','lol same as last time','wait rewind!!','this scene every time 🔥','I can\'t handle this']},
-  {av:'K',color:'#22d3a5',name:'Kira',msgs:['synced ✅','brb getting snacks 🍿','okay I\'m back','SCREAMING at this part','best episode hands down']}
-];
-function startBotChat() {
-  if(S.botTimer) return;
-  function fire() {
-    if(!document.getElementById('view-room').classList.contains('active')) { S.botTimer=null; return; }
-    if(S.room.playing) {
-      var bot = BOT_MSGS[Math.floor(Math.random()*BOT_MSGS.length)];
-      var msg = bot.msgs[Math.floor(Math.random()*bot.msgs.length)];
-      addChatMsg(bot.av, bot.color, bot.name, msg);
+    
+    function renderChat() {
+        const chatDiv = document.getElementById('chatMessages');
+        if (!chatDiv) return;
+        
+        chatDiv.innerHTML = '<div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>';
+        
+        roomState.chatHistory.forEach(msg => {
+            if (roomState.allowedSessions.has(msg.senderId)) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message';
+                msgDiv.innerHTML = `<strong>${escapeHtml(msg.senderName)}</strong> ${escapeHtml(msg.text)}`;
+                chatDiv.appendChild(msgDiv);
+            }
+        });
+        
+        chatDiv.scrollTop = chatDiv.scrollHeight;
     }
-    S.botTimer = setTimeout(fire, 4000 + Math.random()*9000);
-  }
-  S.botTimer = setTimeout(fire, 3000 + Math.random()*5000);
-}
-function addChatMsg(av,color,name,text) {
-  var msgs = document.getElementById('p-chat');
-  var now = new Date();
-  var t = 'just now';
-  var d = document.createElement('div');
-  d.className='cmsg';
-  d.innerHTML='<div class="cav" style="background:'+color+'">'+av+'</div><div><div class="cmeta"><span class="cname" style="color:'+color+'">'+name+'</span><span class="ctime">'+t+'</span></div><div class="ctxt">'+text+'</div></div>';
-  msgs.appendChild(d);
-  msgs.scrollTop=msgs.scrollHeight;
-}
-function authTab(t) {
-  document.querySelectorAll('.atab').forEach(function(b,i){b.classList.toggle('on',(t==='login'&&i===0)||(t==='register'&&i===1));});
-  document.getElementById('auth-login').style.display=t==='login'?'':'none';
-  document.getElementById('auth-register').style.display=t==='register'?'':'none';
-}
-function tpw(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'show':'hide';}
-function strChk(pw){var s=0;if(pw.length>=8)s++;if(pw.length>=12)s++;if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^A-Za-z0-9]/.test(pw))s++;var f=document.getElementById('sfill');f.style.width=Math.min(s/5*100,100)+'%';f.style.background=['#ef4444','#f97316','#eab308','#22c55e','#10b981'][Math.max(0,s-1)];}
-function doLogin(){
-  var e=document.getElementById('l-em').value.trim();
-  var pw=document.getElementById('l-pw').value;
-  // Allow login even without email - just use a default name
-  var name='User';
-  if(e&&e.includes('@')){
-    name=e.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-  } else if(e){
-    name=e.replace(/\b\w/g,function(c){return c.toUpperCase();});
-  }
-  var email=e||'user@zoum.app';
-  toast('🔐 Signing in…','');
-  setTimeout(function(){
-    setUser(name,email);
-    showView('view-app');
-    toast('✅ Welcome to Zoum · E2E encrypted','ok');
-  },600);
-}
-function doRegister(){
-  var n=document.getElementById('r-name').value.trim();
-  var pw=document.getElementById('r-pw').value;
-  var pw2=document.getElementById('r-pw2').value;
-  var email=document.getElementById('r-em').value.trim()||'user@zoum.app';
-  if(!n){toast('⚠ Enter your display name','wn');return;}
-  if(pw&&pw2&&pw!==pw2){toast('⚠ Passwords do not match','wn');return;}
-  toast('🔐 Creating account…','');
-  setTimeout(function(){
-    setUser(n,email);
-    showView('view-app');
-    toast('🎉 Welcome to Zoum · E2E encryption enabled','ok');
-  },600);
-}
-function doLogout(){
-  stopProgTimer();
-  if(S.botTimer){clearTimeout(S.botTimer);S.botTimer=null;}
-  if(S.syncTimer){clearInterval(S.syncTimer);S.syncTimer=null;}
-  if(S.player)try{S.player.destroy();}catch(e){}
-  S.player=null;
-  showView('view-auth');
-  toast('👋 Signed out','');
-}
-function setUser(name,email){
-  S.user={name:name,email:email,initials:name.split(' ').map(function(w){return w[0];}).join('').substring(0,2).toUpperCase()};
-  document.getElementById('nav-av').textContent=S.user.initials;
-  document.getElementById('st-email').textContent=email;
-  var h=new Date().getHours();
-  document.getElementById('greeting').textContent=(h<12?'Good morning':h<18?'Good afternoon':'Good evening')+' '+name.split(' ')[0]+' 👋';
-}
-function gOAuth(target){
-  S.gTarget=target;
-  document.getElementById('g-step1').style.display='';
-  document.getElementById('g-step2').style.display='none';
-  document.getElementById('g-em').value='';
-  openM('modal-google');
-}
-function gStep2(){document.getElementById('g-step1').style.display='none';document.getElementById('g-step2').style.display='';setTimeout(function(){document.getElementById('g-em').focus();},60);}
-function gSelect(name,email){
-  closeM('modal-google');
-  if(S.gTarget==='zoum'){
-    toast('🔐 Signing in with Google…','');
-    setTimeout(function(){
-      setUser(name,email);
-      showView('view-app');
-      toast('✅ Signed in as '+name,'ok');
-    },600);
-  } else {
-    finishConnect(S.gTarget,'Google:'+email,'google');
-  }
-}
-function gSubmit(){
-  var e=document.getElementById('g-em').value.trim();
-  if(!e||!e.includes('@')){toast('⚠ Enter a valid email','wn');return;}
-  closeM('modal-google');
-  var n=e.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-  gSelect(n,e);
-}
-function appleOAuth(){openM('modal-apple');}
-function appleSubmit(){
-  var e=document.getElementById('ap-em').value.trim();
-  if(!e||!e.includes('@')){toast('⚠ Enter your Apple ID','wn');return;}
-  var hide=document.getElementById('ap-hide').checked;
-  closeM('modal-apple');
-  var n=e.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-  toast('🍎 Signing in with Apple…','');
-  setTimeout(function(){setUser(n,e);showView('view-app');toast(hide?'✅ Signed in · Email hidden · E2E active':'✅ Signed in with Apple · E2E active','ok');},900);
-}
-function connectPlatform(key){
-  S.curPK=key;
-  var p=PD[key];if(!p)return;
-  if(p.free){finishConnect(key,'free','free');return;}
-  document.getElementById('pm-brand').innerHTML=
-    '<div class="pm-brand" style="background:'+p.color+'22;border:1px solid '+p.color+'33">'
-    +'<div class="pm-logo" style="background:'+p.color+'">'+p.logo+'</div>'
-    +'<div><div class="pm-name">'+p.name+'</div><div class="pm-sub">'+p.name+' · Secure OAuth</div>'
-    +'<div class="pm-sec">🔒 Never stored · Read-only scope</div></div>'
-    +'</div>';
-  document.getElementById('pm-t-cable').style.display=p.cable?'':'none';
-  document.getElementById('pm-t-oauth').style.display=p.cable?'none':'';
-  document.getElementById('pm-g-row').style.display=p.google?'':'none';
-  document.getElementById('pm-elbl').textContent=key==='prime'?'Amazon Email':key==='appletv'?'Apple ID':key==='twitch'?'Twitch Username':'Email / Username';
-  document.getElementById('pm-hint').textContent=p.hint;
-  document.getElementById('pm-em').value='';
-  document.getElementById('pm-pw').value='';
-  pmTab(p.cable?'cable':'oauth');
-  openM('modal-platform');
-}
-function pmTab(t){
-  document.getElementById('pm-t-oauth').classList.toggle('on',t==='oauth');
-  document.getElementById('pm-t-cable').classList.toggle('on',t==='cable');
-  document.getElementById('pm-oauth').style.display=t==='oauth'?'':'none';
-  document.getElementById('pm-cable').style.display=t==='cable'?'':'none';
-}
-function pmGoog(){closeM('modal-platform');gOAuth(S.curPK);}
-function submitPM(){
-  var e=document.getElementById('pm-em').value.trim(),pw=document.getElementById('pm-pw').value;
-  if(!e){toast('⚠ Enter your email','wn');return;}
-  if(!pw){toast('⚠ Enter your password','wn');return;}
-  closeM('modal-platform');finishConnect(S.curPK,e,'oauth');
-}
-function submitCable(){
-  var e=document.getElementById('pm-ce').value.trim(),pw=document.getElementById('pm-cp').value,prov=document.getElementById('pm-prov').value;
-  if(!e){toast('⚠ Enter your provider email','wn');return;}
-  if(!pw){toast('⚠ Enter your provider password','wn');return;}
-  closeM('modal-platform');finishConnect(S.curPK,e,'cable:'+prov);
-}
-function finishConnect(key,email,method){
-  var p=PD[key],card=document.getElementById('pc-'+key);
-  if(!p)return;
-  if(card)card.classList.add('spin');
-  toast('🔐 Connecting to '+p.name+'…','');
-  setTimeout(function(){
-    S.connected[key]={email:email,method:method||'oauth'};
-    if(card){card.classList.remove('spin');card.classList.add('con');}
-    var st=document.getElementById('pst-'+key);if(st)st.textContent='Connected ✓';
-    refreshSettings();
-    toast('✅ '+p.name+' connected! Tap a title to start watching.','ok');
-    // Immediately open browse catalog so user can pick content
-    if(CATALOG&&CATALOG[key]){
-      setTimeout(function(){openBrowseFor(key);},400);
+    
+    function updateInviteeListUI() {
+        const listUl = document.getElementById('inviteeList');
+        if (listUl) {
+            listUl.innerHTML = '<li>👑 Room Creator (you)</li>';
+            roomState.invitees.forEach(inv => {
+                if (inv !== 'creator_' + currentSession) {
+                    const li = document.createElement('li');
+                    li.textContent = `✅ ${inv}`;
+                    listUl.appendChild(li);
+                }
+            });
+        }
+        
+        const inviteLink = document.getElementById('inviteLinkInput');
+        if (inviteLink) {
+            const token = btoa(JSON.stringify({room: roomState.roomId, expires: Date.now() + 86400000}));
+            inviteLink.value = `${window.location.href}?invite=${token}`;
+        }
     }
-  },1400);
-}
-function disconnectPlatform(key){
-  delete S.connected[key];
-  var p=PD[key],card=document.getElementById('pc-'+key);
-  if(card)card.classList.remove('con');
-  var st=document.getElementById('pst-'+key);
-  if(st&&p)st.textContent=p.free?'No login needed':p.cable?'Cable login':'Connect account';
-  refreshSettings();
-  toast('🔌 '+p.name+' disconnected','');
-}
-function refreshSettings(){
-  var el=document.getElementById('st-svc'),keys=Object.keys(S.connected);
-  if(!keys.length){el.innerHTML='<span style="font-size:.8rem;color:var(--mut)">No services connected yet</span>';return;}
-  el.innerHTML=keys.map(function(k){
-    var p=PD[k];
-    return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)">'
-      +'<div style="width:28px;height:28px;border-radius:7px;background:'+p.color+';display:flex;align-items:center;justify-content:center;flex-shrink:0">'+p.logo+'</div>'
-      +'<div style="flex:1"><div style="font-size:.84rem;font-weight:500">'+p.name+'</div><div style="font-size:.68rem;color:var(--grn)">✓ Connected</div></div>'
-      +'<button onclick="disconnectPlatform(\''+k+'\')" style="font-size:.7rem;color:var(--red);background:none;border:none;cursor:pointer">Disconnect</button>'
-      +'</div>';
-  }).join('');
-}
-function joinRoom(name,service,videoUrl){
-  S.room={name:name,url:videoUrl,playing:false,service:service||'youtube',invitees:[]};
-  document.getElementById('r-title').textContent=name;
-  buildPills(service);
-  // Clear chat — private room, starts fresh
-  var chatEl=document.getElementById('p-chat');
-  if(chatEl){
-    chatEl.innerHTML='<div class="cmsg sys-msg"><div style="font-size:.74rem;color:var(--grn);text-align:center;width:100%;padding:.25rem 0;opacity:.8">🔒 Private room · E2E encrypted · Only invitees can join</div></div>';
-  }
-  document.getElementById('player-overlay').classList.remove('hidden');
-  document.getElementById('player-ctrls').style.display='none';
-  document.getElementById('sync-chip').style.display='none';
-  document.getElementById('prog-fill').style.width='0%';
-  document.getElementById('prog-thumb').style.left='0%';
-  document.getElementById('time-cur').textContent='0:00';
-  document.getElementById('play-pause-btn').textContent='▶';
-  document.getElementById('player-msg').textContent='Tap ▶ or Browse Content to start';
-  document.getElementById('player-hint').textContent='Content syncs for all viewers instantly';
-  ['chat','people','security'].forEach(function(id){
-    var el=document.getElementById('p-'+id);if(el)el.style.display='none';
-  });
-  if(chatEl){chatEl.style.display='flex';chatEl.style.flexDirection='column';}
-  document.querySelectorAll('.ctab').forEach(function(b,i){b.classList.toggle('on',i===0);});
-  showView('view-room');
-  if(videoUrl&&S.playerReady){
-    setTimeout(function(){initPlayer(videoUrl);setTimeout(startStream,1800);},300);
-  } else if(videoUrl){
-    var chk=setInterval(function(){
-      if(S.playerReady){clearInterval(chk);initPlayer(videoUrl);setTimeout(startStream,1800);}
-    },200);
-  }
-  if(S.botTimer){clearTimeout(S.botTimer);S.botTimer=null;}
-  toast('🔒 Room created · Invite people to join','ok');
-}
-function buildPills(active){
-  if(!S.room.invitees)S.room.invitees=[];
-  var shown=[];
-  if(active&&PD[active])shown.push(active);
-  Object.keys(S.connected).forEach(function(k){if(!shown.includes(k))shown.push(k);});
-  if(!shown.includes('youtube'))shown.push('youtube');
-  document.getElementById('r-pills').innerHTML=shown.slice(0,7).map(function(k,i){
-    var p=PD[k];if(!p)return'';
-    return '<div class="pill'+(i===0?' on':'')+'" data-key="'+k+'" onclick="swPill(this,\''+k+'\')">'+p.name+'</div>';
-  }).join('');
-  S.room.service=active||'youtube';
-  renderPeoplePanel();
-}
-function swPill(el,key){
-  document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('on');});
-  el.classList.add('on');
-  S.room.service=key;
-  if(CATALOG&&CATALOG[key]){
-    openBrowseFor(key);
-  }
-};
-
-
-function leaveRoom(){
-  stopProgTimer();
-  if(S.botTimer){clearTimeout(S.botTimer);S.botTimer=null;}
-  if(S.syncTimer){clearInterval(S.syncTimer);S.syncTimer=null;}
-  if(S.player)try{S.player.pauseVideo();}catch(e){}
-  showView('view-app');
-  toast('👋 Left room · Chat deleted','');
-}
-function cTab(t,btn){
-  document.querySelectorAll('.ctab').forEach(function(b){b.classList.remove('on');});btn.classList.add('on');
-  ['chat','people','security'].forEach(function(id){
-    var el=document.getElementById('p-'+id);if(!el)return;
-    if(id===t){el.style.display=id==='chat'?'flex':'block';if(id==='chat')el.style.flexDirection='column';}
-    else{el.style.display='none';}
-  });
-}
-function sendMsg(){
-  var inp=document.getElementById('cinput'),text=inp.value.trim();if(!text)return;
-  addChatMsg(S.user.initials,'var(--acc)','You',text);
-  inp.value='';
-  if(Math.random()>0.3) {
-    setTimeout(function(){
-      var bot=BOT_MSGS[Math.floor(Math.random()*BOT_MSGS.length)];
-      var replies=['lol yes!','100%','omg same','wait what??','😂😂','exactly!!','mood','I was just thinking that'];
-      addChatMsg(bot.av,bot.color,bot.name,replies[Math.floor(Math.random()*replies.length)]);
-    },1500+Math.random()*2500);
-  }
-}
-function togMic(btn){
-  S.micOn=!S.micOn;
-  btn.classList.toggle('on',S.micOn);
-  btn.textContent=S.micOn?'🎙':'🔇';
-  toast(S.micOn?'🎙 Mic on':'🔇 Mic muted','');
-}
-function togAudio(btn){
-  S.audioOn=!S.audioOn;
-  btn.classList.toggle('on',S.audioOn);
-  btn.textContent=S.audioOn?'🎧':'🔕';
-  if(S.player) try{if(!S.audioOn){S.player.mute();}else{S.player.unMute();S.player.setVolume(S.vol);}}catch(e){}
-  toast(S.audioOn?'🎧 Audio on':'🔕 Audio muted','');
-}
-function doSearch(q){
-  q=q.toLowerCase().trim();
-  var el=document.getElementById('search-results');
-  if(!q){el.classList.remove('open');return;}
-  var results=SEARCH_INDEX.filter(function(item){
-    return item.name.toLowerCase().includes(q)||item.type.toLowerCase().includes(q);
-  }).slice(0,5);
-  if(!results.length){el.classList.remove('open');return;}
-  el.innerHTML=results.map(function(r){
-    return '<div class="sr-item" onclick="r_'+SEARCH_INDEX.indexOf(r)+'()">'
-      +'<div class="sr-thumb">'+r.icon+'</div>'
-      +'<div><div class="sr-name">'+r.name+'</div><div class="sr-type">'+r.type+'</div></div>'
-      +'</div>';
-  }).join('');
-  results.forEach(function(r,i){
-    el.querySelectorAll('.sr-item')[i].onclick=(function(action){return function(){action();hideSearch();document.getElementById('search-input').value='';};})(r.action);
-  });
-  el.classList.add('open');
-}
-function showSearch(){var q=document.getElementById('search-input').value;if(q)doSearch(q);}
-function hideSearch(){document.getElementById('search-results').classList.remove('open');}
-function openM(id){document.getElementById(id).classList.add('open');}
-function closeM(id){document.getElementById(id).classList.remove('open');}
-function togV(btn){btn.classList.toggle('on');}
-function togRoomPw(btn){togV(btn);document.getElementById('room-pw-f').style.display=btn.classList.contains('on')?'':'none';}
-function createRoom(){
-  var n=document.getElementById('new-room-name').value.trim()||'My Room';
-  closeM('modal-create');
-  var key='room-'+Date.now();
-  S.myRooms[key]={name:n,service:'netflix',url:'https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0',c1:'#1a0d2e',c2:'#0f1a38'};
-  joinRoom(n,'netflix','https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0');
-}
-(function(){
-  var dragging=false;
-  function handleSeek(e){
-    var bar=document.getElementById('prog-bar');
-    if(!bar)return;
-    var rect=bar.getBoundingClientRect();
-    var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-    document.getElementById('prog-fill').style.width=(pct*100)+'%';
-    document.getElementById('prog-thumb').style.left=(pct*100)+'%';
-    if(S.player){try{S.player.seekTo(pct*S.player.getDuration(),true);}catch(ex){}}
-  }
-  document.addEventListener('mousedown',function(e){
-    if(e.target.closest('#prog-bar')){dragging=true;handleSeek(e);}
-  });
-  document.addEventListener('mousemove',function(e){if(dragging)handleSeek(e);});
-  document.addEventListener('mouseup',function(){dragging=false;});
-  var vdrag=false;
-  function handleVol(e){
-    var bar=document.getElementById('vol-bar');
-    if(!bar)return;
-    var rect=bar.getBoundingClientRect();
-    var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
-    S.vol=Math.round(pct*100);
-    document.getElementById('vol-fill').style.width=S.vol+'%';
-    document.getElementById('mute-btn').textContent=S.vol===0?'🔇':'🔊';
-    if(S.player)try{S.player.setVolume(S.vol);}catch(ex){}
-  }
-  document.addEventListener('mousedown',function(e){if(e.target.closest('#vol-bar')){vdrag=true;handleVol(e);}});
-  document.addEventListener('mousemove',function(e){if(vdrag)handleVol(e);});
-  document.addEventListener('mouseup',function(){vdrag=false;});
-})();
-
-
-// ════════════ INVITE SYSTEM ════════════
-var AVATAR_COLORS = ['#4f7df3','#a855f7','#22d3a5','#f97316','#ec4899','#06b6d4','#8b5cf6','#10b981'];
-
-function sendInviteEmail(){
-  var inp=document.getElementById('inv-email');
-  var email=(inp?inp.value:'').trim();
-  if(!email||!email.includes('@')){toast('⚠ Enter a valid email address','wn');return;}
-  var name=email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
-  addInvitee(name,email,'email');
-  if(inp)inp.value='';
-  toast('📧 Invite sent to '+email,'ok');
-}
-
-function sendInviteSMS(){
-  var inp=document.getElementById('inv-phone');
-  var phone=(inp?inp.value:'').trim();
-  if(phone.replace(/[\s\-+()]/g,'').length<7){toast('⚠ Enter a valid phone number','wn');return;}
-  addInvitee(phone,phone,'phone');
-  if(inp)inp.value='';
-  toast('📱 SMS invite sent to '+phone,'ok');
-}
-
-function addInvitee(name,contact,type){
-  if(!S.room.invitees){S.room.invitees=[];}
-  for(var i=0;i<S.room.invitees.length;i++){
-    if(S.room.invitees[i].contact===contact)return;
-  }
-  var initials=name.split(' ').map(function(w){return w[0]||'';}).join('').substring(0,2).toUpperCase()||'??';
-  var color=AVATAR_COLORS[S.room.invitees.length%AVATAR_COLORS.length];
-  S.room.invitees.push({name:name,contact:contact,type:type,initials:initials,color:color});
-  renderInviteList();
-  renderPeoplePanel();
-  // Simulate them joining chat after a short delay
-  setTimeout(function(){
-    addChatMsg(initials,color,name,'👋 Just joined the room!');
-  },1500+Math.random()*2500);
-}
-
-function renderInviteList(){
-  var wrap=document.getElementById('inv-list-wrap');
-  var list=document.getElementById('inv-list');
-  if(!wrap||!list)return;
-  if(!S.room.invitees||!S.room.invitees.length){wrap.style.display='none';return;}
-  wrap.style.display='block';
-  list.innerHTML=S.room.invitees.map(function(inv){
-    var icon=inv.type==='email'?'📧':'📱';
-    return '<div class="inv-chip'+(inv.type==='phone'?' phone':'')+'">'+
-      '<div class="pav2" style="background:'+inv.color+';width:24px;height:24px;font-size:.55rem;flex-shrink:0">'+inv.initials+'</div>'+
-      '<div class="inv-chip-label">'+icon+' '+inv.contact+'</div>'+
-      '<div class="inv-chip-status">Sent ✓</div>'+
-      '</div>';
-  }).join('');
-}
-
-function renderPeoplePanel(){
-  var list=document.getElementById('people-list');
-  if(!list)return;
-  var html='<div class="prow"><div class="pav2" style="background:linear-gradient(135deg,var(--acc),var(--pur));flex-shrink:0">'+S.user.initials+'</div>'+
-    '<div style="flex:1"><div style="display:flex;align-items:center;gap:5px"><span class="pname2">You</span><span class="phost">HOST</span></div>'+
-    '<div class="pst2 pspk">🎙 Speaking…</div></div></div>';
-  if(S.room.invitees&&S.room.invitees.length){
-    S.room.invitees.forEach(function(inv){
-      html+='<div class="prow"><div class="pav2" style="background:'+inv.color+';flex-shrink:0">'+inv.initials+'</div>'+
-        '<div style="flex:1"><span class="pname2">'+inv.name+'</span><div class="pst2">🎙 Listening</div></div></div>';
+    
+    function sendInvite(contact) {
+        if (!contact.trim()) {
+            showStatus('Please enter an email or phone number');
+            return;
+        }
+        
+        roomState.invitees.add(contact);
+        updateInviteeListUI();
+        showStatus(`✨ Invitation sent to ${contact}`);
+        
+        // In production: integrate with email/SMS API here
+        console.log(`Invite sent to: ${contact}`);
+    }
+    
+    function removeUninvitedUsers() {
+        const keepSessions = new Set();
+        keepSessions.add(currentSession);
+        roomState.allowedSessions = keepSessions;
+        
+        roomState.chatHistory = roomState.chatHistory.filter(msg => 
+            roomState.allowedSessions.has(msg.senderId)
+        );
+        
+        renderChat();
+        showStatus('🗑️ Removed all non-invited users from chat');
+        addChatMessage('Room reset: removed non-invited participants', 'System');
+    }
+    
+    function handleInviteFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        const inviteToken = params.get('invite');
+        
+        if (inviteToken && !roomState.allowedSessions.has(currentSession)) {
+            roomState.allowedSessions.add(currentSession);
+            roomState.invitees.add('guest_' + currentSession.slice(-6));
+            updateInviteeListUI();
+            addChatMessage('joined the private room via invite link', 'Guest');
+            showStatus('✅ You have been added as an invited guest!');
+            
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+    
+    // Platform & Content Management
+    const platforms = [
+        { name: "YouTube", icon: "▶️", type: "youtube", color: "#FF0000" },
+        { name: "Twitch", icon: "🎮", type: "twitch", color: "#9146FF" },
+        { name: "Netflix", icon: "🎬", type: "netflix", color: "#E50914" },
+        { name: "Disney+", icon: "✨", type: "disney", color: "#113CCF" },
+        { name: "Prime Video", icon: "📦", type: "prime", color: "#00A8E1" },
+        { name: "Max (HBO)", icon: "🎞️", type: "max", color: "#0026FF" },
+        { name: "Crunchyroll", icon: "🍣", type: "crunchy", color: "#F47521" },
+        { name: "Pluto TV", icon: "📡", type: "pluto", color: "#6E56CF" },
+        { name: "Tubi", icon: "📺", type: "tubi", color: "#FF1493" }
+    ];
+    
+    const contentLibrary = {
+        youtube: [
+            { title: "🎵 Lo-Fi Beats to Study/Relax", videoId: "jfKfPfyJRdk" },
+            { title: "🎬 Movie Trailer Compilation", videoId: "g4Hbz2lFw2E" },
+            { title: "🎮 Gaming Live Stream Highlights", videoId: "3I7kjoPjZ1M" },
+            { title: "🐱 Funny Cat Videos", videoId: "ZudrJUBq5n8" }
+        ],
+        twitch: [
+            { title: "🎮 Gaming Live", embed: "https://player.twitch.tv/?channel=summit1g&parent=localhost" },
+            { title: "🎨 Art & Creative", embed: "https://player.twitch.tv/?channel=bobross&parent=localhost" },
+            { title: "🎵 Music Streams", embed: "https://player.twitch.tv/?channel/monstercat&parent=localhost" }
+        ],
+        netflix: [
+            { title: "🎬 Stranger Things (Trailer)", videoId: "b9EkMc79ZSU" },
+            { title: "🎭 The Crown (Trailer)", videoId: "JWtnJjn6GZs" },
+            { title: "🎪 Squid Game (Trailer)", videoId: "oqxAJKy0Y4o" }
+        ],
+        disney: [
+            { title: "🦁 The Lion King", videoId: "7TavVZMewpY" },
+            { title: "🦸‍♂️ Avengers: Endgame", videoId: "TcMBFSGVi1c" },
+            { title: "❄️ Frozen 2", videoId: "bwzLiQZDw2I" }
+        ],
+        prime: [
+            { title: "👑 The Boys (Trailer)", videoId: "6y8H6U4Ht7w" },
+            { title: "🧙 The Lord of the Rings", videoId: "s7EvL7nWxnw" },
+            { title: "🔫 Jack Ryan", videoId: "U7B2PpYiqCg" }
+        ],
+        max: [
+            { title: "🐉 House of the Dragon", videoId: "DotnJ7tTA34" },
+            { title: "🃏 The Last of Us", videoId: "uLtkt8BonwM" },
+            { title: "⚡ Succession", videoId: "OZfqtoKcCOw" }
+        ],
+        crunchy: [
+            { title: "⚔️ Demon Slayer", videoId: "VQGCKyvzIM4" },
+            { title: "🏴‍☠️ One Piece", videoId: "TgOplY0dQVM" },
+            { title: "🧙 Jujutsu Kaisen", videoId: "pXlPVnR5CJk" }
+        ],
+        pluto: [
+            { title: "📺 Pluto TV Movies", embed: "https://pluto.tv/live-tv/movies" },
+            { title: "📰 Pluto TV News", embed: "https://pluto.tv/live-tv/news" }
+        ],
+        tubi: [
+            { title: "🎬 Tubi Action Movies", embed: "https://tubitv.com/genre/action" },
+            { title: "😂 Tubi Comedy", embed: "https://tubitv.com/genre/comedy" }
+        ]
+    };
+    
+    function renderPlatforms() {
+        const grid = document.getElementById('platformGrid');
+        if (!grid) return;
+        
+        grid.innerHTML = platforms.map(plat => `
+            <div class="platform-card" data-platform="${plat.type}" style="border-left: 3px solid ${plat.color}">
+                <strong>${plat.icon} ${plat.name}</strong>
+                <br><small>Click to browse</small>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.platform-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const platform = card.dataset.platform;
+                showContentForPlatform(platform);
+                showStatus(`📱 Browsing ${platform} content`);
+            });
+        });
+    }
+    
+    function showContentForPlatform(platformType) {
+        const contentDiv = document.getElementById('contentList');
+        const contents = contentLibrary[platformType] || contentLibrary.youtube;
+        
+        contentDiv.innerHTML = contents.map(content => `
+            <div class="content-item" data-type="${platformType}" data-videoid="${content.videoId || ''}" data-embed="${content.embed || ''}">
+                🎥 ${content.title}
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.content-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const videoId = item.dataset.videoid;
+                const embedUrl = item.dataset.embed;
+                const platform = item.dataset.type;
+                
+                if (videoId) {
+                    playVideo(videoId);
+                    addChatMessage(`started watching "${item.textContent.trim()}" on ${platform}`, 'You');
+                } else if (embedUrl) {
+                    document.getElementById('videoFrame').src = embedUrl;
+                    addChatMessage(`started watching "${item.textContent.trim()}" on ${platform}`, 'You');
+                }
+            });
+        });
+    }
+    
+    function playVideo(videoId) {
+        if (!videoId) return;
+        const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1`;
+        document.getElementById('videoFrame').src = youtubeUrl;
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Video Sync Controls
+    function syncPlay() {
+        const iframe = document.getElementById('videoFrame');
+        addChatMessage('▶️ requested play sync', 'Host');
+        iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        showStatus('▶️ Play synced for all invited users');
+    }
+    
+    function syncPause() {
+        const iframe = document.getElementById('videoFrame');
+        addChatMessage('⏸️ requested pause sync', 'Host');
+        iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        showStatus('⏸️ Pause synced for all invited users');
+    }
+    
+    // Event Listeners
+    document.getElementById('sendInviteBtn')?.addEventListener('click', () => {
+        const contact = document.getElementById('inviteContact').value;
+        sendInvite(contact);
+        document.getElementById('inviteContact').value = '';
     });
-  }
-  html+='<div class="prow" style="border-style:dashed;cursor:pointer;background:transparent" onclick="openM(\'modal-invite\')">'+
-    '<div class="pav2" style="background:var(--hin);flex-shrink:0">+</div>'+
-    '<span class="pname2" style="color:var(--mut);font-size:.78rem">Invite someone…</span></div>';
-  list.innerHTML=html;
-  // Update tab count
-  var tab=document.getElementById('people-tab')||document.querySelector('.ctab:nth-child(2)');
-  if(tab)tab.textContent='People ('+(1+(S.room.invitees?S.room.invitees.length:0))+')';
-}
-
-function copyInv(){
-  var link=document.getElementById('inv-link');
-  var txt=link?link.textContent:'https://zoum.app/r/x7k2-p9nq-enc';
-  if(navigator.clipboard)navigator.clipboard.writeText(txt).catch(function(){});
-  toast('📋 Invite link copied!','ok');
-}
-
-// ════════════ CONTENT CATALOG ════════════
-var CATALOG={
-  netflix:{name:'Netflix',color:'#e50914',tabs:['TV Shows','Movies','New & Hot'],content:{
-    'TV Shows':[
-      {t:'Stranger Things',m:'S4 · Sci-Fi',e:'📺',bg:'#1a0d2e',v:'oBEFQFKCQb0',b:''},
-      {t:'Squid Game',m:'S2 · Thriller',e:'🎮',bg:'#0d2e0d',v:'oqxAJKy0ii4',b:'NEW'},
-      {t:'Arcane',m:'S2 · Animation',e:'🎨',bg:'#1c0a30',v:'4Ps6nV4wiCE',b:''},
-      {t:'The Crown',m:'S6 · Drama',e:'👑',bg:'#1a1a0d',v:'oBEFQFKCQb0',b:''},
-      {t:'Wednesday',m:'S2 · Comedy',e:'🖤',bg:'#0d0d0d',v:'oBEFQFKCQb0',b:''},
-      {t:'Bridgerton',m:'S3 · Romance',e:'🌸',bg:'#2e0d1a',v:'oBEFQFKCQb0',b:'NEW'},
-    ],
-    'Movies':[
-      {t:'The Irishman',m:'3h 29m · Crime',e:'🔫',bg:'#1a0d0d',v:'oBEFQFKCQb0',b:''},
-      {t:'Bird Box',m:'1h 44m · Thriller',e:'🐦',bg:'#0d1a0d',v:'oBEFQFKCQb0',b:''},
-      {t:'Extraction 2',m:'2h 2m · Action',e:'💥',bg:'#1a1a0d',v:'oBEFQFKCQb0',b:''},
-      {t:'The Power of Dog',m:'2h 6m · Drama',e:'🐕',bg:'#0d1a1a',v:'oBEFQFKCQb0',b:''},
-    ],
-    'New & Hot':[
-      {t:'3 Body Problem',m:'S1 · Sci-Fi',e:'🌍',bg:'#0d0d2e',v:'oBEFQFKCQb0',b:'NEW'},
-      {t:'Baby Reindeer',m:'Mini · Thriller',e:'🦌',bg:'#1a0d0d',v:'oBEFQFKCQb0',b:'NEW'},
-      {t:'Ripley',m:'S1 · Crime',e:'🗡️',bg:'#0d1a1a',v:'oBEFQFKCQb0',b:'NEW'},
-    ]
-  }},
-  disney:{name:'Disney+',color:'#040714',tabs:['Disney','Marvel','Star Wars','Pixar'],content:{
-    'Disney':[
-      {t:'Encanto',m:'Movie · Family',e:'🌺',bg:'#1a0d2e',v:'ByXuk9QqQkk',b:''},
-      {t:'Moana 2',m:'Movie · Animation',e:'🌊',bg:'#0d1a2e',v:'ByXuk9QqQkk',b:'NEW'},
-      {t:'Lilo & Stitch',m:'Movie · Live Action',e:'👽',bg:'#0d2e2e',v:'ByXuk9QqQkk',b:'NEW'},
-      {t:'The Little Mermaid',m:'Movie',e:'🧜',bg:'#0d0d2e',v:'ByXuk9QqQkk',b:''},
-    ],
-    'Marvel':[
-      {t:'Avengers: Endgame',m:'3h 2m · Action',e:'⚡',bg:'#1a0d0d',v:'ByXuk9QqQkk',b:''},
-      {t:'Loki',m:'S2 · Sci-Fi',e:'🐍',bg:'#0d2e0d',v:'ByXuk9QqQkk',b:''},
-      {t:'WandaVision',m:'S1 · Sci-Fi',e:'🔮',bg:'#2e0d1a',v:'ByXuk9QqQkk',b:''},
-      {t:'Daredevil: Born Again',m:'S1 · Action',e:'😈',bg:'#2e0d0d',v:'ByXuk9QqQkk',b:'NEW'},
-    ],
-    'Star Wars':[
-      {t:'The Mandalorian',m:'S3 · Sci-Fi',e:'🪖',bg:'#1a1a0d',v:'ByXuk9QqQkk',b:''},
-      {t:'Andor',m:'S2 · Drama',e:'🚀',bg:'#0d0d1a',v:'ByXuk9QqQkk',b:'NEW'},
-      {t:'Ahsoka',m:'S1 · Sci-Fi',e:'⚔️',bg:'#0d1a1a',v:'ByXuk9QqQkk',b:''},
-    ],
-    'Pixar':[
-      {t:'Inside Out 2',m:'Movie',e:'🧠',bg:'#1a0d2e',v:'ByXuk9QqQkk',b:''},
-      {t:'Elemental',m:'Movie',e:'🔥',bg:'#2e1a0d',v:'ByXuk9QqQkk',b:''},
-      {t:'Turning Red',m:'Movie',e:'🐼',bg:'#2e0d0d',v:'ByXuk9QqQkk',b:''},
-    ]
-  }},
-  hbo:{name:'Max (HBO)',color:'#002be0',tabs:['HBO','Max Originals','Movies'],content:{
-    'HBO':[
-      {t:'House of the Dragon',m:'S2 · Fantasy',e:'🐉',bg:'#1a0505',v:'DrVVHRHlMJQ',b:''},
-      {t:'The Last of Us',m:'S2 · Drama',e:'🍄',bg:'#1a1a0d',v:'DrVVHRHlMJQ',b:'NEW'},
-      {t:'Succession',m:'S4 · Drama',e:'👔',bg:'#0d1a1a',v:'DrVVHRHlMJQ',b:''},
-      {t:'White Lotus',m:'S3 · Thriller',e:'🌺',bg:'#2e1a0d',v:'DrVVHRHlMJQ',b:'NEW'},
-      {t:'Euphoria',m:'S3 · Drama',e:'✨',bg:'#2e0d2e',v:'DrVVHRHlMJQ',b:''},
-      {t:'Game of Thrones',m:'S8 · Fantasy',e:'⚔️',bg:'#0d0d1a',v:'DrVVHRHlMJQ',b:''},
-    ],
-    'Max Originals':[
-      {t:'The Penguin',m:'S1 · Crime',e:'🐧',bg:'#0d0d0d',v:'DrVVHRHlMJQ',b:'NEW'},
-      {t:'Industry',m:'S3 · Drama',e:'📈',bg:'#0d1a0d',v:'DrVVHRHlMJQ',b:''},
-    ],
-    'Movies':[
-      {t:'Dune: Part Two',m:'2h 46m · Sci-Fi',e:'🏜️',bg:'#1a1a0d',v:'DrVVHRHlMJQ',b:''},
-      {t:'Poor Things',m:'2h 21m · Drama',e:'🦋',bg:'#0d1a1a',v:'DrVVHRHlMJQ',b:''},
-      {t:'Barbie',m:'1h 54m · Comedy',e:'💗',bg:'#2e0d1a',v:'DrVVHRHlMJQ',b:''},
-    ]
-  }},
-  hulu:{name:'Hulu',color:'#1ce783',tabs:['TV Shows','Movies','FX on Hulu'],content:{
-    'TV Shows':[
-      {t:'The Bear',m:'S3 · Comedy-Drama',e:'🍳',bg:'#1e0a00',v:'VwZy3Sl3tFA',b:'NEW'},
-      {t:'Abbott Elementary',m:'S4 · Comedy',e:'🍎',bg:'#0d1a0d',v:'VwZy3Sl3tFA',b:''},
-      {t:'Only Murders',m:'S4 · Mystery',e:'🔍',bg:'#0d0d2e',v:'VwZy3Sl3tFA',b:''},
-      {t:'Handmaid\'s Tale',m:'S5 · Drama',e:'🔴',bg:'#2e0d0d',v:'VwZy3Sl3tFA',b:''},
-    ],
-    'Movies':[
-      {t:'Parasite',m:'2h 12m · Thriller',e:'🪱',bg:'#1a1a0d',v:'VwZy3Sl3tFA',b:''},
-      {t:'Palm Springs',m:'1h 30m · Comedy',e:'🌴',bg:'#2e1a0d',v:'VwZy3Sl3tFA',b:''},
-    ],
-    'FX on Hulu':[
-      {t:'Shogun',m:'S1 · Drama',e:'🗡️',bg:'#1a0d0d',v:'VwZy3Sl3tFA',b:''},
-      {t:'Fargo',m:'S5 · Crime',e:'❄️',bg:'#0d1a2e',v:'VwZy3Sl3tFA',b:''},
-      {t:'The Americans',m:'S6 · Thriller',e:'🕵️',bg:'#0d0d0d',v:'VwZy3Sl3tFA',b:''},
-    ]
-  }},
-  prime:{name:'Prime Video',color:'#00a8e0',tabs:['TV Shows','Movies','Originals'],content:{
-    'TV Shows':[
-      {t:'Rings of Power',m:'S2 · Fantasy',e:'💍',bg:'#0a1a0a',v:'3WqqJemi39E',b:'NEW'},
-      {t:'The Boys',m:'S4 · Action',e:'⚡',bg:'#1a0d0d',v:'3WqqJemi39E',b:''},
-      {t:'Reacher',m:'S3 · Action',e:'💪',bg:'#0d0d1a',v:'3WqqJemi39E',b:'NEW'},
-      {t:'Fallout',m:'S1 · Sci-Fi',e:'☢️',bg:'#1a1a0d',v:'3WqqJemi39E',b:''},
-    ],
-    'Movies':[
-      {t:'Road House',m:'1h 54m · Action',e:'🥊',bg:'#1a0d0d',v:'3WqqJemi39E',b:''},
-      {t:'Saltburn',m:'2h 10m · Thriller',e:'🏠',bg:'#1a1a0d',v:'3WqqJemi39E',b:''},
-      {t:'Air',m:'1h 52m · Drama',e:'👟',bg:'#0d1a0d',v:'3WqqJemi39E',b:''},
-    ],
-    'Originals':[
-      {t:'Invincible',m:'S3 · Animation',e:'🦸',bg:'#1a0d1a',v:'3WqqJemi39E',b:'NEW'},
-      {t:'Upload',m:'S3 · Comedy',e:'☁️',bg:'#0d1a1a',v:'3WqqJemi39E',b:''},
-      {t:'Citadel',m:'S1 · Spy',e:'🌍',bg:'#0d0d1a',v:'3WqqJemi39E',b:''},
-    ]
-  }},
-  appletv:{name:'Apple TV+',color:'#1c1c1e',tabs:['Apple Originals','New'],content:{
-    'Apple Originals':[
-      {t:'Severance',m:'S2 · Thriller',e:'🏢',bg:'#0a0a1e',v:'mPLAHR8VLCA',b:'NEW'},
-      {t:'Ted Lasso',m:'S3 · Comedy',e:'⚽',bg:'#0d2e0d',v:'mPLAHR8VLCA',b:''},
-      {t:'The Morning Show',m:'S4 · Drama',e:'☀️',bg:'#2e1a0d',v:'mPLAHR8VLCA',b:'NEW'},
-      {t:'Slow Horses',m:'S4 · Thriller',e:'🐎',bg:'#0d0d0d',v:'mPLAHR8VLCA',b:''},
-      {t:'Silo',m:'S2 · Sci-Fi',e:'🏭',bg:'#1a1a0d',v:'mPLAHR8VLCA',b:'NEW'},
-      {t:'Shrinking',m:'S2 · Comedy',e:'🛋️',bg:'#0d2e0d',v:'mPLAHR8VLCA',b:''},
-    ],
-    'New':[
-      {t:'Presumed Innocent',m:'S1 · Legal',e:'⚖️',bg:'#0d0d1a',v:'mPLAHR8VLCA',b:'NEW'},
-      {t:'Dark Matter',m:'S1 · Sci-Fi',e:'🌌',bg:'#0d0d2e',v:'mPLAHR8VLCA',b:'NEW'},
-      {t:'Sugar',m:'S1 · Noir',e:'🍬',bg:'#1a0d0d',v:'mPLAHR8VLCA',b:''},
-    ]
-  }},
-  crunchyroll:{name:'Crunchyroll',color:'#f47521',tabs:['Anime','Simulcast','Movies'],content:{
-    'Anime':[
-      {t:'Demon Slayer',m:'S4 · Action',e:'⚔️',bg:'#1f0a0a',v:'VQGCKyvzIM4',b:''},
-      {t:'Jujutsu Kaisen',m:'S3 · Action',e:'👊',bg:'#0d0d1a',v:'VQGCKyvzIM4',b:'NEW'},
-      {t:'My Hero Academia',m:'S7 · Action',e:'⚡',bg:'#0d1a2e',v:'VQGCKyvzIM4',b:''},
-      {t:'One Piece',m:'Ep 1100+',e:'🏴‍☠️',bg:'#1a1a0d',v:'VQGCKyvzIM4',b:''},
-      {t:'Attack on Titan',m:'Final',e:'🗡️',bg:'#1a0d0d',v:'VQGCKyvzIM4',b:''},
-      {t:'Chainsaw Man',m:'S2 · Horror',e:'🪚',bg:'#2e0d0d',v:'VQGCKyvzIM4',b:'NEW'},
-    ],
-    'Simulcast':[
-      {t:'Frieren',m:'S1 · Fantasy',e:'🧙',bg:'#0d1a1a',v:'VQGCKyvzIM4',b:''},
-      {t:'Blue Lock',m:'S2 · Sports',e:'⚽',bg:'#0d0d2e',v:'VQGCKyvzIM4',b:'NEW'},
-      {t:'Dungeon Meshi',m:'S1 · Fantasy',e:'🍲',bg:'#1a1a0d',v:'VQGCKyvzIM4',b:''},
-    ],
-    'Movies':[
-      {t:'Mugen Train',m:'1h 57m · Action',e:'🚂',bg:'#1a0d0d',v:'VQGCKyvzIM4',b:''},
-      {t:'Dragon Ball Super: Broly',m:'1h 40m',e:'🐉',bg:'#0d0d2e',v:'VQGCKyvzIM4',b:''},
-    ]
-  }},
-  espn:{name:'ESPN',color:'#cc0000',tabs:['Live Now','NFL','NBA','Soccer'],content:{
-    'Live Now':[
-      {t:'NFL Sunday Night',m:'Live · Football',e:'🏈',bg:'#0a1f0a',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'NBA Playoffs',m:'Live · Basketball',e:'🏀',bg:'#1a0a00',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Champions League',m:'Live · Soccer',e:'⚽',bg:'#0a0a1f',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'UFC Fight Night',m:'Live · MMA',e:'🥊',bg:'#1f0a0a',v:'jfKfPfyJRdk',b:'LIVE'},
-    ],
-    'NFL':[
-      {t:'NFL Highlights',m:'Week 18',e:'🏈',bg:'#0d1a0d',v:'jfKfPfyJRdk',b:''},
-      {t:'Super Bowl LVIII',m:'Replay',e:'🏆',bg:'#1a1a0d',v:'jfKfPfyJRdk',b:''},
-    ],
-    'NBA':[
-      {t:'NBA Finals Game 7',m:'Replay',e:'🏀',bg:'#0d0d2e',v:'jfKfPfyJRdk',b:''},
-      {t:'NBA All-Star Game',m:'2024 Replay',e:'⭐',bg:'#2e0d0d',v:'jfKfPfyJRdk',b:''},
-    ],
-    'Soccer':[
-      {t:'CL Final',m:'Real Madrid vs Dortmund',e:'⚽',bg:'#0d1a1a',v:'jfKfPfyJRdk',b:''},
-      {t:'Euro 2024 Final',m:'Spain vs England',e:'🏆',bg:'#0d0d1a',v:'jfKfPfyJRdk',b:''},
-    ]
-  }},
-  twitch:{name:'Twitch',color:'#9147ff',tabs:['Live','Gaming','IRL','Esports'],content:{
-    'Live':[
-      {t:'Just Chatting',m:'Live · 482k watching',e:'💬',bg:'#1a0d2e',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Minecraft',m:'Live · 89k watching',e:'⛏️',bg:'#0d1a0d',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Fortnite',m:'Live · 124k watching',e:'🎮',bg:'#0d0d2e',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'League of Legends',m:'Live · 67k watching',e:'⚔️',bg:'#1a0d0d',v:'jfKfPfyJRdk',b:'LIVE'},
-    ],
-    'Gaming':[
-      {t:'Call of Duty',m:'Battle Royale',e:'🔫',bg:'#0d0d0d',v:'jfKfPfyJRdk',b:''},
-      {t:'GTA V Roleplay',m:'Live RP Server',e:'🚗',bg:'#0d1a0d',v:'jfKfPfyJRdk',b:'LIVE'},
-    ],
-    'IRL':[
-      {t:'Travel IRL',m:'Live from Tokyo',e:'✈️',bg:'#0d1a1a',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Cooking Live',m:'Kitchen Stream',e:'👨‍🍳',bg:'#1a1a0d',v:'jfKfPfyJRdk',b:'LIVE'},
-    ],
-    'Esports':[
-      {t:'CS2 Major',m:'Live · Quarterfinals',e:'🏆',bg:'#0d0d1a',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Valorant Champions',m:'Finals',e:'🎯',bg:'#2e0d0d',v:'jfKfPfyJRdk',b:'LIVE'},
-    ]
-  }},
-  youtube:{name:'YouTube',color:'#ff0000',tabs:['Trending','Music','Live'],content:{
-    'Trending':[
-      {t:'Lo-fi Hip Hop Radio',m:'24/7 Live · Study',e:'🎵',bg:'#0a0f1e',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Top Music Mix',m:'Trending Hits',e:'🎶',bg:'#1a0d0d',v:'5qap5aO4i9A',b:''},
-      {t:'Comedy Shorts',m:'Viral Videos',e:'😂',bg:'#1a1a0d',v:'jfKfPfyJRdk',b:''},
-    ],
-    'Music':[
-      {t:'Chill Vibes Radio',m:'24/7 Live',e:'🎧',bg:'#0d0d2e',v:'5qap5aO4i9A',b:'LIVE'},
-      {t:'Jazz & Soul Radio',m:'24/7 Live',e:'🎷',bg:'#1a1a0d',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Top 40 Hits',m:'Playlist · 6h+',e:'🎵',bg:'#2e0d1a',v:'5qap5aO4i9A',b:''},
-    ],
-    'Live':[
-      {t:'News Live',m:'Breaking News 24/7',e:'📺',bg:'#0d0d0d',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'NASA ISS Feed',m:'Space Station Live',e:'🚀',bg:'#0a0a1e',v:'jfKfPfyJRdk',b:'LIVE'},
-      {t:'Nature Cams',m:'Wildlife Live',e:'🦁',bg:'#0d1a0d',v:'jfKfPfyJRdk',b:'LIVE'},
-    ]
-  }}
-};
-
-// ════════════ BROWSE MODAL ════════════
-var _browsePlatform='youtube';
-
-function openBrowse(){
-  // Use current active pill's platform if in a room
-  var active=document.querySelector('.pill.on');
-  var key='youtube';
-  if(active&&active.dataset&&active.dataset.key&&CATALOG[active.dataset.key]){
-    key=active.dataset.key;
-  } else if(S.room&&S.room.service&&CATALOG[S.room.service]){
-    key=S.room.service;
-  }
-  openBrowseFor(key);
-}
-
-function openBrowseFor(key){
-  if(!CATALOG[key])key='youtube';
-  _browsePlatform=key;
-  var cat=CATALOG[key];
-  document.getElementById('browse-plat-name').textContent='Browse '+cat.name;
-  document.getElementById('browse-plat-sub').textContent='Select something to watch together in real time';
-  // Render platform tabs (left side tabs for platform switching + content tabs on top)
-  var platKeys=Object.keys(CATALOG);
-  // Render content category tabs
-  var tabs=cat.tabs;
-  document.getElementById('browse-tabs').innerHTML=
-    // Platform switcher
-    '<div style="display:flex;align-items:center;gap:6px;padding:8px 1rem;border-bottom:1px solid var(--b1);overflow-x:auto;flex-shrink:0;background:rgba(0,0,0,.3)">'
-    +platKeys.filter(function(k){return !!CATALOG[k];}).map(function(k){
-      var p=CATALOG[k];
-      return '<button onclick="openBrowseFor(\''+k+'\')" style="display:flex;align-items:center;gap:4px;padding:4px 10px;border-radius:99px;border:1px solid '+(k===key?'var(--acc)':'var(--b1)')+';background:'+(k===key?'var(--acd)':'rgba(0,0,0,.3)')+';color:'+(k===key?'var(--acc)':'var(--mut)')+';font-size:.68rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:\'Syne\',sans-serif">'+p.name+'</button>';
-    }).join('')
-    +'</div>'
-    // Category tabs
-    +'<div style="display:flex;overflow-x:auto;padding:0 .5rem;border-bottom:1px solid var(--b1)">'
-    +tabs.map(function(t,i){
-      return '<button class="browse-tab'+(i===0?' on':'')+'" onclick="browseSwitchTab(this,\''+t+'\')">'+t+'</button>';
-    }).join('')+'</div>';
-  renderBrowseGrid(tabs[0]);
-  openM('modal-browse');
-}
-
-function browseSwitchTab(el,tabName){
-  document.querySelectorAll('.browse-tab').forEach(function(b){b.classList.remove('on');});
-  el.classList.add('on');
-  renderBrowseGrid(tabName);
-}
-
-function renderBrowseGrid(tabName){
-  var cat=CATALOG[_browsePlatform];
-  if(!cat)return;
-  var items=cat.content[tabName]||[];
-  document.getElementById('browse-grid').innerHTML=items.map(function(item){
-    var safeTitle=item.t.replace(/'/g,'&#39;');
-    return '<div class="content-card" onclick="watchContent(\''+_browsePlatform+'\',\''+item.v+'\',\''+safeTitle+'\')">'
-      +'<div class="cc-thumb" style="background:linear-gradient(135deg,'+item.bg+',#000)">'
-      +(item.b?('<div class="'+(item.b==='LIVE'?'cc-live':'cc-new')+'">'+item.b+'</div>'):'')
-      +item.e
-      +'</div>'
-      +'<div class="cc-info"><div class="cc-title">'+item.t+'</div><div class="cc-meta">'+item.m+'</div></div>'
-      +'</div>';
-  }).join('');
-}
-
-function watchContent(platform,videoId,title){
-  closeM('modal-browse');
-  var url='https://www.youtube.com/embed/'+videoId+'?enablejsapi=1&rel=0&origin='+encodeURIComponent(window.location.origin);
-  var p=PD[platform]||PD['youtube'];
-  S.room.service=platform;
-  // If not in a room yet, join one
-  if(!document.getElementById('view-room').classList.contains('active')){
-    joinRoom(title,platform,url);
-    return;
-  }
-  // Already in room — switch content immediately
-  S.room.url=url;
-  S.room.playing=false;
-  stopProgTimer();
-  document.getElementById('player-overlay').classList.remove('hidden');
-  document.getElementById('player-ctrls').style.display='none';
-  document.getElementById('video-title-bar').textContent='▶ '+title;
-  document.getElementById('video-title-bar').style.display='block';
-  document.getElementById('player-msg').textContent='▶ '+title;
-  document.getElementById('player-hint').textContent=p.name+' · Syncing for all viewers';
-  toast('🎬 Loading: '+title,'ok');
-  // Update active pill
-  document.querySelectorAll('.pill').forEach(function(pill){
-    pill.classList.toggle('on',pill.dataset&&pill.dataset.key===platform);
-  });
-  if(S.playerReady){
-    setTimeout(function(){
-      initPlayer(url);
-      setTimeout(startStream,1800);
-    },200);
-  }
-  // Announce in chat
-  addChatMsg(S.user.initials,'var(--acc)','You','▶ Now watching: '+title);
-}
-
-
-function showView(id){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});document.getElementById(id).classList.add('active');}
-function toast(msg,type){
-  var w=document.getElementById('twrap'),el=document.createElement('div');
-  el.className='tst'+(type?' '+type:'');
-  el.style.borderLeftColor=type==='ok'?'var(--grn)':type==='wn'?'var(--amb)':'var(--acc)';
-  el.textContent=msg;w.appendChild(el);
-  setTimeout(function(){el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(function(){el.remove();},300);},2800);
-}
-function sendReaction(emoji){
-  addChatMsg(S.user.initials,'var(--acc)','You',emoji);
-  var el=document.createElement('div');
-  el.className='reaction-float';
-  el.textContent=emoji;
-  var rect=document.querySelector('.cpanel');
-  if(rect){
-    var r=rect.getBoundingClientRect();
-    el.style.left=(r.left+Math.random()*r.width*0.6+r.width*0.2)+'px';
-    el.style.top=(r.bottom-80)+'px';
-  }
-  document.body.appendChild(el);
-  setTimeout(function(){el.remove();},1900);
-  if(Math.random()>0.5){
-    setTimeout(function(){
-      var bot=BOT_MSGS[Math.floor(Math.random()*BOT_MSGS.length)];
-      addChatMsg(bot.av,bot.color,bot.name,emoji);
-    },800+Math.random()*1200);
-  }
-}
-var VIDEO_TITLES={
-  'oBEFQFKCQb0':'Stranger Things Season 4 — Official Trailer',
-  '4Ps6nV4wiCE':'Arcane Season 2 — Final Trailer',
-  'jfKfPfyJRdk':'Lo-fi Hip Hop Radio 📚 Beats to Relax/Study To',
-  'VQGCKyvzIM4':'Demon Slayer: Mugen Train — Official Trailer',
-  'DrVVHRHlMJQ':'House of the Dragon Season 2 — Official Trailer',
-  'VwZy3Sl3tFA':'The Bear — Official Trailer',
-  '3WqqJemi39E':'The Lord of the Rings: The Rings of Power — Trailer',
-  'mPLAHR8VLCA':'Severance Season 2 — Official Trailer',
-  'ByXuk9QqQkk':'Encanto — Official Trailer',
-  'oqxAJKy0ii4':'Squid Game Season 2 — Official Trailer',
-};
-function showVideoTitle(vid){
-  var bar=document.getElementById('video-title-bar');
-  if(!bar)return;
-  var title=VIDEO_TITLES[vid]||'Now Playing';
-  bar.textContent='▶ '+title;
-  bar.style.display='block';
-}
-var _HOME_HTML=''; // captured after grids build
-S.myRooms={};
-function showHomeContent(){
-  var cnt=document.getElementById('main-content');
-  if(!cnt)return;
-  if(_HOME_HTML){cnt.innerHTML=_HOME_HTML;cnt.scrollTop=0;return;}
-  cnt.scrollTop=0;
-  document.querySelectorAll('.slink').forEach(function(l){l.classList.remove('on');});
-  document.querySelector('.slink').classList.add('on');
-}
-document.querySelectorAll('.mov').forEach(function(ov){
-  ov.addEventListener('click',function(e){if(e.target===ov)ov.classList.remove('open');});
-});
-document.addEventListener('keydown',function(e){
-  var inRoom = document.getElementById('view-room').classList.contains('active');
-  var notInput = e.target.tagName!=='INPUT' && e.target.tagName!=='TEXTAREA';
-  if(!inRoom || !notInput) return;
-  if(e.code==='Space'){e.preventDefault();togglePlay();}
-  if(e.code==='ArrowLeft'){e.preventDefault();skipBack();}
-  if(e.code==='ArrowRight'){e.preventDefault();skipFwd();}
-  if(e.code==='ArrowUp'){e.preventDefault();adjVol(10);}
-  if(e.code==='ArrowDown'){e.preventDefault();adjVol(-10);}
-  if(e.code==='KeyF'){toggleFS();}
-  if(e.code==='KeyM'){toggleMute();}
-  if(e.code==='KeyP'){togglePiP();}
-});
-function adjVol(delta){
-  S.vol=Math.max(0,Math.min(100,S.vol+delta));
-  document.getElementById('vol-fill').style.width=S.vol+'%';
-  document.getElementById('mute-btn').textContent=S.vol===0?'🔇':'🔊';
-  if(S.player)try{S.player.setVolume(S.vol);}catch(ex){}
-  toast((delta>0?'🔊':'🔉')+' Volume '+S.vol+'%','');
-}
-function togglePiP(){
-  var iframe=document.querySelector('#yt-player iframe');
-  if(!iframe){toast('▶ Start a video first','wn');return;}
-  if(document.pictureInPictureElement){
-    document.exitPictureInPicture().catch(function(){});
-  } else {
-    iframe.requestPictureInPicture&&iframe.requestPictureInPicture().catch(function(){
-      toast('📺 PiP not supported in this browser','wn');
+    
+    document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
+        const linkInput = document.getElementById('inviteLinkInput');
+        linkInput.select();
+        navigator.clipboard.writeText(linkInput.value);
+        showStatus('🔗 Invite link copied to clipboard');
     });
-  }
-}
-var _ctrlHideTimer=null;
-function resetCtrlHide(){
-  var ctrls=document.getElementById('player-ctrls');
-  if(!ctrls)return;
-  ctrls.style.opacity='1';
-  ctrls.style.transform='translateY(0)';
-  clearTimeout(_ctrlHideTimer);
-  if(document.fullscreenElement){
-    _ctrlHideTimer=setTimeout(function(){
-      ctrls.style.opacity='0';
-      ctrls.style.transform='translateY(8px)';
-    },3000);
-  }
-}
-document.addEventListener('fullscreenchange',function(){
-  var ctrls=document.getElementById('player-ctrls');
-  var pa=document.querySelector('.player-area');
-  if(!ctrls||!pa)return;
-  if(document.fullscreenElement){
-    ctrls.style.transition='opacity .4s,transform .4s';
-    pa.addEventListener('mousemove',resetCtrlHide);
-    pa.addEventListener('click',resetCtrlHide);
-    resetCtrlHide();
-  } else {
-    ctrls.style.opacity='1';
-    ctrls.style.transform='';
-    clearTimeout(_ctrlHideTimer);
-    pa.removeEventListener('mousemove',resetCtrlHide);
-  }
-});
-(function(){
-  function barPct(bar,e){
-    var rect=bar.getBoundingClientRect();
-    var x=(e.touches?e.touches[0].clientX:e.clientX);
-    return Math.max(0,Math.min(1,(x-rect.left)/rect.width));
-  }
-  var pb=null,vb=null;
-  document.addEventListener('touchstart',function(e){
-    if(e.target.closest('#prog-bar')){pb=e.target.closest('#prog-bar');}
-    if(e.target.closest('#vol-bar')){vb=e.target.closest('#vol-bar');}
-  },{passive:true});
-  document.addEventListener('touchmove',function(e){
-    if(pb){
-      var p=barPct(pb,e);
-      document.getElementById('prog-fill').style.width=(p*100)+'%';
-      document.getElementById('prog-thumb').style.left=(p*100)+'%';
-      if(S.player)try{S.player.seekTo(p*S.player.getDuration(),true);}catch(ex){}
-    }
-    if(vb){
-      var v=barPct(vb,e);
-      S.vol=Math.round(v*100);
-      document.getElementById('vol-fill').style.width=S.vol+'%';
-      document.getElementById('mute-btn').textContent=S.vol===0?'🔇':'🔊';
-      if(S.player)try{S.player.setVolume(S.vol);}catch(ex){}
-    }
-  },{passive:true});
-  document.addEventListener('touchend',function(){pb=null;vb=null;});
-})();
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.nsrch'))hideSearch();
-});
-setInterval(function(){
-  var vc=document.getElementById('viewer-count');
-  if(!vc)return;
-  var n=parseInt(vc.textContent)||0;
-  var delta=Math.floor(Math.random()*3)-(Math.random()>.7?1:0);
-  n=Math.max(2,n+delta);
-  vc.textContent=n;
-},8000);
-(function(){
-  var notifBadge=document.querySelector('.slink .sbadge:not(.live)');
-  if(notifBadge&&notifBadge.closest('.slink')){
-    notifBadge.closest('.slink').addEventListener('click',function(){
-      notifBadge.style.display='none';
+    
+    document.getElementById('resetRoomBtn')?.addEventListener('click', removeUninvitedUsers);
+    
+    document.getElementById('sendChatBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('chatInput');
+        if (input.value.trim()) {
+            addChatMessage(input.value, 'You');
+            input.value = '';
+        }
     });
-  }
-})();
-function mkRcard(name,service,c1,c2,ico,url,meta1,meta2){
-  var safeUrl=url.replace(/'/g,'%27');
-  return '<div class="rcard" onclick="joinRoom(\''+name.replace(/'/g,'')+'\',\''+service+'\',\''+safeUrl+'\')">'
-    +'<div class="rthumb" style="background:linear-gradient(135deg,'+c1+','+c2+')">'+ico+'<div class="rltag">LIVE</div></div>'
-    +'<div class="rinfo"><div class="rtitle">'+name+'</div><div class="rmeta"><span>'+meta1+'</span><span style="margin-left:auto;font-size:.7rem">'+meta2+'</span></div></div>'
-    +'</div>';
-}
-function mkFriend(name,initials,color,status,state){
-  var dot=state==='online'?'var(--grn)':state==='away'?'var(--amb)':'var(--hin)';
-  var actionBtn=state==='online'?
-    '<button class="btnp" style="padding:5px 11px;font-size:.72rem;max-width:none;width:auto" onclick="toast(\'📨 Invite sent to '+name+'!\',\'ok\')">Invite</button>':
-    '<span style="font-size:.72rem;color:var(--hin)">'+status+'</span>';
-  return '<div class="friend-row">'+
-    '<div style="position:relative;flex-shrink:0"><div class="pav2" style="background:'+color+';width:40px;height:40px;font-size:.75rem">'+initials+'</div>'+
-    '<div style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:'+dot+';border:2px solid var(--card)"></div></div>'+
-    '<div style="flex:1;min-width:0"><div style="font-size:.88rem;font-weight:600">'+name+'</div><div style="font-size:.72rem;color:var(--mut);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+status+'</div></div>'+
-    actionBtn+'</div>';
-}
-function mkNotif(ico,title,sub,color,av,action){
-  var btn=action?'<button style="font-size:.72rem;color:var(--acc);background:none;border:none;cursor:pointer;flex-shrink:0" onclick="'+action()+'">Join</button>':'';
-  return '<div class="notif-row">'+
-    '<div class="pav2" style="background:'+color+';width:36px;height:36px;font-size:.75rem;flex-shrink:0">'+av+'</div>'+
-    '<div style="flex:1"><div style="font-size:.84rem;font-weight:500">'+title+'</div><div style="font-size:.72rem;color:var(--mut);margin-top:2px">'+sub+'</div></div>'+
-    btn+'</div>';
-}
-function showPage(key,btn){
-  if(btn){document.querySelectorAll('.slink').forEach(function(l){l.classList.remove('on');});btn.classList.add('on');}
-  var cnt=document.getElementById('main-content');
-  if(!cnt)return;
-  var fn=PAGE_CONTENT[key];
-  if(!fn){cnt.innerHTML='';return;}
-  cnt.innerHTML=fn();
-  cnt.scrollTop=0;
-}
-function stab(el,page){
-  document.querySelectorAll('.slink').forEach(function(l){l.classList.remove('on');});
-  el.classList.add('on');
-  if(page){showPage(page,null);}
-}
-
-var PAGE_CONTENT = {
-  home: null, // default, shows rooms+platforms
-  trending: function(){return '<div class="pg-hd"><h2>🔥 Trending Now</h2><p>Most-watched rooms live right now</p></div>'+
-    '<div class="rgrid">'+
-    mkRcard('Squid Game S3 Watch Party','netflix','#1a2e0d','#0d2e1a','🎮','https://www.youtube.com/embed/oqxAJKy0ii4?enablejsapi=1&rel=0','Prime Video','1.2k watching')+
-    mkRcard('Formula 1 Grand Prix Live','espn','#1a0808','#2d1000','🏎️','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0','ESPN','892 watching')+
-    mkRcard('Severance S2 Finale','appletv','#0a0a1e','#1a1040','🏢','https://www.youtube.com/embed/mPLAHR8VLCA?enablejsapi=1&rel=0','Apple TV+','734 watching')+
-    mkRcard('The Bear S3 Premiere','hulu','#1e0a00','#2d1500','🍳','https://www.youtube.com/embed/VwZy3Sl3tFA?enablejsapi=1&rel=0','Hulu','621 watching')+
-    '</div>';},
-  movies: function(){return '<div class="pg-hd"><h2>🎬 Movies</h2><p>Watch a film together right now</p></div>'+
-    '<div class="rgrid">'+
-    mkRcard('Encanto','disney','#0d1a2e','#1a0d30','🌺','https://www.youtube.com/embed/ByXuk9QqQkk?enablejsapi=1&rel=0','Disney+','Movie · 1h 42m')+
-    mkRcard('Rings of Power','prime','#0a1a0a','#0d2e1a','💍','https://www.youtube.com/embed/3WqqJemi39E?enablejsapi=1&rel=0','Prime Video','Movie · 2h 17m')+
-    mkRcard('Demon Slayer: Mugen Train','crunchyroll','#1f0a0a','#200d30','⚔️','https://www.youtube.com/embed/VQGCKyvzIM4?enablejsapi=1&rel=0','Crunchyroll','Movie · 1h 57m')+
-    mkRcard('House of Dragon','hbo','#1a0505','#2d0a00','🐉','https://www.youtube.com/embed/DrVVHRHlMJQ?enablejsapi=1&rel=0','Max','Movie · 1h 28m')+
-    '</div>';},
-  tvshows: function(){return '<div class="pg-hd"><h2>📺 TV Shows</h2><p>Binge together, episode by episode</p></div>'+
-    '<div class="rgrid">'+
-    mkRcard('Stranger Things S4','netflix','#1a0d2e','#0f1a38','📺','https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0','Netflix','Season 4 · Ep 7')+
-    mkRcard('Arcane Season 2','netflix','#1c0a30','#0a1e3a','🎮','https://www.youtube.com/embed/4Ps6nV4wiCE?enablejsapi=1&rel=0','Netflix','Season 2 · Ep 9')+
-    mkRcard('Severance','appletv','#0a0a1e','#1a1040','🏢','https://www.youtube.com/embed/mPLAHR8VLCA?enablejsapi=1&rel=0','Apple TV+','Season 2 · Ep 4')+
-    mkRcard('The Bear','hulu','#1e0a00','#2d1500','🍳','https://www.youtube.com/embed/VwZy3Sl3tFA?enablejsapi=1&rel=0','Hulu','Season 3 · Ep 1')+
-    '</div>';},
-  sports: function(){return '<div class="pg-hd"><h2>🏟 Live Sports</h2><p>Watch the game with your crew</p></div>'+
-    '<div class="rgrid">'+
-    mkRcard('NFL Sunday Night Football','espn','#0a1f0a','#0d1a2e','🏈','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0','ESPN · LIVE','892 watching')+
-    mkRcard('NBA Playoffs Game 5','espn','#1a0a00','#2d1000','🏀','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0','ESPN · LIVE','1.4k watching')+
-    mkRcard('UFC 305 Fight Night','espn','#0a0a0a','#1a0a00','🥊','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0','ESPN · LIVE','2.1k watching')+
-    mkRcard('Champions League Final','fubo','#0a0f1e','#1a1040','⚽','https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&rel=0','FuboTV · LIVE','3.8k watching')+
-    '</div>';},
-  friends: function(){return '<div class="pg-hd"><h2>👥 Friends</h2><p>Your watch party crew</p></div>'+
-    '<div class="friends-list">'+
-    mkFriend('Alex Johnson','AJ','#4f7df3','Watching Stranger Things','online')+
-    mkFriend('Jordan Kim','JK','#a855f7','In a room — Arcane','online')+
-    mkFriend('Kira Patel','KP','#22d3a5','Last seen 2h ago','offline')+
-    mkFriend('Marcus Lee','ML','#f97316','Watching NFL','online')+
-    mkFriend('Sam Rivera','SR','#ec4899','Available','away')+
-    mkFriend('Taylor Wong','TW','#06b6d4','Last seen yesterday','offline')+
-    '</div>'+
-    '<button class="btnp" style="margin-top:1.5rem;max-width:200px" onclick="toast(\'📨 Friend request sent!\',\'ok\')">+ Add Friend</button>';},
-  myrooms: function(){
-    var rooms=Object.keys(S.myRooms||{});
-    var html='<div class="pg-hd"><h2>📌 My Rooms</h2><p>Rooms you\'ve created or saved</p></div>';
-    if(!rooms.length){html+='<div style="color:var(--mut);font-size:.9rem;padding:2rem 0;text-align:center">No saved rooms yet.<br><br><button class="btnp" style="max-width:200px;margin-top:.5rem" onclick="openM(\'modal-create\')">+ Create a Room</button></div>';}
-    else{html+='<div class="rgrid">'+rooms.map(function(k){var r=S.myRooms[k];return mkRcard(r.name,r.service||'youtube',r.c1||'#1a0d2e',r.c2||'#0f1a38','📺',r.url,'Your Room','Created by you');}).join('')+'</div>';}
-    return html;},
-  notifications: function(){return '<div class="pg-hd"><h2>🔔 Notifications</h2><p>What\'s been happening</p></div>'+
-    '<div class="notif-list">'+
-    mkNotif('🎬','Alex started a room','Stranger Things S4 Rewatch · 5m ago','#4f7df3','AJ',function(){return 'joinRoom(\'Stranger Things S4\',\'netflix\',\'https://www.youtube.com/embed/oBEFQFKCQb0?enablejsapi=1&rel=0\')';})+
-    mkNotif('📨','Jordan invited you','To watch Arcane S2 · 12m ago','#a855f7','JK',function(){return 'openM(\'modal-invite\')';})+
-    mkNotif('✅','Kira connected Netflix','Successfully linked · 1h ago','#22d3a5','KP',null)+
-    mkNotif('🔒','Security check passed','All devices verified · 2h ago','#22d3a5','🔒',null)+
-    '</div>';}
-};
-
-(function buildGrids(){
-  var cats={free:[],premium:[],cable:[]};
-  Object.keys(PD).forEach(function(k){cats[PD[k].cat].push(k);});
-  function card(k){
-    var p=PD[k];
-    var badge=p.cat==='free'?'free':p.cat==='premium'?'prem':'cabl';
-    var badgeTxt=p.cat==='free'?'Free':p.cat==='premium'?'Premium':'Cable';
-    return '<div class="pc" id="pc-'+k+'" onclick="connectPlatform(\''+k+'\')"><div class="pc-ck">✓</div>'
-      +'<div class="plogo" style="background:'+p.color+'">'+p.logo+'</div>'
-      +'<div class="pname">'+p.name+'</div>'
-      +'<div class="pst" id="pst-'+k+'">'+(p.free?'No login needed':p.cable?'Cable login':'Connect account')+'</div>'
-      +'<span class="ptag '+badge+'">'+badgeTxt+'</span></div>';
-  }
-  document.getElementById('grid-free').innerHTML=cats.free.map(card).join('');
-  document.getElementById('grid-premium').innerHTML=cats.premium.map(card).join('');
-  document.getElementById('grid-cable').innerHTML=cats.cable.map(card).join('');
-  setTimeout(function(){
-    var mc=document.getElementById('main-content');
-    if(mc)_HOME_HTML=mc.innerHTML;
-  },0);
-})();
-refreshSettings();
+    
+    document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('sendChatBtn').click();
+        }
+    });
+    
+    document.getElementById('syncPlayBtn')?.addEventListener('click', syncPlay);
+    document.getElementById('syncPauseBtn')?.addEventListener('click', syncPause);
+    
+    // Initialize
+    renderPlatforms();
+    showContentForPlatform('youtube');
+    updateInviteeListUI();
+    handleInviteFromURL();
+    
+    // Set default video
+    setTimeout(() => {
+        playVideo('dQw4w9WgXcQ');
+    }, 100);
+    
+    // Clean up uninvited messages periodically
+    setInterval(() => {
+        const oldLength = roomState.chatHistory.length;
+        roomState.chatHistory = roomState.chatHistory.filter(msg => 
+            roomState.allowedSessions.has(msg.senderId)
+        );
+        if (oldLength !== roomState.chatHistory.length) {
+            renderChat();
+        }
+    }, 5000);
 </script>
 </body>
 </html>
