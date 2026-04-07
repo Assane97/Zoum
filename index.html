@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Zoum — Watch Together · Sync · Private Rooms</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Zoum — Watch Together • Sync • Private Rooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
 * {
@@ -20,18 +19,20 @@ body {
   overflow-x: hidden;
 }
 
+/* Gradient Background */
 .gradient-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15), transparent 50%),
-              radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.08), transparent 60%);
+  background: radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.12), transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.06), transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -44,6 +45,7 @@ body {
   border-radius: 10px;
 }
 
+/* Navigation */
 .navbar {
   position: fixed;
   top: 0;
@@ -76,6 +78,10 @@ body {
   gap: 0.5rem;
 }
 
+.logo span {
+  font-size: 1.2rem;
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;
@@ -94,6 +100,7 @@ body {
   color: #8b5cf6;
 }
 
+/* Buttons */
 .btn-primary {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
@@ -122,6 +129,11 @@ body {
   transition: 0.2s;
 }
 
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Hero Section */
 .hero-section {
   min-height: 100vh;
   display: flex;
@@ -173,6 +185,7 @@ body {
   flex-wrap: wrap;
 }
 
+/* Features Section */
 .features-section {
   padding: 5rem 2rem;
   background: #0f0f14;
@@ -189,7 +202,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
@@ -223,6 +236,7 @@ body {
   line-height: 1.5;
 }
 
+/* App Container */
 .app-container {
   display: none;
   padding-top: 4rem;
@@ -232,6 +246,7 @@ body {
   display: block;
 }
 
+/* Room Dashboard */
 .room-dashboard {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -241,6 +256,7 @@ body {
   margin: 0 auto;
 }
 
+/* Video Section */
 .video-section {
   background: #000000;
   border-radius: 1.5rem;
@@ -304,9 +320,18 @@ body {
 .video-controls button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
+.now-playing {
+  font-size: 0.7rem;
+  color: #8b5cf6;
+  padding: 0.5rem 0.75rem;
+  background: #0f0f14;
+  border-top: 1px solid #2d2d44;
+  display: none;
+}
+
+/* Room Sidebar */
 .room-sidebar {
   display: flex;
   flex-direction: column;
@@ -335,112 +360,34 @@ body {
   font-weight: 600;
 }
 
-.chat-container {
-  height: 320px;
+.room-info-bar {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: #0f0f14;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.chat-message {
-  background: #2d2d44;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.75rem;
-  font-size: 0.85rem;
-  max-width: 85%;
-}
-
-.chat-message.own {
-  background: #8b5cf6;
-  align-self: flex-end;
-}
-
-.chat-message strong {
-  color: #c4b5fd;
+.room-id {
+  font-family: monospace;
   font-size: 0.75rem;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
 }
 
-.chat-input-area {
+.viewer-count {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.chat-input-area input {
-  flex: 1;
-  background: #2d2d44;
-  border: none;
-  padding: 0.7rem 1rem;
-  border-radius: 100px;
-  color: white;
-  font-size: 0.85rem;
-}
-
-.chat-input-area input::placeholder {
-  color: #6b7280;
-}
-
-.chat-input-area button {
-  background: #8b5cf6;
-  border: none;
-  padding: 0.5rem 1.25rem;
-  border-radius: 100px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.platforms-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.platform-item {
-  background: #2d2d44;
-  padding: 0.5rem 0.25rem;
-  text-align: center;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: 0.1s;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.75rem;
+  color: #a1a1aa;
 }
 
-.platform-item:hover {
-  background: #8b5cf6;
-}
-
-.content-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.content-item {
-  background: #3b82f6;
-  padding: 0.35rem 0.75rem;
-  border-radius: 100px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  transition: 0.1s;
-}
-
-.content-item:hover {
-  background: #2563eb;
-}
-
+/* Invite Section */
 .invite-section {
   background: #0f1420;
   border-radius: 1rem;
@@ -481,33 +428,143 @@ body {
   font-size: 0.75rem;
 }
 
-.room-info-bar {
-  display: flex;
-  align-items: center;
+/* Platform Grid */
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
-  padding: 0.5rem 1rem;
-  background: #0f0f14;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  margin-top: 0.75rem;
 }
 
-.room-id {
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.1);
-  padding: 0.25rem 0.75rem;
-  border-radius: 100px;
+.platform-item {
+  background: #2d2d44;
+  padding: 0.75rem 0.25rem;
+  text-align: center;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: 0.1s;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.viewer-count {
+.platform-item:hover {
+  background: #8b5cf6;
+  transform: scale(0.98);
+}
+
+.platform-item.active {
+  background: #8b5cf6;
+  border: 1px solid #c4b5fd;
+}
+
+/* Content List */
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.content-item {
+  background: #2d2d44;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: 0.1s;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
+  gap: 0.5rem;
+}
+
+.content-item:hover {
+  background: #3b82f6;
+}
+
+.content-item .icon {
+  font-size: 1rem;
+}
+
+.content-item .title {
+  flex: 1;
+}
+
+.content-item .duration {
+  font-size: 0.65rem;
   color: #a1a1aa;
 }
 
+/* Chat */
+.chat-container {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat-message {
+  background: #2d2d44;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  max-width: 85%;
+}
+
+.chat-message.own {
+  background: #8b5cf6;
+  align-self: flex-end;
+}
+
+.chat-message strong {
+  color: #c4b5fd;
+  font-size: 0.7rem;
+}
+
+.chat-message.own strong {
+  color: #e9d5ff;
+}
+
+.chat-input-area {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.chat-input-area input {
+  flex: 1;
+  background: #2d2d44;
+  border: none;
+  padding: 0.7rem 1rem;
+  border-radius: 100px;
+  color: white;
+  font-size: 0.85rem;
+}
+
+.chat-input-area input::placeholder {
+  color: #6b7280;
+}
+
+.chat-input-area button {
+  background: #8b5cf6;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -554,6 +611,7 @@ body {
   cursor: pointer;
 }
 
+/* Toast */
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -587,14 +645,7 @@ body {
   }
 }
 
-.now-playing {
-  font-size: 0.7rem;
-  color: #8b5cf6;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid #2d2d44;
-}
-
+/* Responsive */
 @media (max-width: 900px) {
   .room-dashboard {
     grid-template-columns: 1fr;
@@ -608,12 +659,16 @@ body {
   .nav-links {
     gap: 1rem;
   }
+  .platforms-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>
 </head>
 <body>
 <div class="gradient-bg"></div>
 
+<!-- Navigation -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
@@ -627,6 +682,7 @@ body {
   </div>
 </nav>
 
+<!-- Landing Page -->
 <div id="landingPage">
   <section class="hero-section">
     <div class="hero-content">
@@ -634,11 +690,11 @@ body {
         ✨ Watch Together, Anywhere
       </div>
       <h1 class="hero-title">
-        Sync. Watch. Chat.<br>Together in Real-Time
+        Watch Together.<br>Sync in Real-Time.
       </h1>
       <p class="hero-subtitle">
         Create private rooms, invite friends via email or phone,<br>
-        and watch content from 15+ platforms together with perfect sync.
+        and watch content from YouTube, Netflix, and Prime Video together.
       </p>
       <div class="cta-buttons">
         <button class="btn-primary" onclick="showCreateRoomModal()">🚀 Start a Room</button>
@@ -653,22 +709,22 @@ body {
       <div class="feature-card">
         <div class="feature-icon">🔒</div>
         <h3>Private Rooms</h3>
-        <p>Invite-only access with end-to-end encryption. Only people you invite can join.</p>
+        <p>Invite-only access. Only people you invite can join your watch party.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📧</div>
         <h3>Invite via Email/Phone</h3>
-        <p>Send invites directly to friends via email or SMS with secure one-time links.</p>
+        <p>Send invites directly to friends via email or SMS with secure links.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🎬</div>
-        <h3>15+ Platforms</h3>
-        <p>YouTube, Netflix, Disney+, Twitch, Prime Video, and more. Pick and play directly.</p>
+        <h3>3 Platforms</h3>
+        <p>YouTube, Netflix, and Prime Video. Pick and play directly.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💬</div>
         <h3>Real-time Chat</h3>
-        <p>Built-in encrypted chat. Non-invited users are automatically removed.</p>
+        <p>Built-in encrypted chat for all invited guests.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">⚡</div>
@@ -678,14 +734,16 @@ body {
       <div class="feature-card">
         <div class="feature-icon">🌐</div>
         <h3>No Login Required</h3>
-        <p>Start watching instantly. No account needed. Works on any device.</p>
+        <p>Start watching instantly. No account needed.</p>
       </div>
     </div>
   </section>
 </div>
 
+<!-- App Container -->
 <div id="appContainer" class="app-container">
   <div class="room-dashboard">
+    <!-- Video Section -->
     <div class="video-section">
       <div class="video-wrapper">
         <iframe id="videoPlayer" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -696,13 +754,15 @@ body {
         </div>
       </div>
       <div class="video-controls">
-        <button class="btn-primary" id="syncPlayBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;" disabled>▶️ Sync Play</button>
-        <button class="btn-secondary" id="syncPauseBtn" style="padding: 0.5rem 1rem; font-size: 0.8rem;" disabled>⏸️ Sync Pause</button>
+        <button class="btn-primary" id="syncPlayBtn" disabled>▶️ Sync Play</button>
+        <button class="btn-secondary" id="syncPauseBtn" disabled>⏸️ Sync Pause</button>
       </div>
-      <div id="nowPlaying" class="now-playing" style="display: none;"></div>
+      <div id="nowPlaying" class="now-playing"></div>
     </div>
 
+    <!-- Sidebar -->
     <div class="room-sidebar">
+      <!-- Room Info Card -->
       <div class="room-card">
         <div class="room-header">
           <h3>🔐 Private Room</h3>
@@ -739,17 +799,19 @@ body {
         </div>
       </div>
 
+      <!-- Browse Content Card -->
       <div class="room-card">
         <h3>🎬 Browse Content</h3>
         <div class="platforms-grid" id="platformsGrid"></div>
         <div class="content-list" id="contentList"></div>
       </div>
 
+      <!-- Chat Card -->
       <div class="room-card">
         <h3>💬 Room Chat</h3>
         <div class="chat-container">
           <div class="chat-messages" id="chatMessages">
-            <div class="chat-message"><strong>🛡️ System</strong> Welcome to the private room! Browse content below to start watching.</div>
+            <div class="chat-message"><strong>🛡️ System</strong> Welcome! Browse content below to start watching.</div>
           </div>
           <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
@@ -761,6 +823,7 @@ body {
   </div>
 </div>
 
+<!-- Create Room Modal -->
 <div id="createRoomModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -771,20 +834,18 @@ body {
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">ROOM NAME</label>
       <input type="text" id="newRoomName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Movie Night 🍿">
     </div>
-    <div style="margin-bottom: 1rem;">
-      <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">PLATFORM</label>
-      <select id="newRoomPlatform" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;">
-        <option value="youtube">YouTube</option>
-        <option value="netflix">Netflix</option>
-        <option value="disney">Disney+</option>
-        <option value="twitch">Twitch</option>
-        <option value="prime">Prime Video</option>
-      </select>
+    <div class="settings-row" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;">
+      <div>
+        <div class="settings-label">Private Room</div>
+        <div class="settings-sub" style="font-size: 0.7rem; color: #6b7280;">Invite-only access</div>
+      </div>
+      <div class="toggle active" id="privateRoomToggle" style="width: 44px; height: 24px; background: #8b5cf6; border-radius: 12px; position: relative; cursor: pointer;"></div>
     </div>
     <button class="btn-primary" onclick="createRoom()" style="width: 100%; margin-top: 1rem;">Create Room →</button>
   </div>
 </div>
 
+<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -796,74 +857,47 @@ let currentRoom = {
   messages: [],
   platform: 'youtube',
   videoId: null,
-  hasContent: false
+  hasContent: false,
+  currentTitle: null
 };
 
 let currentUser = {
   name: 'Guest',
-  email: 'guest@zoum.app',
-  initials: 'GU'
+  email: 'guest@zoum.app'
 };
 
-// Platforms & Content
+// Platforms (Only YouTube, Netflix, Prime Video)
 const platforms = [
   { name: 'YouTube', icon: '▶️', type: 'youtube', color: '#FF0000' },
   { name: 'Netflix', icon: '🎬', type: 'netflix', color: '#E50914' },
-  { name: 'Disney+', icon: '✨', type: 'disney', color: '#113CCF' },
-  { name: 'Twitch', icon: '🎮', type: 'twitch', color: '#9146FF' },
-  { name: 'Prime Video', icon: '📦', type: 'prime', color: '#00A8E1' },
-  { name: 'Max (HBO)', icon: '🎞️', type: 'max', color: '#0026FF' },
-  { name: 'Crunchyroll', icon: '🍣', type: 'crunchy', color: '#F47521' },
-  { name: 'Apple TV+', icon: '🍎', type: 'apple', color: '#1C1C1E' },
-  { name: 'Hulu', icon: '📺', type: 'hulu', color: '#1CE783' },
-  { name: 'Paramount+', icon: '⭐', type: 'paramount', color: '#0064FF' }
+  { name: 'Prime Video', icon: '📦', type: 'prime', color: '#00A8E1' }
 ];
 
+// Content Library
 const contentLibrary = {
   youtube: [
-    { title: '🎵 Lo-Fi Beats 24/7', id: 'jfKfPfyJRdk' },
-    { title: '🎬 Movie Trailer Compilation', id: 'g4Hbz2lFw2E' },
-    { title: '🎮 Gaming Highlights', id: '3I7kjoPjZ1M' },
-    { title: '🐱 Funny Cats', id: 'ZudrJUBq5n8' },
-    { title: '🎤 Music Mix 2024', id: 'JGwWNGJdvx8' }
+    { title: 'Lo-Fi Beats 24/7 - Study Music', id: 'jfKfPfyJRdk', duration: 'Live 24/7' },
+    { title: 'Movie Trailer Compilation 2024', id: 'g4Hbz2lFw2E', duration: '12:34' },
+    { title: 'Best Gaming Highlights', id: '3I7kjoPjZ1M', duration: '15:22' },
+    { title: 'Funny Cat Videos Compilation', id: 'ZudrJUBq5n8', duration: '08:45' },
+    { title: 'Top Music Mix 2024', id: 'JGwWNGJdvx8', duration: '45:12' },
+    { title: 'Nature Relaxation 4K', id: 'sN2R9qVqjq0', duration: '1:30:00' }
   ],
   netflix: [
-    { title: 'Stranger Things S4', id: 'b9EkMc79ZSU' },
-    { title: 'Wednesday', id: 'Di310WS8zLk' },
-    { title: 'Squid Game', id: 'oqxAJKy0Y4o' }
-  ],
-  disney: [
-    { title: 'The Mandalorian', id: 'aOC8E8z_ifw' },
-    { title: 'Loki', id: 'N2bXK2jq4q0' },
-    { title: 'The Lion King', id: '7TavVZMewpY' }
-  ],
-  twitch: [
-    { title: '🎮 Gaming Live', embed: 'https://player.twitch.tv/?channel=summit1g&parent=localhost' },
-    { title: '🎨 Art Creative', embed: 'https://player.twitch.tv/?channel=bobross&parent=localhost' }
+    { title: 'Stranger Things - Season 4 Trailer', id: 'b9EkMc79ZSU', duration: '2:48' },
+    { title: 'Wednesday - Official Trailer', id: 'Di310WS8zLk', duration: '2:15' },
+    { title: 'Squid Game - Season 1 Trailer', id: 'oqxAJKy0Y4o', duration: '1:58' },
+    { title: 'The Crown - Season 6 Trailer', id: 'Dx5qFachd3A', duration: '2:22' },
+    { title: 'Bridgerton - Season 3 Trailer', id: 'HuFYqnbVbzY', duration: '1:45' },
+    { title: 'Money Heist - Final Season', id: 'rUxyKA_-grg', duration: '2:10' }
   ],
   prime: [
-    { title: 'The Boys', id: '6y8H6U4Ht7w' },
-    { title: 'The Lord of the Rings', id: 's7EvL7nWxnw' }
-  ],
-  max: [
-    { title: 'House of the Dragon', id: 'DotnJ7tTA34' },
-    { title: 'The Last of Us', id: 'uLtkt8BonwM' }
-  ],
-  crunchy: [
-    { title: 'Demon Slayer', id: 'VQGCKyvzIM4' },
-    { title: 'Jujutsu Kaisen', id: 'pXlPVnR5CJk' }
-  ],
-  apple: [
-    { title: 'Severance', id: 'Dx5qFachd3A' },
-    { title: 'Ted Lasso', id: 'DWcJFNfaw9c' }
-  ],
-  hulu: [
-    { title: 'The Bear', id: '5qap5aO4i9A' },
-    { title: 'Only Murders', id: 'gfFiOo-P7VY' }
-  ],
-  paramount: [
-    { title: 'Yellowstone', id: 'jfKfPfyJRdk' },
-    { title: 'Halo', id: 'nPEFuoVjB-U' }
+    { title: 'The Boys - Season 4 Trailer', id: '6y8H6U4Ht7w', duration: '2:30' },
+    { title: 'The Lord of the Rings: The Rings of Power', id: 's7EvL7nWxnw', duration: '3:15' },
+    { title: 'Reacher - Season 2 Trailer', id: 'nPEFuoVjB-U', duration: '1:52' },
+    { title: 'Fallout - Official Trailer', id: '5qap5aO4i9A', duration: '2:45' },
+    { title: 'Jack Ryan - Final Season', id: 'U7B2PpYiqCg', duration: '2:18' },
+    { title: 'The Marvelous Mrs. Maisel', id: 'gfFiOo-P7VY', duration: '2:22' }
   ]
 };
 
@@ -898,8 +932,8 @@ function closeModal(modalId) {
 
 function showJoinPrompt() {
   const roomId = prompt('Enter room ID to join:');
-  if (roomId) {
-    joinRoom(roomId);
+  if (roomId && roomId.trim()) {
+    joinRoom(roomId.trim());
   }
 }
 
@@ -928,29 +962,28 @@ function updateNowPlaying(title) {
 // ============ ROOM MANAGEMENT ============
 function createRoom() {
   const roomName = document.getElementById('newRoomName').value.trim() || 'Watch Party';
-  const platform = document.getElementById('newRoomPlatform').value;
   
   currentRoom = {
     id: 'room_' + Math.random().toString(36).substr(2, 8),
     name: roomName,
     invitees: [{ name: currentUser.name, contact: currentUser.email, type: 'host' }],
     messages: [],
-    platform: platform,
+    platform: 'youtube',
     videoId: null,
-    hasContent: false
+    hasContent: false,
+    currentTitle: null
   };
   
   document.getElementById('roomIdDisplay').textContent = currentRoom.id;
   document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
   updateInviteLink();
   renderPlatforms();
-  renderContent(platform);
+  renderContent('youtube');
   renderChat();
   updateInvitedList();
   updateSyncButtons(false);
   updateNowPlaying(null);
   
-  // Clear video player and show empty state
   document.getElementById('videoPlayer').src = 'about:blank';
   document.getElementById('emptyPlayer').style.display = 'flex';
   
@@ -967,6 +1000,7 @@ function joinRoom(roomId) {
   currentRoom.platform = 'youtube';
   currentRoom.videoId = null;
   currentRoom.hasContent = false;
+  currentRoom.currentTitle = null;
   
   document.getElementById('roomIdDisplay').textContent = roomId;
   document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
@@ -978,12 +1012,11 @@ function joinRoom(roomId) {
   updateSyncButtons(false);
   updateNowPlaying(null);
   
-  // Clear video player and show empty state
   document.getElementById('videoPlayer').src = 'about:blank';
   document.getElementById('emptyPlayer').style.display = 'flex';
   
   showApp();
-  showToast('🔗 Joined room: ' + roomId + '. Browse content to start watching.');
+  showToast('🔗 Joined room: ' + roomId);
 }
 
 // ============ INVITE SYSTEM ============
@@ -1096,6 +1129,8 @@ function renderPlatforms() {
   for (var i = 0; i < items.length; i++) {
     items[i].addEventListener('click', function() {
       var platform = this.dataset.platform;
+      document.querySelectorAll('.platform-item').forEach(function(p) { p.classList.remove('active'); });
+      this.classList.add('active');
       renderContent(platform);
     });
   }
@@ -1108,7 +1143,11 @@ function renderContent(platformType) {
   var html = '';
   for (var i = 0; i < contents.length; i++) {
     var content = contents[i];
-    html += '<div class="content-item" data-id="' + (content.id || '') + '" data-embed="' + (content.embed || '') + '" data-title="' + escapeHtml(content.title) + '">🎥 ' + content.title + '</div>';
+    html += '<div class="content-item" data-id="' + content.id + '" data-title="' + escapeHtml(content.title) + '">' +
+            '<span class="icon">🎥</span>' +
+            '<span class="title">' + content.title + '</span>' +
+            '<span class="duration">' + content.duration + '</span>' +
+            '</div>';
   }
   contentDiv.innerHTML = html;
   
@@ -1116,14 +1155,8 @@ function renderContent(platformType) {
   for (var i = 0; i < items.length; i++) {
     items[i].addEventListener('click', function() {
       var videoId = this.dataset.id;
-      var embedUrl = this.dataset.embed;
       var title = this.dataset.title;
-      
-      if (videoId) {
-        playVideo(videoId, title);
-      } else if (embedUrl) {
-        playEmbed(embedUrl, title);
-      }
+      playVideo(videoId, title);
     });
   }
 }
@@ -1135,16 +1168,7 @@ function playVideo(videoId, title) {
   document.getElementById('emptyPlayer').style.display = 'none';
   currentRoom.videoId = videoId;
   currentRoom.hasContent = true;
-  updateSyncButtons(true);
-  updateNowPlaying(title);
-  addChatMessage('started watching "' + title + '"');
-  showToast('🎬 Now playing: ' + title);
-}
-
-function playEmbed(embedUrl, title) {
-  document.getElementById('videoPlayer').src = embedUrl;
-  document.getElementById('emptyPlayer').style.display = 'none';
-  currentRoom.hasContent = true;
+  currentRoom.currentTitle = title;
   updateSyncButtons(true);
   updateNowPlaying(title);
   addChatMessage('started watching "' + title + '"');
@@ -1203,6 +1227,9 @@ if (urlParams.get('join')) {
     joinRoom(urlParams.get('join'));
   }, 500);
 }
+
+// Make first platform active
+document.querySelector('.platform-item')?.classList.add('active');
 </script>
 </body>
 </html>
