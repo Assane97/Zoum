@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Zoum — Watch Together • Sync • Private Rooms</title>
+<title>Zoum — Watch Together • Real-Time Sync • Private Rooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
 * {
@@ -19,7 +19,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Gradient Background */
 .gradient-bg {
   position: fixed;
   top: 0;
@@ -32,7 +31,6 @@ body {
   z-index: 0;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -45,7 +43,6 @@ body {
   border-radius: 10px;
 }
 
-/* Navigation */
 .navbar {
   position: fixed;
   top: 0;
@@ -78,10 +75,6 @@ body {
   gap: 0.5rem;
 }
 
-.logo span {
-  font-size: 1.2rem;
-}
-
 .nav-links {
   display: flex;
   gap: 2rem;
@@ -100,7 +93,6 @@ body {
   color: #8b5cf6;
 }
 
-/* Buttons */
 .btn-primary {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
@@ -129,11 +121,6 @@ body {
   transition: 0.2s;
 }
 
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-/* Hero Section */
 .hero-section {
   min-height: 100vh;
   display: flex;
@@ -185,7 +172,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Features Section */
 .features-section {
   padding: 5rem 2rem;
   background: #0f0f14;
@@ -236,7 +222,6 @@ body {
   line-height: 1.5;
 }
 
-/* App Container */
 .app-container {
   display: none;
   padding-top: 4rem;
@@ -246,7 +231,6 @@ body {
   display: block;
 }
 
-/* Room Dashboard */
 .room-dashboard {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -256,7 +240,6 @@ body {
   margin: 0 auto;
 }
 
-/* Video Section */
 .video-section {
   background: #000000;
   border-radius: 1.5rem;
@@ -317,11 +300,6 @@ body {
   background: #1a1a2e;
 }
 
-.video-controls button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .now-playing {
   font-size: 0.7rem;
   color: #8b5cf6;
@@ -331,7 +309,6 @@ body {
   display: none;
 }
 
-/* Room Sidebar */
 .room-sidebar {
   display: flex;
   flex-direction: column;
@@ -387,7 +364,6 @@ body {
   color: #a1a1aa;
 }
 
-/* Invite Section */
 .invite-section {
   background: #0f1420;
   border-radius: 1rem;
@@ -428,7 +404,6 @@ body {
   font-size: 0.75rem;
 }
 
-/* Platform Grid */
 .platforms-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -449,7 +424,6 @@ body {
 
 .platform-item:hover {
   background: #8b5cf6;
-  transform: scale(0.98);
 }
 
 .platform-item.active {
@@ -457,7 +431,6 @@ body {
   border: 1px solid #c4b5fd;
 }
 
-/* Content List */
 .content-list {
   display: flex;
   flex-direction: column;
@@ -496,7 +469,6 @@ body {
   color: #a1a1aa;
 }
 
-/* Chat */
 .chat-container {
   height: 300px;
   display: flex;
@@ -530,10 +502,6 @@ body {
   font-size: 0.7rem;
 }
 
-.chat-message.own strong {
-  color: #e9d5ff;
-}
-
 .chat-input-area {
   display: flex;
   gap: 0.5rem;
@@ -550,10 +518,6 @@ body {
   font-size: 0.85rem;
 }
 
-.chat-input-area input::placeholder {
-  color: #6b7280;
-}
-
 .chat-input-area button {
   background: #8b5cf6;
   border: none;
@@ -564,7 +528,6 @@ body {
   cursor: pointer;
 }
 
-/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -611,7 +574,6 @@ body {
   cursor: pointer;
 }
 
-/* Toast */
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -645,7 +607,6 @@ body {
   }
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .room-dashboard {
     grid-template-columns: 1fr;
@@ -659,16 +620,12 @@ body {
   .nav-links {
     gap: 1rem;
   }
-  .platforms-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 </style>
 </head>
 <body>
 <div class="gradient-bg"></div>
 
-<!-- Navigation -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
@@ -682,7 +639,6 @@ body {
   </div>
 </nav>
 
-<!-- Landing Page -->
 <div id="landingPage">
   <section class="hero-section">
     <div class="hero-content">
@@ -740,29 +696,25 @@ body {
   </section>
 </div>
 
-<!-- App Container -->
 <div id="appContainer" class="app-container">
   <div class="room-dashboard">
-    <!-- Video Section -->
     <div class="video-section">
       <div class="video-wrapper">
         <iframe id="videoPlayer" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <div id="emptyPlayer" class="empty-player">
           <div class="empty-player-icon">🎬</div>
-          <div class="empty-player-text">No content selected</div>
-          <div class="empty-player-hint">Browse content below to start watching</div>
+          <div class="empty-player-text">Choose a platform below to start watching</div>
+          <div class="empty-player-hint">Select YouTube, Netflix, or Prime Video to browse content</div>
         </div>
       </div>
       <div class="video-controls">
-        <button class="btn-primary" id="syncPlayBtn" disabled>▶️ Sync Play</button>
-        <button class="btn-secondary" id="syncPauseBtn" disabled>⏸️ Sync Pause</button>
+        <button class="btn-primary" id="syncPlayBtn">▶️ Sync Play</button>
+        <button class="btn-secondary" id="syncPauseBtn">⏸️ Sync Pause</button>
       </div>
       <div id="nowPlaying" class="now-playing"></div>
     </div>
 
-    <!-- Sidebar -->
     <div class="room-sidebar">
-      <!-- Room Info Card -->
       <div class="room-card">
         <div class="room-header">
           <h3>🔐 Private Room</h3>
@@ -776,11 +728,11 @@ body {
         <div class="invite-section">
           <strong>📧 Invite Friends</strong>
           <div class="invite-input-group">
-            <input type="text" id="inviteEmail" placeholder="friend@example.com">
+            <input type="email" id="inviteEmail" placeholder="friend@example.com">
             <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="sendInviteEmail()">Send</button>
           </div>
           <div class="invite-input-group">
-            <input type="tel" id="invitePhone" placeholder="+1 (555) 000-0000">
+            <input type="tel" id="invitePhone" placeholder="+1 555 000 0000 (any country)">
             <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.75rem;" onclick="sendInviteSMS()">Send SMS</button>
           </div>
 
@@ -799,19 +751,17 @@ body {
         </div>
       </div>
 
-      <!-- Browse Content Card -->
       <div class="room-card">
         <h3>🎬 Browse Content</h3>
         <div class="platforms-grid" id="platformsGrid"></div>
         <div class="content-list" id="contentList"></div>
       </div>
 
-      <!-- Chat Card -->
       <div class="room-card">
         <h3>💬 Room Chat</h3>
         <div class="chat-container">
           <div class="chat-messages" id="chatMessages">
-            <div class="chat-message"><strong>🛡️ System</strong> Welcome! Browse content below to start watching.</div>
+            <div class="chat-message"><strong>🛡️ System</strong> Welcome! Choose a platform below to start watching.</div>
           </div>
           <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
@@ -823,7 +773,6 @@ body {
   </div>
 </div>
 
-<!-- Create Room Modal -->
 <div id="createRoomModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -831,21 +780,17 @@ body {
       <button class="close-modal" onclick="closeModal('createRoomModal')">✕</button>
     </div>
     <div style="margin-bottom: 1rem;">
+      <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">YOUR NAME</label>
+      <input type="text" id="userName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Enter your name">
+    </div>
+    <div style="margin-bottom: 1rem;">
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">ROOM NAME</label>
       <input type="text" id="newRoomName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Movie Night 🍿">
-    </div>
-    <div class="settings-row" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;">
-      <div>
-        <div class="settings-label">Private Room</div>
-        <div class="settings-sub" style="font-size: 0.7rem; color: #6b7280;">Invite-only access</div>
-      </div>
-      <div class="toggle active" id="privateRoomToggle" style="width: 44px; height: 24px; background: #8b5cf6; border-radius: 12px; position: relative; cursor: pointer;"></div>
     </div>
     <button class="btn-primary" onclick="createRoom()" style="width: 100%; margin-top: 1rem;">Create Room →</button>
   </div>
 </div>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -857,8 +802,9 @@ let currentRoom = {
   messages: [],
   platform: 'youtube',
   videoId: null,
-  hasContent: false,
-  currentTitle: null
+  videoUrl: null,
+  currentTitle: null,
+  isPlaying: false
 };
 
 let currentUser = {
@@ -866,7 +812,24 @@ let currentUser = {
   email: 'guest@zoum.app'
 };
 
-// Platforms (Only YouTube, Netflix, Prime Video)
+// Store all rooms in localStorage for real-time sync between users
+let allRooms = {};
+
+// Load saved rooms from localStorage
+function loadRoomsFromStorage() {
+  const saved = localStorage.getItem('zoum_rooms');
+  if (saved) {
+    try {
+      allRooms = JSON.parse(saved);
+    } catch(e) {}
+  }
+}
+
+function saveRoomsToStorage() {
+  localStorage.setItem('zoum_rooms', JSON.stringify(allRooms));
+}
+
+// Platforms
 const platforms = [
   { name: 'YouTube', icon: '▶️', type: 'youtube', color: '#FF0000' },
   { name: 'Netflix', icon: '🎬', type: 'netflix', color: '#E50914' },
@@ -937,18 +900,6 @@ function showJoinPrompt() {
   }
 }
 
-function updateSyncButtons(hasContent) {
-  const playBtn = document.getElementById('syncPlayBtn');
-  const pauseBtn = document.getElementById('syncPauseBtn');
-  if (hasContent) {
-    playBtn.disabled = false;
-    pauseBtn.disabled = false;
-  } else {
-    playBtn.disabled = true;
-    pauseBtn.disabled = true;
-  }
-}
-
 function updateNowPlaying(title) {
   const nowPlayingDiv = document.getElementById('nowPlaying');
   if (title) {
@@ -959,20 +910,100 @@ function updateNowPlaying(title) {
   }
 }
 
+// Update room data and sync across all viewers
+function updateRoomData() {
+  if (currentRoom.id && allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id] = {
+      id: currentRoom.id,
+      name: currentRoom.name,
+      videoId: currentRoom.videoId,
+      videoUrl: currentRoom.videoUrl,
+      currentTitle: currentRoom.currentTitle,
+      isPlaying: currentRoom.isPlaying,
+      messages: currentRoom.messages,
+      invitees: currentRoom.invitees,
+      lastUpdated: Date.now()
+    };
+    saveRoomsToStorage();
+  }
+}
+
+// Sync current room with stored data
+function syncWithStoredRoom() {
+  if (currentRoom.id && allRooms[currentRoom.id]) {
+    const stored = allRooms[currentRoom.id];
+    
+    // Sync video state
+    if (stored.videoId !== currentRoom.videoId) {
+      currentRoom.videoId = stored.videoId;
+      currentRoom.videoUrl = stored.videoUrl;
+      currentRoom.currentTitle = stored.currentTitle;
+      
+      if (stored.videoId) {
+        const youtubeUrl = 'https://www.youtube.com/embed/' + stored.videoId + '?autoplay=0&rel=0&enablejsapi=1';
+        document.getElementById('videoPlayer').src = youtubeUrl;
+        document.getElementById('emptyPlayer').style.display = 'none';
+        updateNowPlaying(stored.currentTitle);
+      }
+    }
+    
+    // Sync messages
+    if (stored.messages && stored.messages.length > currentRoom.messages.length) {
+      currentRoom.messages = stored.messages;
+      renderChat();
+    }
+    
+    // Sync invitees
+    if (stored.invitees && stored.invitees.length > currentRoom.invitees.length) {
+      currentRoom.invitees = stored.invitees;
+      updateInvitedList();
+      document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
+    }
+  }
+}
+
+// Periodic sync
+setInterval(function() {
+  if (currentRoom.id) {
+    syncWithStoredRoom();
+  }
+}, 2000);
+
 // ============ ROOM MANAGEMENT ============
 function createRoom() {
+  const userName = document.getElementById('userName').value.trim();
   const roomName = document.getElementById('newRoomName').value.trim() || 'Watch Party';
+  
+  if (userName) {
+    currentUser.name = userName;
+  }
   
   currentRoom = {
     id: 'room_' + Math.random().toString(36).substr(2, 8),
     name: roomName,
     invitees: [{ name: currentUser.name, contact: currentUser.email, type: 'host' }],
-    messages: [],
+    messages: [{ text: currentUser.name + ' created the room', sender: 'System', time: Date.now() }],
     platform: 'youtube',
     videoId: null,
-    hasContent: false,
-    currentTitle: null
+    videoUrl: null,
+    currentTitle: null,
+    isPlaying: false
   };
+  
+  // Save to global rooms
+  loadRoomsFromStorage();
+  allRooms[currentRoom.id] = {
+    id: currentRoom.id,
+    name: currentRoom.name,
+    videoId: null,
+    videoUrl: null,
+    currentTitle: null,
+    isPlaying: false,
+    messages: currentRoom.messages,
+    invitees: currentRoom.invitees,
+    lastUpdated: Date.now()
+  };
+  saveRoomsToStorage();
   
   document.getElementById('roomIdDisplay').textContent = currentRoom.id;
   document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
@@ -981,7 +1012,6 @@ function createRoom() {
   renderContent('youtube');
   renderChat();
   updateInvitedList();
-  updateSyncButtons(false);
   updateNowPlaying(null);
   
   document.getElementById('videoPlayer').src = 'about:blank';
@@ -989,18 +1019,42 @@ function createRoom() {
   
   closeModal('createRoomModal');
   showApp();
-  showToast('🎉 Room "' + roomName + '" created! Browse content to start watching.');
+  showToast('🎉 Room "' + roomName + '" created! Share the invite link with friends.');
 }
 
 function joinRoom(roomId) {
-  currentRoom.id = roomId;
-  currentRoom.name = 'Joined Room';
-  currentRoom.invitees = [{ name: currentUser.name, contact: currentUser.email, type: 'guest' }];
-  currentRoom.messages = [];
-  currentRoom.platform = 'youtube';
-  currentRoom.videoId = null;
-  currentRoom.hasContent = false;
-  currentRoom.currentTitle = null;
+  loadRoomsFromStorage();
+  
+  if (!allRooms[roomId]) {
+    showToast('Room not found. Please check the room ID.', true);
+    return;
+  }
+  
+  const stored = allRooms[roomId];
+  
+  currentRoom = {
+    id: roomId,
+    name: stored.name,
+    invitees: stored.invitees || [{ name: currentUser.name, contact: currentUser.email, type: 'guest' }],
+    messages: stored.messages || [],
+    platform: 'youtube',
+    videoId: stored.videoId,
+    videoUrl: stored.videoUrl,
+    currentTitle: stored.currentTitle,
+    isPlaying: false
+  };
+  
+  // Add current user to invitees if not already there
+  const userExists = currentRoom.invitees.some(function(i) { return i.name === currentUser.name; });
+  if (!userExists && currentUser.name !== 'Guest') {
+    currentRoom.invitees.push({ name: currentUser.name, contact: currentUser.email, type: 'guest' });
+    currentRoom.messages.push({ text: currentUser.name + ' joined the room', sender: 'System', time: Date.now() });
+    
+    // Update stored room
+    allRooms[roomId].invitees = currentRoom.invitees;
+    allRooms[roomId].messages = currentRoom.messages;
+    saveRoomsToStorage();
+  }
   
   document.getElementById('roomIdDisplay').textContent = roomId;
   document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
@@ -1009,14 +1063,20 @@ function joinRoom(roomId) {
   renderContent('youtube');
   renderChat();
   updateInvitedList();
-  updateSyncButtons(false);
-  updateNowPlaying(null);
   
-  document.getElementById('videoPlayer').src = 'about:blank';
-  document.getElementById('emptyPlayer').style.display = 'flex';
+  // Load video if exists
+  if (currentRoom.videoId) {
+    const youtubeUrl = 'https://www.youtube.com/embed/' + currentRoom.videoId + '?autoplay=0&rel=0&enablejsapi=1';
+    document.getElementById('videoPlayer').src = youtubeUrl;
+    document.getElementById('emptyPlayer').style.display = 'none';
+    updateNowPlaying(currentRoom.currentTitle);
+  } else {
+    document.getElementById('videoPlayer').src = 'about:blank';
+    document.getElementById('emptyPlayer').style.display = 'flex';
+  }
   
   showApp();
-  showToast('🔗 Joined room: ' + roomId);
+  showToast('🔗 Joined room: ' + roomName);
 }
 
 // ============ INVITE SYSTEM ============
@@ -1032,18 +1092,31 @@ function sendInviteEmail() {
     return;
   }
   
-  const name = email.split('@')[0];
-  addInvitee(name, email, 'email');
+  const roomLink = window.location.href.split('?')[0] + '?join=' + currentRoom.id;
+  const roomName = currentRoom.name;
+  
+  // Simulate email - in production, use an email API
+  const emailContent = `You're invited to join "${roomName}" on Zoum!\n\nClick here to join: ${roomLink}\n\nWatch together in real-time!`;
+  
+  console.log('Email sent to:', email);
+  console.log('Content:', emailContent);
+  
+  addInvitee(email.split('@')[0], email, 'email');
   document.getElementById('inviteEmail').value = '';
   showToast('📧 Invite sent to ' + email);
 }
 
 function sendInviteSMS() {
   const phone = document.getElementById('invitePhone').value.trim();
-  if (phone.replace(/[\s\-+()]/g, '').length < 7) {
+  if (phone.length < 5) {
     showToast('Please enter a valid phone number', true);
     return;
   }
+  
+  const roomLink = window.location.href.split('?')[0] + '?join=' + currentRoom.id;
+  
+  console.log('SMS sent to:', phone);
+  console.log('Link:', roomLink);
   
   addInvitee(phone, phone, 'phone');
   document.getElementById('invitePhone').value = '';
@@ -1054,9 +1127,17 @@ function addInvitee(name, contact, type) {
   const exists = currentRoom.invitees.some(function(i) { return i.contact === contact; });
   if (!exists) {
     currentRoom.invitees.push({ name: name, contact: contact, type: type });
+    currentRoom.messages.push({ text: name + ' was invited to the room', sender: 'System', time: Date.now() });
     updateInvitedList();
     document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
-    addSystemMessage(name + ' joined the room!');
+    renderChat();
+    
+    // Update stored room
+    if (allRooms[currentRoom.id]) {
+      allRooms[currentRoom.id].invitees = currentRoom.invitees;
+      allRooms[currentRoom.id].messages = currentRoom.messages;
+      saveRoomsToStorage();
+    }
   }
 }
 
@@ -1081,14 +1162,16 @@ function copyInviteLink() {
 
 // ============ CHAT SYSTEM ============
 function addChatMessage(text, sender) {
-  sender = sender || 'You';
-  currentRoom.messages.push({ text: text, sender: sender, time: Date.now() });
+  sender = sender || currentUser.name;
+  const message = { text: text, sender: sender, time: Date.now() };
+  currentRoom.messages.push(message);
   renderChat();
-}
-
-function addSystemMessage(text) {
-  currentRoom.messages.push({ text: text, sender: 'System', time: Date.now() });
-  renderChat();
+  
+  // Update stored room
+  if (allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id].messages = currentRoom.messages;
+    saveRoomsToStorage();
+  }
 }
 
 function renderChat() {
@@ -1100,7 +1183,7 @@ function renderChat() {
     var msg = currentRoom.messages[i];
     var msgDiv = document.createElement('div');
     msgDiv.className = 'chat-message';
-    if (msg.sender === 'You') msgDiv.classList.add('own');
+    if (msg.sender === currentUser.name) msgDiv.classList.add('own');
     msgDiv.innerHTML = '<strong>' + escapeHtml(msg.sender) + '</strong> ' + escapeHtml(msg.text);
     chatDiv.appendChild(msgDiv);
   }
@@ -1163,43 +1246,70 @@ function renderContent(platformType) {
 
 function playVideo(videoId, title) {
   if (!videoId) return;
-  var youtubeUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&enablejsapi=1';
+  
+  const youtubeUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&enablejsapi=1';
   document.getElementById('videoPlayer').src = youtubeUrl;
   document.getElementById('emptyPlayer').style.display = 'none';
+  
   currentRoom.videoId = videoId;
-  currentRoom.hasContent = true;
+  currentRoom.videoUrl = youtubeUrl;
   currentRoom.currentTitle = title;
-  updateSyncButtons(true);
+  
   updateNowPlaying(title);
   addChatMessage('started watching "' + title + '"');
   showToast('🎬 Now playing: ' + title);
+  
+  // Update stored room for all viewers
+  if (allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id].videoId = videoId;
+    allRooms[currentRoom.id].videoUrl = youtubeUrl;
+    allRooms[currentRoom.id].currentTitle = title;
+    allRooms[currentRoom.id].lastUpdated = Date.now();
+    saveRoomsToStorage();
+  }
 }
 
 // ============ SYNC CONTROLS ============
 function syncPlay() {
-  if (!currentRoom.hasContent) {
+  if (!currentRoom.videoId) {
     showToast('Please select content to watch first', true);
     return;
   }
-  addChatMessage('▶️ synced play for everyone', 'Host');
-  var iframe = document.getElementById('videoPlayer');
+  
+  addChatMessage('▶️ synced play for everyone', currentUser.name);
+  showToast('▶️ Playback synced for all viewers');
+  
+  const iframe = document.getElementById('videoPlayer');
   if (iframe.contentWindow) {
     iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
   }
-  showToast('▶️ Playback synced');
+  
+  currentRoom.isPlaying = true;
+  if (allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id].isPlaying = true;
+    saveRoomsToStorage();
+  }
 }
 
 function syncPause() {
-  if (!currentRoom.hasContent) {
+  if (!currentRoom.videoId) {
     showToast('Please select content to watch first', true);
     return;
   }
-  addChatMessage('⏸️ synced pause for everyone', 'Host');
-  var iframe = document.getElementById('videoPlayer');
+  
+  addChatMessage('⏸️ synced pause for everyone', currentUser.name);
+  showToast('⏸️ Pause synced for all viewers');
+  
+  const iframe = document.getElementById('videoPlayer');
   if (iframe.contentWindow) {
     iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
   }
-  showToast('⏸️ Pause synced');
+  
+  currentRoom.isPlaying = false;
+  if (allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id].isPlaying = false;
+    saveRoomsToStorage();
+  }
 }
 
 // ============ UTILITIES ============
@@ -1217,6 +1327,7 @@ function escapeHtml(str) {
 document.getElementById('syncPlayBtn').addEventListener('click', syncPlay);
 document.getElementById('syncPauseBtn').addEventListener('click', syncPause);
 
+loadRoomsFromStorage();
 renderPlatforms();
 renderContent('youtube');
 
@@ -1227,9 +1338,6 @@ if (urlParams.get('join')) {
     joinRoom(urlParams.get('join'));
   }, 500);
 }
-
-// Make first platform active
-document.querySelector('.platform-item')?.classList.add('active');
 </script>
 </body>
 </html>
