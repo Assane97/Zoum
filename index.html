@@ -274,6 +274,7 @@ body {
   background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
   text-align: center;
   padding: 2rem;
+  z-index: 10;
 }
 
 .empty-player-icon {
@@ -420,6 +421,7 @@ body {
   transition: 0.1s;
   font-size: 0.8rem;
   font-weight: 500;
+  position: relative;
 }
 
 .platform-item:hover {
@@ -429,6 +431,22 @@ body {
 .platform-item.active {
   background: #8b5cf6;
   border: 1px solid #c4b5fd;
+}
+
+.platform-item.logged-in {
+  background: #10b981;
+}
+
+.login-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #10b981;
+  color: white;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 100px;
+  font-weight: 600;
 }
 
 .content-list {
@@ -454,6 +472,11 @@ body {
 
 .content-item:hover {
   background: #3b82f6;
+}
+
+.content-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .content-item .icon {
@@ -502,6 +525,10 @@ body {
   font-size: 0.7rem;
 }
 
+.chat-message.own strong {
+  color: #e9d5ff;
+}
+
 .chat-input-area {
   display: flex;
   gap: 0.5rem;
@@ -535,7 +562,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(8px);
   z-index: 2000;
   align-items: center;
@@ -549,8 +576,8 @@ body {
 .modal-content {
   background: #1a1a2e;
   border-radius: 1.5rem;
-  padding: 1.5rem;
-  max-width: 450px;
+  padding: 2rem;
+  max-width: 400px;
   width: 90%;
   border: 1px solid #3f3f5e;
 }
@@ -559,7 +586,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .modal-header h3 {
@@ -572,6 +599,22 @@ body {
   color: #a1a1aa;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.login-input {
+  width: 100%;
+  background: #2d2d44;
+  border: 1px solid #3f3f5e;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  color: white;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
 }
 
 .toast-container {
@@ -761,7 +804,7 @@ body {
         <h3>💬 Room Chat</h3>
         <div class="chat-container">
           <div class="chat-messages" id="chatMessages">
-            <div class="chat-message"><strong>🛡️ System</strong> Welcome! Choose a platform below to start watching.</div>
+            <div class="chat-message"><strong>🛡️ System</strong> Welcome! Choose a platform and login to start watching.</div>
           </div>
           <div class="chat-input-area">
             <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendChatMessage()">
@@ -773,6 +816,25 @@ body {
   </div>
 </div>
 
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="loginModalTitle">Login to YouTube</h3>
+      <button class="close-modal" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div id="loginModalBody">
+      <input type="email" id="loginEmail" class="login-input" placeholder="Email address">
+      <input type="password" id="loginPassword" class="login-input" placeholder="Password">
+      <button class="btn-primary" onclick="submitLogin()" style="width: 100%;">Sign In →</button>
+    </div>
+    <div style="text-align: center; margin-top: 1rem; font-size: 0.7rem; color: #6b7280;">
+      Demo mode - Any credentials work
+    </div>
+  </div>
+</div>
+
+<!-- Create Room Modal -->
 <div id="createRoomModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -781,11 +843,11 @@ body {
     </div>
     <div style="margin-bottom: 1rem;">
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">YOUR NAME</label>
-      <input type="text" id="userName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Enter your name">
+      <input type="text" id="userName" class="login-input" placeholder="Enter your name">
     </div>
     <div style="margin-bottom: 1rem;">
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">ROOM NAME</label>
-      <input type="text" id="newRoomName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Movie Night 🍿">
+      <input type="text" id="newRoomName" class="login-input" placeholder="Movie Night 🍿">
     </div>
     <button class="btn-primary" onclick="createRoom()" style="width: 100%; margin-top: 1rem;">Create Room →</button>
   </div>
@@ -804,7 +866,8 @@ let currentRoom = {
   videoId: null,
   videoUrl: null,
   currentTitle: null,
-  isPlaying: false
+  isPlaying: false,
+  loggedInPlatforms: {}
 };
 
 let currentUser = {
@@ -812,10 +875,11 @@ let currentUser = {
   email: 'guest@zoum.app'
 };
 
-// Store all rooms in localStorage for real-time sync between users
+let pendingPlatform = null;
+
+// Store all rooms in localStorage for real-time sync
 let allRooms = {};
 
-// Load saved rooms from localStorage
 function loadRoomsFromStorage() {
   const saved = localStorage.getItem('zoum_rooms');
   if (saved) {
@@ -910,7 +974,6 @@ function updateNowPlaying(title) {
   }
 }
 
-// Update room data and sync across all viewers
 function updateRoomData() {
   if (currentRoom.id && allRooms[currentRoom.id]) {
     allRooms[currentRoom.id] = {
@@ -922,52 +985,121 @@ function updateRoomData() {
       isPlaying: currentRoom.isPlaying,
       messages: currentRoom.messages,
       invitees: currentRoom.invitees,
+      loggedInPlatforms: currentRoom.loggedInPlatforms,
       lastUpdated: Date.now()
     };
     saveRoomsToStorage();
   }
 }
 
-// Sync current room with stored data
 function syncWithStoredRoom() {
   if (currentRoom.id && allRooms[currentRoom.id]) {
     const stored = allRooms[currentRoom.id];
     
-    // Sync video state
-    if (stored.videoId !== currentRoom.videoId) {
+    if (stored.videoId !== currentRoom.videoId && stored.videoId) {
       currentRoom.videoId = stored.videoId;
       currentRoom.videoUrl = stored.videoUrl;
       currentRoom.currentTitle = stored.currentTitle;
       
-      if (stored.videoId) {
-        const youtubeUrl = 'https://www.youtube.com/embed/' + stored.videoId + '?autoplay=0&rel=0&enablejsapi=1';
-        document.getElementById('videoPlayer').src = youtubeUrl;
-        document.getElementById('emptyPlayer').style.display = 'none';
-        updateNowPlaying(stored.currentTitle);
-      }
+      const youtubeUrl = 'https://www.youtube.com/embed/' + stored.videoId + '?autoplay=0&rel=0&enablejsapi=1';
+      document.getElementById('videoPlayer').src = youtubeUrl;
+      document.getElementById('emptyPlayer').style.display = 'none';
+      updateNowPlaying(stored.currentTitle);
     }
     
-    // Sync messages
     if (stored.messages && stored.messages.length > currentRoom.messages.length) {
       currentRoom.messages = stored.messages;
       renderChat();
     }
     
-    // Sync invitees
     if (stored.invitees && stored.invitees.length > currentRoom.invitees.length) {
       currentRoom.invitees = stored.invitees;
       updateInvitedList();
       document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
     }
+    
+    if (stored.loggedInPlatforms) {
+      currentRoom.loggedInPlatforms = stored.loggedInPlatforms;
+      updatePlatformLoginStatus();
+    }
   }
 }
 
-// Periodic sync
 setInterval(function() {
   if (currentRoom.id) {
     syncWithStoredRoom();
   }
 }, 2000);
+
+// ============ LOGIN SYSTEM ============
+function showLoginModal(platform) {
+  pendingPlatform = platform;
+  const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+  document.getElementById('loginModalTitle').textContent = 'Login to ' + platformName;
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPassword').value = '';
+  openModal('loginModal');
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).classList.add('active');
+}
+
+function submitLogin() {
+  if (!pendingPlatform) return;
+  
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  if (!email) {
+    showToast('Please enter your email', true);
+    return;
+  }
+  
+  // Simulate successful login
+  currentRoom.loggedInPlatforms[pendingPlatform] = {
+    email: email,
+    loggedIn: true,
+    time: Date.now()
+  };
+  
+  updatePlatformLoginStatus();
+  closeModal('loginModal');
+  
+  // Update stored room
+  if (allRooms[currentRoom.id]) {
+    allRooms[currentRoom.id].loggedInPlatforms = currentRoom.loggedInPlatforms;
+    saveRoomsToStorage();
+  }
+  
+  showToast('✅ Successfully logged into ' + pendingPlatform.charAt(0).toUpperCase() + pendingPlatform.slice(1));
+  addChatMessage('logged into ' + pendingPlatform.charAt(0).toUpperCase() + pendingPlatform.slice(1), currentUser.name);
+  
+  // Enable content for this platform
+  renderContent(pendingPlatform);
+  pendingPlatform = null;
+}
+
+function updatePlatformLoginStatus() {
+  const platformItems = document.querySelectorAll('.platform-item');
+  platformItems.forEach(function(item) {
+    const platform = item.dataset.platform;
+    if (currentRoom.loggedInPlatforms[platform] && currentRoom.loggedInPlatforms[platform].loggedIn) {
+      item.classList.add('logged-in');
+      // Add badge if not exists
+      if (!item.querySelector('.login-badge')) {
+        const badge = document.createElement('div');
+        badge.className = 'login-badge';
+        badge.textContent = '✓';
+        item.appendChild(badge);
+      }
+    } else {
+      item.classList.remove('logged-in');
+      const badge = item.querySelector('.login-badge');
+      if (badge) badge.remove();
+    }
+  });
+}
 
 // ============ ROOM MANAGEMENT ============
 function createRoom() {
@@ -987,10 +1119,10 @@ function createRoom() {
     videoId: null,
     videoUrl: null,
     currentTitle: null,
-    isPlaying: false
+    isPlaying: false,
+    loggedInPlatforms: {}
   };
   
-  // Save to global rooms
   loadRoomsFromStorage();
   allRooms[currentRoom.id] = {
     id: currentRoom.id,
@@ -1001,6 +1133,7 @@ function createRoom() {
     isPlaying: false,
     messages: currentRoom.messages,
     invitees: currentRoom.invitees,
+    loggedInPlatforms: {},
     lastUpdated: Date.now()
   };
   saveRoomsToStorage();
@@ -1019,7 +1152,7 @@ function createRoom() {
   
   closeModal('createRoomModal');
   showApp();
-  showToast('🎉 Room "' + roomName + '" created! Share the invite link with friends.');
+  showToast('🎉 Room "' + roomName + '" created! Login to a platform to start watching.');
 }
 
 function joinRoom(roomId) {
@@ -1041,16 +1174,15 @@ function joinRoom(roomId) {
     videoId: stored.videoId,
     videoUrl: stored.videoUrl,
     currentTitle: stored.currentTitle,
-    isPlaying: false
+    isPlaying: false,
+    loggedInPlatforms: stored.loggedInPlatforms || {}
   };
   
-  // Add current user to invitees if not already there
   const userExists = currentRoom.invitees.some(function(i) { return i.name === currentUser.name; });
   if (!userExists && currentUser.name !== 'Guest') {
     currentRoom.invitees.push({ name: currentUser.name, contact: currentUser.email, type: 'guest' });
     currentRoom.messages.push({ text: currentUser.name + ' joined the room', sender: 'System', time: Date.now() });
     
-    // Update stored room
     allRooms[roomId].invitees = currentRoom.invitees;
     allRooms[roomId].messages = currentRoom.messages;
     saveRoomsToStorage();
@@ -1060,11 +1192,10 @@ function joinRoom(roomId) {
   document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
   updateInviteLink();
   renderPlatforms();
-  renderContent('youtube');
   renderChat();
   updateInvitedList();
+  updatePlatformLoginStatus();
   
-  // Load video if exists
   if (currentRoom.videoId) {
     const youtubeUrl = 'https://www.youtube.com/embed/' + currentRoom.videoId + '?autoplay=0&rel=0&enablejsapi=1';
     document.getElementById('videoPlayer').src = youtubeUrl;
@@ -1076,7 +1207,7 @@ function joinRoom(roomId) {
   }
   
   showApp();
-  showToast('🔗 Joined room: ' + roomName);
+  showToast('🔗 Joined room: ' + currentRoom.name);
 }
 
 // ============ INVITE SYSTEM ============
@@ -1093,13 +1224,9 @@ function sendInviteEmail() {
   }
   
   const roomLink = window.location.href.split('?')[0] + '?join=' + currentRoom.id;
-  const roomName = currentRoom.name;
   
-  // Simulate email - in production, use an email API
-  const emailContent = `You're invited to join "${roomName}" on Zoum!\n\nClick here to join: ${roomLink}\n\nWatch together in real-time!`;
-  
-  console.log('Email sent to:', email);
-  console.log('Content:', emailContent);
+  console.log('📧 Email sent to:', email);
+  console.log('🔗 Join link:', roomLink);
   
   addInvitee(email.split('@')[0], email, 'email');
   document.getElementById('inviteEmail').value = '';
@@ -1115,8 +1242,8 @@ function sendInviteSMS() {
   
   const roomLink = window.location.href.split('?')[0] + '?join=' + currentRoom.id;
   
-  console.log('SMS sent to:', phone);
-  console.log('Link:', roomLink);
+  console.log('📱 SMS sent to:', phone);
+  console.log('🔗 Join link:', roomLink);
   
   addInvitee(phone, phone, 'phone');
   document.getElementById('invitePhone').value = '';
@@ -1132,7 +1259,6 @@ function addInvitee(name, contact, type) {
     document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
     renderChat();
     
-    // Update stored room
     if (allRooms[currentRoom.id]) {
       allRooms[currentRoom.id].invitees = currentRoom.invitees;
       allRooms[currentRoom.id].messages = currentRoom.messages;
@@ -1167,7 +1293,6 @@ function addChatMessage(text, sender) {
   currentRoom.messages.push(message);
   renderChat();
   
-  // Update stored room
   if (allRooms[currentRoom.id]) {
     allRooms[currentRoom.id].messages = currentRoom.messages;
     saveRoomsToStorage();
@@ -1212,6 +1337,13 @@ function renderPlatforms() {
   for (var i = 0; i < items.length; i++) {
     items[i].addEventListener('click', function() {
       var platform = this.dataset.platform;
+      
+      // Check if logged in
+      if (!currentRoom.loggedInPlatforms[platform] || !currentRoom.loggedInPlatforms[platform].loggedIn) {
+        showLoginModal(platform);
+        return;
+      }
+      
       document.querySelectorAll('.platform-item').forEach(function(p) { p.classList.remove('active'); });
       this.classList.add('active');
       renderContent(platform);
@@ -1259,7 +1391,6 @@ function playVideo(videoId, title) {
   addChatMessage('started watching "' + title + '"');
   showToast('🎬 Now playing: ' + title);
   
-  // Update stored room for all viewers
   if (allRooms[currentRoom.id]) {
     allRooms[currentRoom.id].videoId = videoId;
     allRooms[currentRoom.id].videoUrl = youtubeUrl;
@@ -1329,7 +1460,6 @@ document.getElementById('syncPauseBtn').addEventListener('click', syncPause);
 
 loadRoomsFromStorage();
 renderPlatforms();
-renderContent('youtube');
 
 // Check for invite in URL
 var urlParams = new URLSearchParams(window.location.search);
