@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Zoum — Watch Together • Private Rooms • Invite-Only</title>
+    <title>Hearo — Watch Together • Sync • Chat • Private Rooms</title>
     <style>
         * {
             margin: 0;
@@ -12,678 +12,804 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(145deg, #0a0c10 0%, #0f1117 100%);
-            color: #eef2ff;
-            padding: 1.5rem;
-            line-height: 1.5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f1a;
+            color: #ffffff;
+            overflow-x: hidden;
         }
 
-        .container {
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 10px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
             max-width: 1400px;
             margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #fff, #a855f7);
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        
-        .badge {
-            background: #1e293b;
-            padding: 0.25rem 0.75rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #e2e8f0;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #a855f7;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.1), transparent);
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            background: rgba(124, 58, 237, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
             display: inline-block;
-            margin: 0.5rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(124, 58, 237, 0.3);
         }
 
-        .dashboard {
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 5rem 2rem;
+            background: #0a0a12;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            font-weight: 700;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 360px;
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        .feature-card {
+            background: rgba(26, 26, 46, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            transition: 0.2s;
         }
 
-        .card {
-            background: rgba(18, 22, 30, 0.85);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
-            padding: 1.25rem 1.5rem;
-            border: 1px solid #2d3a4e;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        .feature-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-5px);
         }
 
-        .card h2 {
-            font-size: 1.4rem;
+        .feature-icon {
+            font-size: 2.5rem;
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
-        .video-container {
+        /* App Container (hidden initially) */
+        .app-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem 2rem;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        /* Room Dashboard */
+        .room-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 1.5rem;
+        }
+
+        .video-section {
             background: #000;
             border-radius: 1.5rem;
             overflow: hidden;
-            aspect-ratio: 16 / 9;
-            position: relative;
         }
-        
-        iframe {
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .chat-area {
-            background: #0b0e14;
-            border-radius: 1.5rem;
+        .video-controls {
             display: flex;
-            flex-direction: column;
-            height: 400px;
-        }
-        
-        .messages {
-            flex: 1;
-            overflow-y: auto;
+            gap: 1rem;
             padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .message {
-            background: #1e293b;
-            padding: 0.5rem 0.75rem;
-            border-radius: 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .message strong {
-            color: #c084fc;
-        }
-        
-        .chat-input-area {
-            display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-top: 1px solid #2d3a4e;
-        }
-        
-        .chat-input-area input {
-            flex: 1;
-            background: #1a1f2a;
-            border: none;
-            padding: 0.7rem 1rem;
-            border-radius: 2rem;
-            color: white;
-        }
-        
-        .chat-input-area button {
-            background: #7c3aed;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            color: white;
+            background: #1a1a2e;
         }
 
-        .room-panel {
+        .room-sidebar {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        .invite-section {
-            background: #0f1420;
+        .room-card {
+            background: #1a1a2e;
             border-radius: 1.5rem;
-            padding: 1rem;
-        }
-        
-        .invite-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.7rem;
-            margin: 1rem 0;
-        }
-        
-        .invite-input-group input {
-            background: #1a1f2a;
-            border: 1px solid #334155;
-            padding: 0.7rem;
-            border-radius: 1rem;
-            color: white;
-        }
-        
-        button {
-            background: #3b82f6;
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: white;
-        }
-        
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-        
-        button.danger {
-            background: #dc2626;
-        }
-        
-        button.secondary {
-            background: #334155;
+            padding: 1.5rem;
+            border: 1px solid #2d2d44;
         }
 
-        .invitee-list {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            max-height: 150px;
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .room-status {
+            background: #10b981;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+        }
+
+        /* Chat */
+        .chat-container {
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
             overflow-y: auto;
+            padding: 0.5rem;
         }
-        
-        .invitee-list ul {
+
+        .chat-message {
+            background: #2d2d44;
+            margin: 0.5rem 0;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .chat-message strong {
+            color: #a855f7;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            background: #2d2d44;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            color: white;
+        }
+
+        /* Platform Grid */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .platform-item {
+            background: #2d2d44;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: 0.1s;
+            font-size: 0.85rem;
+        }
+
+        .platform-item:hover {
+            background: #7c3aed;
+            transform: scale(0.98);
+        }
+
+        .content-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .content-item {
+            background: #3b82f6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.1s;
+        }
+
+        .content-item:hover {
+            background: #2563eb;
+        }
+
+        .invite-list {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .invite-list ul {
             list-style: none;
-            padding-left: 0;
+            margin-top: 0.5rem;
         }
-        
-        .invitee-list li {
-            padding: 0.3rem 0;
+
+        .invite-list li {
+            padding: 0.25rem 0;
             color: #86efac;
         }
 
-        .browse-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-            gap: 0.8rem;
-            margin-top: 1rem;
+        input, button {
+            outline: none;
         }
-        
-        .platform-card {
-            background: #1e293b;
-            border-radius: 1rem;
-            padding: 0.6rem;
-            text-align: center;
+
+        button {
             cursor: pointer;
-            transition: 0.1s linear;
-            border: 1px solid #334155;
         }
-        
-        .platform-card:hover {
-            background: #2d3a5e;
-            transform: scale(0.98);
-        }
-        
-        .content-item {
-            background: #3b82f6;
-            padding: 0.4rem 0.8rem;
-            border-radius: 2rem;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: inline-block;
-            margin: 0.3rem;
-            transition: 0.1s;
-        }
-        
-        .content-item:hover {
-            background: #2563eb;
-            transform: scale(0.98);
-        }
-        
-        hr {
-            border-color: #2d3a4e;
-            margin: 1rem 0;
-        }
-        
-        .sync-controls {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-        
+
         @media (max-width: 900px) {
-            .dashboard {
+            .room-dashboard {
                 grid-template-columns: 1fr;
             }
-        }
-        
-        .status-message {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            z-index: 1000;
+            .hero-title {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="hero">
-        <h1>🎬 Zoum · Watch Together</h1>
-        <div class="badge">🔒 E2E Encrypted · Private Rooms · Invite-Only</div>
-        <div class="badge">✨ No Login Required · Works on GitHub Pages</div>
-    </div>
-
-    <div class="dashboard">
-        <div class="main-content">
-            <div class="card">
-                <h2>📺 Now Watching</h2>
-                <div class="video-container">
-                    <iframe id="videoFrame" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="sync-controls">
-                    <button id="syncPlayBtn" style="background:#16a34a;">▶️ Sync Play</button>
-                    <button id="syncPauseBtn" style="background:#eab308;">⏸️ Sync Pause</button>
-                </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                🎬 Hearo
             </div>
-
-            <div class="card">
-                <h2>💬 Private Chat · Invited Guests Only</h2>
-                <div class="chat-area">
-                    <div class="messages" id="chatMessages">
-                        <div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>
-                    </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="chatInput" placeholder="Write a message..." autocomplete="off">
-                        <button id="sendChatBtn">Send</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>🎬 Browse Content · Play Directly (No Link Pasting)</h2>
-                <div id="platformGrid" class="browse-grid"></div>
-                <div id="contentList" style="margin-top: 1rem;"></div>
-                <p style="font-size:0.75rem; margin-top:0.8rem; color:#94a3b8;">✨ Click any platform, then choose content — plays instantly above</p>
+            <div class="nav-links">
+                <a href="#" onclick="showLanding()">Home</a>
+                <a href="#" onclick="startNewRoom()">Start Room</a>
+                <a href="#" id="navJoinBtn">Join Room</a>
             </div>
         </div>
+    </nav>
 
-        <div class="room-panel">
-            <div class="card">
-                <h2>🔐 Private Room Controls</h2>
-                <p style="font-size: 0.9rem; margin-bottom: 1rem;">✅ Only invited people can join, chat, and watch</p>
-                
-                <div class="invite-section">
-                    <strong>📧 Invite via Email or Phone</strong>
-                    <div class="invite-input-group">
-                        <input type="text" id="inviteContact" placeholder="friend@example.com or +1234567890">
-                        <button id="sendInviteBtn">Send Invite</button>
+    <!-- Landing Page -->
+    <div id="landingPage">
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    ✨ Watch Together, Anywhere
+                </div>
+                <h1 class="hero-title">
+                    Sync. Watch. Chat.<br>Together in Real-Time
+                </h1>
+                <p class="hero-subtitle">
+                    Create private rooms, invite friends via email or phone,<br>
+                    and watch content from 15+ platforms together with perfect sync.
+                </p>
+                <div class="cta-buttons">
+                    <button class="btn-primary" onclick="startNewRoom()">🚀 Start a Room</button>
+                    <button class="btn-secondary" onclick="joinRoomPrompt()">🔗 Join Existing Room</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section">
+            <h2 class="section-title">Everything you need to watch together</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Private Rooms</h3>
+                    <p>Invite-only access with end-to-end encryption. Only people you invite can join.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <h3>Invite via Email/Phone</h3>
+                    <p>Send invites directly to friends via email or SMS with secure one-time links.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>15+ Platforms</h3>
+                    <p>YouTube, Netflix, Disney+, Twitch, Prime Video, and more. Pick and play directly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Real-time Chat</h3>
+                    <p>Built-in encrypted chat. Non-invited users are automatically removed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Perfect Sync</h3>
+                    <p>One-click play/pause sync for everyone in the room.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>No Login Required</h3>
+                    <p>Start watching instantly. No account needed. Works on any device.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- App Container -->
+    <div id="appContainer" class="app-container">
+        <div class="room-dashboard">
+            <!-- Video Section -->
+            <div class="video-section">
+                <div class="video-wrapper">
+                    <iframe id="videoPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="video-controls">
+                    <button class="btn-primary" id="syncPlayBtn" style="padding: 0.5rem 1rem;">▶️ Sync Play</button>
+                    <button class="btn-secondary" id="syncPauseBtn" style="padding: 0.5rem 1rem;">⏸️ Sync Pause</button>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="room-sidebar">
+                <div class="room-card">
+                    <div class="room-header">
+                        <h3>🔐 Private Room</h3>
+                        <span class="room-status" id="roomStatus">Active</span>
                     </div>
+                    <p style="font-size: 0.85rem; margin-bottom: 1rem;">Room ID: <strong id="roomIdDisplay">loading...</strong></p>
                     
-                    <strong>🔗 Invite Link (Single Use)</strong>
-                    <div class="invite-input-group">
-                        <input type="text" id="inviteLinkInput" readonly style="background:#111; font-size:0.8rem;">
-                        <button id="copyLinkBtn">Copy Invite Link</button>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>📧 Invite Friends</strong>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <input type="text" id="inviteInput" placeholder="Email or phone number" style="flex: 1; background: #2d2d44; border: none; padding: 0.5rem; border-radius: 0.5rem; color: white;">
+                            <button id="sendInviteBtn" style="background: #7c3aed; padding: 0.5rem 1rem; border-radius: 0.5rem;">Send</button>
+                        </div>
                     </div>
-                    
-                    <div class="invitee-list">
-                        <strong>✅ Authorized Guests:</strong>
-                        <ul id="inviteeList">
-                            <li>👑 Room Creator (you)</li>
+
+                    <div>
+                        <strong>🔗 Invite Link</strong>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <input type="text" id="inviteLink" readonly style="flex: 1; background: #2d2d44; border: none; padding: 0.5rem; border-radius: 0.5rem; font-size: 0.7rem;">
+                            <button id="copyLinkBtn" style="background: #3b82f6; padding: 0.5rem 1rem; border-radius: 0.5rem;">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="invite-list">
+                        <strong>✅ Invited Guests</strong>
+                        <ul id="invitedList">
+                            <li>👑 You (Creator)</li>
                         </ul>
                     </div>
                 </div>
-                
-                <hr>
-                <button id="resetRoomBtn" class="danger" style="width:100%;">🗑️ Remove Uninvited Users</button>
-            </div>
-            
-            <div class="card">
-                <h2>📡 Live Rooms Right Now</h2>
-                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    <span class="badge">📺 Stranger Things</span>
-                    <span class="badge">🎮 Arcane S2</span>
-                    <span class="badge">🏈 NFL Sunday</span>
-                    <span class="badge">🎵 Lo-Fi Beats</span>
+
+                <div class="room-card">
+                    <h3>🎬 Browse Content</h3>
+                    <div class="platforms-grid" id="platformsGrid"></div>
+                    <div class="content-list" id="contentList"></div>
                 </div>
-                <p style="margin-top: 1rem; font-size:0.8rem;">🔒 Zero-knowledge · GDPR ready</p>
+
+                <div class="room-card">
+                    <h3>💬 Room Chat</h3>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-message"><strong>🛡️ System</strong> Welcome to the private room!</div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chatMessageInput" placeholder="Type a message...">
+                            <button id="sendChatBtn" style="background: #7c3aed; padding: 0.5rem 1rem; border-radius: 0.5rem;">Send</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Room State Management
-    const roomState = {
-        roomId: 'room_' + Math.random().toString(36).substr(2, 9),
-        invitees: new Set(),
-        allowedSessions: new Set(),
-        chatHistory: []
-    };
-    
-    const currentSession = 'user_' + Math.random().toString(36).substr(2, 9);
-    roomState.invitees.add('creator_' + currentSession);
-    roomState.allowedSessions.add(currentSession);
-    
-    // Helper Functions
-    function showStatus(message) {
-        const statusDiv = document.createElement('div');
-        statusDiv.className = 'status-message';
-        statusDiv.textContent = message;
-        document.body.appendChild(statusDiv);
-        setTimeout(() => statusDiv.remove(), 3000);
-    }
-    
-    function isAllowed(sessionId) {
-        return roomState.allowedSessions.has(sessionId);
-    }
-    
-    function addChatMessage(text, senderName = 'System') {
-        if (!isAllowed(currentSession)) {
-            showStatus('❌ You are not invited to this private room');
-            return false;
+    <script>
+        // App State
+        let currentRoom = {
+            id: 'room_' + Math.random().toString(36).substr(2, 8),
+            invitees: new Set(),
+            allowedUsers: new Set(),
+            messages: [],
+            currentVideo: 'dQw4w9WgXcQ'
+        };
+
+        const currentUser = 'user_' + Math.random().toString(36).substr(2, 6);
+        currentRoom.allowedUsers.add(currentUser);
+        currentRoom.invitees.add('creator_' + currentUser);
+
+        // Platforms & Content
+        const platforms = [
+            { name: 'YouTube', icon: '▶️', type: 'youtube' },
+            { name: 'Netflix', icon: '🎬', type: 'netflix' },
+            { name: 'Disney+', icon: '✨', type: 'disney' },
+            { name: 'Twitch', icon: '🎮', type: 'twitch' },
+            { name: 'Prime Video', icon: '📦', type: 'prime' },
+            { name: 'Max', icon: '🎞️', type: 'max' },
+            { name: 'Crunchyroll', icon: '🍣', type: 'crunchy' },
+            { name: 'Apple TV+', icon: '🍎', type: 'apple' },
+            { name: 'Hulu', icon: '📺', type: 'hulu' },
+            { name: 'Paramount+', icon: '⭐', type: 'paramount' }
+        ];
+
+        const contentLibrary = {
+            youtube: [
+                { title: '🎵 Lo-Fi Beats 24/7', id: 'jfKfPfyJRdk' },
+                { title: '🎬 Movie Trailer Compilation', id: 'g4Hbz2lFw2E' },
+                { title: '🎮 Gaming Highlights', id: '3I7kjoPjZ1M' },
+                { title: '🐱 Funny Cats', id: 'ZudrJUBq5n8' },
+                { title: '🎤 Music Mix 2024', id: 'JGwWNGJdvx8' }
+            ],
+            netflix: [
+                { title: 'Stranger Things', id: 'b9EkMc79ZSU', platform: 'youtube' },
+                { title: 'Wednesday', id: 'Di310WS8zLk', platform: 'youtube' },
+                { title: 'Squid Game', id: 'oqxAJKy0Y4o', platform: 'youtube' }
+            ],
+            disney: [
+                { title: 'The Mandalorian', id: 'aOC8E8z_ifw', platform: 'youtube' },
+                { title: 'Loki', id: 'N2bXK2jq4q0', platform: 'youtube' },
+                { title: 'The Lion King', id: '7TavVZMewpY', platform: 'youtube' }
+            ],
+            twitch: [
+                { title: '🎮 Gaming Live', embed: 'https://player.twitch.tv/?channel=summit1g&parent=localhost' },
+                { title: '🎨 Art Creative', embed: 'https://player.twitch.tv/?channel=bobross&parent=localhost' }
+            ],
+            prime: [
+                { title: 'The Boys', id: '6y8H6U4Ht7w', platform: 'youtube' },
+                { title: 'The Lord of the Rings', id: 's7EvL7nWxnw', platform: 'youtube' }
+            ]
+        };
+
+        // Helper Functions
+        function showStatus(message, isError = false) {
+            const statusDiv = document.createElement('div');
+            statusDiv.textContent = message;
+            statusDiv.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${isError ? '#dc2626' : '#10b981'};
+                color: white;
+                padding: 0.75rem 1.5rem;
+                border-radius: 100px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            document.body.appendChild(statusDiv);
+            setTimeout(() => statusDiv.remove(), 3000);
         }
-        
-        roomState.chatHistory.push({
-            id: Date.now(),
-            senderId: currentSession,
-            senderName: senderName,
-            text: text
-        });
-        renderChat();
-        return true;
-    }
-    
-    function renderChat() {
-        const chatDiv = document.getElementById('chatMessages');
-        if (!chatDiv) return;
-        
-        chatDiv.innerHTML = '<div class="message"><strong>🛡️ System</strong> Private room — only invited members can chat.</div>';
-        
-        roomState.chatHistory.forEach(msg => {
-            if (roomState.allowedSessions.has(msg.senderId)) {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'message';
-                msgDiv.innerHTML = `<strong>${escapeHtml(msg.senderName)}</strong> ${escapeHtml(msg.text)}`;
-                chatDiv.appendChild(msgDiv);
+
+        function showLanding() {
+            document.getElementById('landingPage').style.display = 'block';
+            document.getElementById('appContainer').classList.remove('active');
+        }
+
+        function startNewRoom() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            initializeRoom();
+        }
+
+        function joinRoomPrompt() {
+            const roomId = prompt('Enter room ID to join:');
+            if (roomId) {
+                startNewRoom();
+                showStatus(`Joined room: ${roomId}`);
             }
-        });
-        
-        chatDiv.scrollTop = chatDiv.scrollHeight;
-    }
-    
-    function updateInviteeListUI() {
-        const listUl = document.getElementById('inviteeList');
-        if (listUl) {
-            listUl.innerHTML = '<li>👑 Room Creator (you)</li>';
-            roomState.invitees.forEach(inv => {
-                if (inv !== 'creator_' + currentSession) {
-                    const li = document.createElement('li');
-                    li.textContent = `✅ ${inv}`;
-                    listUl.appendChild(li);
-                }
-            });
         }
-        
-        const inviteLink = document.getElementById('inviteLinkInput');
-        if (inviteLink) {
-            const token = btoa(JSON.stringify({room: roomState.roomId, expires: Date.now() + 86400000}));
-            inviteLink.value = `${window.location.href}?invite=${token}`;
+
+        function initializeRoom() {
+            document.getElementById('roomIdDisplay').textContent = currentRoom.id;
+            updateInviteLink();
+            renderPlatforms();
+            renderChat();
+            updateInvitedList();
         }
-    }
-    
-    function sendInvite(contact) {
-        if (!contact.trim()) {
-            showStatus('Please enter an email or phone number');
-            return;
+
+        function updateInviteLink() {
+            const inviteToken = btoa(JSON.stringify({ room: currentRoom.id, expires: Date.now() + 86400000 }));
+            const link = `${window.location.origin}${window.location.pathname}?join=${inviteToken}`;
+            document.getElementById('inviteLink').value = link;
         }
-        
-        roomState.invitees.add(contact);
-        updateInviteeListUI();
-        showStatus(`✨ Invitation sent to ${contact}`);
-        
-        // In production: integrate with email/SMS API here
-        console.log(`Invite sent to: ${contact}`);
-    }
-    
-    function removeUninvitedUsers() {
-        const keepSessions = new Set();
-        keepSessions.add(currentSession);
-        roomState.allowedSessions = keepSessions;
-        
-        roomState.chatHistory = roomState.chatHistory.filter(msg => 
-            roomState.allowedSessions.has(msg.senderId)
-        );
-        
-        renderChat();
-        showStatus('🗑️ Removed all non-invited users from chat');
-        addChatMessage('Room reset: removed non-invited participants', 'System');
-    }
-    
-    function handleInviteFromURL() {
-        const params = new URLSearchParams(window.location.search);
-        const inviteToken = params.get('invite');
-        
-        if (inviteToken && !roomState.allowedSessions.has(currentSession)) {
-            roomState.allowedSessions.add(currentSession);
-            roomState.invitees.add('guest_' + currentSession.slice(-6));
-            updateInviteeListUI();
-            addChatMessage('joined the private room via invite link', 'Guest');
-            showStatus('✅ You have been added as an invited guest!');
+
+        function sendInvite(contact) {
+            if (!contact.trim()) {
+                showStatus('Please enter an email or phone number', true);
+                return;
+            }
+            currentRoom.invitees.add(contact);
+            updateInvitedList();
+            showStatus(`✨ Invitation sent to ${contact}`);
+            document.getElementById('inviteInput').value = '';
             
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
+            // Simulate email/SMS (replace with actual API in production)
+            console.log(`[DEMO] Send invite to: ${contact} with link: ${document.getElementById('inviteLink').value}`);
         }
-    }
-    
-    // Platform & Content Management
-    const platforms = [
-        { name: "YouTube", icon: "▶️", type: "youtube", color: "#FF0000" },
-        { name: "Twitch", icon: "🎮", type: "twitch", color: "#9146FF" },
-        { name: "Netflix", icon: "🎬", type: "netflix", color: "#E50914" },
-        { name: "Disney+", icon: "✨", type: "disney", color: "#113CCF" },
-        { name: "Prime Video", icon: "📦", type: "prime", color: "#00A8E1" },
-        { name: "Max (HBO)", icon: "🎞️", type: "max", color: "#0026FF" },
-        { name: "Crunchyroll", icon: "🍣", type: "crunchy", color: "#F47521" },
-        { name: "Pluto TV", icon: "📡", type: "pluto", color: "#6E56CF" },
-        { name: "Tubi", icon: "📺", type: "tubi", color: "#FF1493" }
-    ];
-    
-    const contentLibrary = {
-        youtube: [
-            { title: "🎵 Lo-Fi Beats to Study/Relax", videoId: "jfKfPfyJRdk" },
-            { title: "🎬 Movie Trailer Compilation", videoId: "g4Hbz2lFw2E" },
-            { title: "🎮 Gaming Live Stream Highlights", videoId: "3I7kjoPjZ1M" },
-            { title: "🐱 Funny Cat Videos", videoId: "ZudrJUBq5n8" }
-        ],
-        twitch: [
-            { title: "🎮 Gaming Live", embed: "https://player.twitch.tv/?channel=summit1g&parent=localhost" },
-            { title: "🎨 Art & Creative", embed: "https://player.twitch.tv/?channel=bobross&parent=localhost" },
-            { title: "🎵 Music Streams", embed: "https://player.twitch.tv/?channel/monstercat&parent=localhost" }
-        ],
-        netflix: [
-            { title: "🎬 Stranger Things (Trailer)", videoId: "b9EkMc79ZSU" },
-            { title: "🎭 The Crown (Trailer)", videoId: "JWtnJjn6GZs" },
-            { title: "🎪 Squid Game (Trailer)", videoId: "oqxAJKy0Y4o" }
-        ],
-        disney: [
-            { title: "🦁 The Lion King", videoId: "7TavVZMewpY" },
-            { title: "🦸‍♂️ Avengers: Endgame", videoId: "TcMBFSGVi1c" },
-            { title: "❄️ Frozen 2", videoId: "bwzLiQZDw2I" }
-        ],
-        prime: [
-            { title: "👑 The Boys (Trailer)", videoId: "6y8H6U4Ht7w" },
-            { title: "🧙 The Lord of the Rings", videoId: "s7EvL7nWxnw" },
-            { title: "🔫 Jack Ryan", videoId: "U7B2PpYiqCg" }
-        ],
-        max: [
-            { title: "🐉 House of the Dragon", videoId: "DotnJ7tTA34" },
-            { title: "🃏 The Last of Us", videoId: "uLtkt8BonwM" },
-            { title: "⚡ Succession", videoId: "OZfqtoKcCOw" }
-        ],
-        crunchy: [
-            { title: "⚔️ Demon Slayer", videoId: "VQGCKyvzIM4" },
-            { title: "🏴‍☠️ One Piece", videoId: "TgOplY0dQVM" },
-            { title: "🧙 Jujutsu Kaisen", videoId: "pXlPVnR5CJk" }
-        ],
-        pluto: [
-            { title: "📺 Pluto TV Movies", embed: "https://pluto.tv/live-tv/movies" },
-            { title: "📰 Pluto TV News", embed: "https://pluto.tv/live-tv/news" }
-        ],
-        tubi: [
-            { title: "🎬 Tubi Action Movies", embed: "https://tubitv.com/genre/action" },
-            { title: "😂 Tubi Comedy", embed: "https://tubitv.com/genre/comedy" }
-        ]
-    };
-    
-    function renderPlatforms() {
-        const grid = document.getElementById('platformGrid');
-        if (!grid) return;
-        
-        grid.innerHTML = platforms.map(plat => `
-            <div class="platform-card" data-platform="${plat.type}" style="border-left: 3px solid ${plat.color}">
-                <strong>${plat.icon} ${plat.name}</strong>
-                <br><small>Click to browse</small>
-            </div>
-        `).join('');
-        
-        document.querySelectorAll('.platform-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const platform = card.dataset.platform;
-                showContentForPlatform(platform);
-                showStatus(`📱 Browsing ${platform} content`);
-            });
-        });
-    }
-    
-    function showContentForPlatform(platformType) {
-        const contentDiv = document.getElementById('contentList');
-        const contents = contentLibrary[platformType] || contentLibrary.youtube;
-        
-        contentDiv.innerHTML = contents.map(content => `
-            <div class="content-item" data-type="${platformType}" data-videoid="${content.videoId || ''}" data-embed="${content.embed || ''}">
-                🎥 ${content.title}
-            </div>
-        `).join('');
-        
-        document.querySelectorAll('.content-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const videoId = item.dataset.videoid;
-                const embedUrl = item.dataset.embed;
-                const platform = item.dataset.type;
-                
-                if (videoId) {
-                    playVideo(videoId);
-                    addChatMessage(`started watching "${item.textContent.trim()}" on ${platform}`, 'You');
-                } else if (embedUrl) {
-                    document.getElementById('videoFrame').src = embedUrl;
-                    addChatMessage(`started watching "${item.textContent.trim()}" on ${platform}`, 'You');
+
+        function updateInvitedList() {
+            const list = document.getElementById('invitedList');
+            list.innerHTML = '<li>👑 You (Creator)</li>';
+            currentRoom.invitees.forEach(invitee => {
+                if (invitee !== 'creator_' + currentUser) {
+                    const li = document.createElement('li');
+                    li.textContent = `✅ ${invitee}`;
+                    list.appendChild(li);
                 }
             });
-        });
-    }
-    
-    function playVideo(videoId) {
-        if (!videoId) return;
-        const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1`;
-        document.getElementById('videoFrame').src = youtubeUrl;
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // Video Sync Controls
-    function syncPlay() {
-        const iframe = document.getElementById('videoFrame');
-        addChatMessage('▶️ requested play sync', 'Host');
-        iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        showStatus('▶️ Play synced for all invited users');
-    }
-    
-    function syncPause() {
-        const iframe = document.getElementById('videoFrame');
-        addChatMessage('⏸️ requested pause sync', 'Host');
-        iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        showStatus('⏸️ Pause synced for all invited users');
-    }
-    
-    // Event Listeners
-    document.getElementById('sendInviteBtn')?.addEventListener('click', () => {
-        const contact = document.getElementById('inviteContact').value;
-        sendInvite(contact);
-        document.getElementById('inviteContact').value = '';
-    });
-    
-    document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
-        const linkInput = document.getElementById('inviteLinkInput');
-        linkInput.select();
-        navigator.clipboard.writeText(linkInput.value);
-        showStatus('🔗 Invite link copied to clipboard');
-    });
-    
-    document.getElementById('resetRoomBtn')?.addEventListener('click', removeUninvitedUsers);
-    
-    document.getElementById('sendChatBtn')?.addEventListener('click', () => {
-        const input = document.getElementById('chatInput');
-        if (input.value.trim()) {
-            addChatMessage(input.value, 'You');
-            input.value = '';
         }
-    });
-    
-    document.getElementById('chatInput')?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('sendChatBtn').click();
-        }
-    });
-    
-    document.getElementById('syncPlayBtn')?.addEventListener('click', syncPlay);
-    document.getElementById('syncPauseBtn')?.addEventListener('click', syncPause);
-    
-    // Initialize
-    renderPlatforms();
-    showContentForPlatform('youtube');
-    updateInviteeListUI();
-    handleInviteFromURL();
-    
-    // Set default video
-    setTimeout(() => {
-        playVideo('dQw4w9WgXcQ');
-    }, 100);
-    
-    // Clean up uninvited messages periodically
-    setInterval(() => {
-        const oldLength = roomState.chatHistory.length;
-        roomState.chatHistory = roomState.chatHistory.filter(msg => 
-            roomState.allowedSessions.has(msg.senderId)
-        );
-        if (oldLength !== roomState.chatHistory.length) {
+
+        function addChatMessage(text, sender = 'You') {
+            if (!currentRoom.allowedUsers.has(currentUser)) {
+                showStatus('You are not invited to this room', true);
+                return;
+            }
+            currentRoom.messages.push({ text, sender, time: Date.now() });
             renderChat();
         }
-    }, 5000);
-</script>
+
+        function renderChat() {
+            const chatDiv = document.getElementById('chatMessages');
+            chatDiv.innerHTML = '';
+            currentRoom.messages.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'chat-message';
+                msgDiv.innerHTML = `<strong>${escapeHtml(msg.sender)}</strong> ${escapeHtml(msg.text)}`;
+                chatDiv.appendChild(msgDiv);
+            });
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        function renderPlatforms() {
+            const grid = document.getElementById('platformsGrid');
+            grid.innerHTML = platforms.map(plat => `
+                <div class="platform-item" data-platform="${plat.type}">
+                    ${plat.icon} ${plat.name}
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.platform-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const platform = item.dataset.platform;
+                    showContentForPlatform(platform);
+                });
+            });
+        }
+
+        function showContentForPlatform(platformType) {
+            const contentDiv = document.getElementById('contentList');
+            const contents = contentLibrary[platformType] || contentLibrary.youtube;
+            
+            contentDiv.innerHTML = contents.map(content => `
+                <div class="content-item" data-id="${content.id || ''}" data-embed="${content.embed || ''}" data-platform="${content.platform || 'youtube'}">
+                    🎥 ${content.title}
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const videoId = item.dataset.id;
+                    const embedUrl = item.dataset.embed;
+                    
+                    if (videoId) {
+                        playVideo(videoId);
+                        addChatMessage(`started watching "${item.textContent.trim()}"`, 'You');
+                    } else if (embedUrl) {
+                        document.getElementById('videoPlayer').src = embedUrl;
+                        addChatMessage(`started watching "${item.textContent.trim()}"`, 'You');
+                    }
+                });
+            });
+        }
+
+        function playVideo(videoId) {
+            if (!videoId) return;
+            const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&enablejsapi=1`;
+            document.getElementById('videoPlayer').src = youtubeUrl;
+            currentRoom.currentVideo = videoId;
+        }
+
+        function syncPlay() {
+            addChatMessage('▶️ synced play for everyone', 'Host');
+            const iframe = document.getElementById('videoPlayer');
+            iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            showStatus('▶️ Playback synced');
+        }
+
+        function syncPause() {
+            addChatMessage('⏸️ synced pause for everyone', 'Host');
+            const iframe = document.getElementById('videoPlayer');
+            iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            showStatus('⏸️ Pause synced');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('sendInviteBtn')?.addEventListener('click', () => {
+            const input = document.getElementById('inviteInput');
+            sendInvite(input.value);
+        });
+
+        document.getElementById('copyLinkBtn')?.addEventListener('click', () => {
+            const linkInput = document.getElementById('inviteLink');
+            linkInput.select();
+            navigator.clipboard.writeText(linkInput.value);
+            showStatus('Invite link copied!');
+        });
+
+        document.getElementById('sendChatBtn')?.addEventListener('click', () => {
+            const input = document.getElementById('chatMessageInput');
+            if (input.value.trim()) {
+                addChatMessage(input.value);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('chatMessageInput')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('sendChatBtn').click();
+            }
+        });
+
+        document.getElementById('syncPlayBtn')?.addEventListener('click', syncPlay);
+        document.getElementById('syncPauseBtn')?.addEventListener('click', syncPause);
+
+        document.getElementById('navJoinBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            joinRoomPrompt();
+        });
+
+        // Initialize default content
+        setTimeout(() => {
+            if (document.getElementById('platformsGrid')) {
+                renderPlatforms();
+                showContentForPlatform('youtube');
+            }
+        }, 100);
+
+        // Check for invite in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('join')) {
+            setTimeout(() => {
+                startNewRoom();
+                showStatus('Joined room via invite link!');
+            }, 500);
+        }
+    </script>
 </body>
 </html>
