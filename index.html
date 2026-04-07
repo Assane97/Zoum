@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Hearo — Watch Together · Sync · Private Rooms</title>
+<title>Zoum — Watch Together · Sync · Private Rooms</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
 * {
@@ -696,7 +696,7 @@ body {
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
-      <span>🎧</span> Hearo
+      <span>🎬</span> Zoum
     </div>
     <div class="nav-links">
       <a onclick="showLanding()">Home</a>
@@ -852,7 +852,7 @@ body {
       <div class="settings-row">
         <div>
           <div class="settings-label">Email</div>
-          <div class="settings-sub" id="settingsEmail">user@hearo.app</div>
+          <div class="settings-sub" id="settingsEmail">user@zoum.app</div>
         </div>
         <button class="btn-secondary" style="padding: 0.25rem 1rem; font-size: 0.7rem;">Change</button>
       </div>
@@ -950,7 +950,7 @@ let currentRoom = {
 
 let currentUser = {
   name: 'Guest',
-  email: 'guest@hearo.app',
+  email: 'guest@zoum.app',
   initials: 'GU'
 };
 
@@ -1044,285 +1044,4 @@ function showApp() {
 function showSettings() {
   document.getElementById('landingPage').style.display = 'none';
   document.getElementById('appContainer').classList.remove('active');
-  document.getElementById('settingsPage').style.display = 'block';
-}
-
-function showCreateRoomModal() {
-  document.getElementById('createRoomModal').classList.add('active');
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).classList.remove('active');
-}
-
-function showJoinPrompt() {
-  const roomId = prompt('Enter room ID to join:');
-  if (roomId) {
-    joinRoom(roomId);
-  }
-}
-
-function toggleSetting(element) {
-  element.classList.toggle('active');
-}
-
-// ============ ROOM MANAGEMENT ============
-function createRoom() {
-  const roomName = document.getElementById('newRoomName').value.trim() || 'Watch Party';
-  const platform = document.getElementById('newRoomPlatform').value;
-  
-  currentRoom = {
-    id: 'room_' + Math.random().toString(36).substr(2, 8),
-    name: roomName,
-    invitees: [{ name: currentUser.name, contact: currentUser.email, type: 'host' }],
-    messages: [],
-    platform: platform,
-    videoId: 'dQw4w9WgXcQ',
-    isPlaying: false
-  };
-  
-  document.getElementById('roomIdDisplay').textContent = currentRoom.id;
-  document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
-  updateInviteLink();
-  renderPlatforms();
-  renderContent(platform);
-  renderChat();
-  updateInvitedList();
-  
-  closeModal('createRoomModal');
-  showApp();
-  showToast(`🎉 Room "${roomName}" created! Invite friends to join.`);
-}
-
-function joinRoom(roomId) {
-  currentRoom.id = roomId;
-  currentRoom.name = 'Joined Room';
-  currentRoom.invitees = [{ name: currentUser.name, contact: currentUser.email, type: 'guest' }];
-  currentRoom.messages = [];
-  currentRoom.platform = 'youtube';
-  
-  document.getElementById('roomIdDisplay').textContent = roomId;
-  document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
-  updateInviteLink();
-  renderPlatforms();
-  renderContent('youtube');
-  renderChat();
-  updateInvitedList();
-  
-  showApp();
-  showToast(`🔗 Joined room: ${roomId}`);
-}
-
-function leaveRoom() {
-  if (confirm('Leave the room? Chat history will be cleared.')) {
-    showLanding();
-    showToast('👋 Left the room');
-  }
-}
-
-// ============ INVITE SYSTEM ============
-function updateInviteLink() {
-  const link = `${window.location.origin}${window.location.pathname}?join=${currentRoom.id}`;
-  document.getElementById('inviteLink').value = link;
-}
-
-function sendInviteEmail() {
-  const email = document.getElementById('inviteEmail').value.trim();
-  if (!email || !email.includes('@')) {
-    showToast('Please enter a valid email address', true);
-    return;
-  }
-  
-  const name = email.split('@')[0];
-  addInvitee(name, email, 'email');
-  document.getElementById('inviteEmail').value = '';
-  showToast(`📧 Invite sent to ${email}`);
-}
-
-function sendInviteSMS() {
-  const phone = document.getElementById('invitePhone').value.trim();
-  if (phone.replace(/[\s\-+()]/g, '').length < 7) {
-    showToast('Please enter a valid phone number', true);
-    return;
-  }
-  
-  addInvitee(phone, phone, 'phone');
-  document.getElementById('invitePhone').value = '';
-  showToast(`📱 SMS invite sent to ${phone}`);
-}
-
-function addInvitee(name, contact, type) {
-  if (!currentRoom.invitees.some(i => i.contact === contact)) {
-    currentRoom.invitees.push({ name, contact, type });
-    updateInvitedList();
-    document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
-    addSystemMessage(`${name} joined the room!`);
-  }
-}
-
-function updateInvitedList() {
-  const list = document.getElementById('invitedList');
-  list.innerHTML = '';
-  currentRoom.invitees.forEach(inv => {
-    const li = document.createElement('li');
-    const icon = inv.type === 'host' ? '👑' : (inv.type === 'email' ? '📧' : '📱');
-    li.innerHTML = `${icon} ${inv.name}${inv.type === 'host' ? ' (Host)' : ''}`;
-    list.appendChild(li);
-  });
-}
-
-function copyInviteLink() {
-  const link = document.getElementById('inviteLink');
-  link.select();
-  navigator.clipboard.writeText(link.value);
-  showToast('Invite link copied!');
-}
-
-// ============ CHAT SYSTEM ============
-function addChatMessage(text, sender = 'You') {
-  if (!currentRoom.invitees.some(i => i.name === sender && sender !== 'System')) {
-    if (sender !== 'You' && sender !== 'System') return;
-  }
-  
-  currentRoom.messages.push({ text, sender, time: Date.now() });
-  renderChat();
-}
-
-function addSystemMessage(text) {
-  currentRoom.messages.push({ text, sender: 'System', time: Date.now() });
-  renderChat();
-}
-
-function renderChat() {
-  const chatDiv = document.getElementById('chatMessages');
-  chatDiv.innerHTML = '';
-  
-  currentRoom.messages.slice(-50).forEach(msg => {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'chat-message';
-    if (msg.sender === 'You') msgDiv.classList.add('own');
-    msgDiv.innerHTML = `<strong>${escapeHtml(msg.sender)}</strong> ${escapeHtml(msg.text)}`;
-    chatDiv.appendChild(msgDiv);
-  });
-  chatDiv.scrollTop = chatDiv.scrollHeight;
-}
-
-function sendChatMessage() {
-  const input = document.getElementById('chatInput');
-  if (input.value.trim()) {
-    addChatMessage(input.value);
-    input.value = '';
-  }
-}
-
-// ============ CONTENT BROWSING ============
-function renderPlatforms() {
-  const grid = document.getElementById('platformsGrid');
-  grid.innerHTML = platforms.map(plat => `
-    <div class="platform-item" data-platform="${plat.type}" style="border-left: 2px solid ${plat.color}">
-      ${plat.icon} ${plat.name}
-    </div>
-  `).join('');
-  
-  document.querySelectorAll('.platform-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const platform = item.dataset.platform;
-      renderContent(platform);
-    });
-  });
-}
-
-function renderContent(platformType) {
-  const contentDiv = document.getElementById('contentList');
-  const contents = contentLibrary[platformType] || contentLibrary.youtube;
-  
-  contentDiv.innerHTML = contents.map(content => `
-    <div class="content-item" data-id="${content.id || ''}" data-embed="${content.embed || ''}">
-      🎥 ${content.title}
-    </div>
-  `).join('');
-  
-  document.querySelectorAll('.content-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const videoId = item.dataset.id;
-      const embedUrl = item.dataset.embed;
-      
-      if (videoId) {
-        playVideo(videoId);
-        addChatMessage(`started watching "${item.textContent.trim()}"`);
-      } else if (embedUrl) {
-        document.getElementById('videoPlayer').src = embedUrl;
-        addChatMessage(`started watching "${item.textContent.trim()}"`);
-      }
-    });
-  });
-}
-
-function playVideo(videoId) {
-  if (!videoId) return;
-  const youtubeUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1`;
-  document.getElementById('videoPlayer').src = youtubeUrl;
-  currentRoom.videoId = videoId;
-}
-
-// ============ SYNC CONTROLS ============
-function syncPlay() {
-  addChatMessage('▶️ synced play for everyone', 'Host');
-  const iframe = document.getElementById('videoPlayer');
-  iframe.contentWindow?.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-  showToast('▶️ Playback synced');
-}
-
-function syncPause() {
-  addChatMessage('⏸️ synced pause for everyone', 'Host');
-  const iframe = document.getElementById('videoPlayer');
-  iframe.contentWindow?.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-  showToast('⏸️ Pause synced');
-}
-
-// ============ AUTH ============
-function login() {
-  const name = prompt('Enter your name:', 'Guest');
-  if (name) {
-    currentUser.name = name;
-    currentUser.initials = name.substring(0, 2).toUpperCase();
-    document.getElementById('settingsName').textContent = name;
-    showToast(`Welcome, ${name}!`);
-  }
-}
-
-function logout() {
-  currentUser = { name: 'Guest', email: 'guest@hearo.app', initials: 'GU' };
-  showLanding();
-  showToast('Signed out');
-}
-
-// ============ UTILITIES ============
-function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>]/g, function(m) {
-    if (m === '&') return '&amp;';
-    if (m === '<') return '&lt;';
-    if (m === '>') return '&gt;';
-    return m;
-  });
-}
-
-// Check for invite in URL
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('join')) {
-  setTimeout(() => {
-    joinRoom(urlParams.get('join'));
-  }, 500);
-}
-
-// Event listeners
-document.getElementById('syncPlayBtn')?.addEventListener('click', syncPlay);
-document.getElementById('syncPauseBtn')?.addEventListener('click', syncPause);
-
-// Initialize
-renderPlatforms();
-renderContent('youtube');
-</script>
-</body>
-</html>
+  document.getElementById('
