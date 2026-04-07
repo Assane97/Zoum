@@ -20,7 +20,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Modern Gradient Background */
 .gradient-bg {
   position: fixed;
   top: 0;
@@ -33,7 +32,6 @@ body {
   z-index: 0;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -45,11 +43,7 @@ body {
   background: #8b5cf6;
   border-radius: 10px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #7c3aed;
-}
 
-/* Navigation */
 .navbar {
   position: fixed;
   top: 0;
@@ -82,10 +76,6 @@ body {
   gap: 0.5rem;
 }
 
-.logo span {
-  font-size: 1.2rem;
-}
-
 .nav-links {
   display: flex;
   gap: 2rem;
@@ -104,7 +94,6 @@ body {
   color: #8b5cf6;
 }
 
-/* Buttons */
 .btn-primary {
   background: linear-gradient(135deg, #8b5cf6, #7c3aed);
   color: white;
@@ -133,11 +122,6 @@ body {
   transition: 0.2s;
 }
 
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-/* Hero Section */
 .hero-section {
   min-height: 100vh;
   display: flex;
@@ -189,11 +173,9 @@ body {
   flex-wrap: wrap;
 }
 
-/* Features Section */
 .features-section {
   padding: 5rem 2rem;
   background: #0f0f14;
-  position: relative;
 }
 
 .section-title {
@@ -241,7 +223,6 @@ body {
   line-height: 1.5;
 }
 
-/* App Container */
 .app-container {
   display: none;
   padding-top: 4rem;
@@ -251,7 +232,6 @@ body {
   display: block;
 }
 
-/* Room Dashboard */
 .room-dashboard {
   display: grid;
   grid-template-columns: 1fr 380px;
@@ -289,7 +269,6 @@ body {
   background: #1a1a2e;
 }
 
-/* Room Sidebar */
 .room-sidebar {
   display: flex;
   flex-direction: column;
@@ -318,7 +297,6 @@ body {
   font-weight: 600;
 }
 
-/* Chat */
 .chat-container {
   height: 320px;
   display: flex;
@@ -352,10 +330,6 @@ body {
   font-size: 0.75rem;
 }
 
-.chat-message.own strong {
-  color: #e9d5ff;
-}
-
 .chat-input-area {
   display: flex;
   gap: 0.5rem;
@@ -386,7 +360,6 @@ body {
   cursor: pointer;
 }
 
-/* Platform Grid */
 .platforms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -406,7 +379,6 @@ body {
 
 .platform-item:hover {
   background: #8b5cf6;
-  transform: scale(0.98);
 }
 
 .content-list {
@@ -431,7 +403,6 @@ body {
   background: #2563eb;
 }
 
-/* Invite Section */
 .invite-section {
   background: #0f1420;
   border-radius: 1rem;
@@ -470,88 +441,35 @@ body {
   padding: 0.25rem 0;
   color: #86efac;
   font-size: 0.75rem;
+}
+
+.room-info-bar {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-/* Settings Page */
-.settings-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.settings-card {
-  background: #1a1a2e;
-  border-radius: 1.25rem;
-  padding: 1.5rem;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: #0f0f14;
+  border-radius: 0.5rem;
   margin-bottom: 1rem;
-  border: 1px solid #2d2d44;
 }
 
-.settings-header {
-  font-size: 0.7rem;
-  text-transform: uppercase;
+.room-id {
+  font-family: monospace;
+  font-size: 0.75rem;
   color: #8b5cf6;
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
+  background: rgba(139, 92, 246, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
 }
 
-.settings-row {
+.viewer-count {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #2d2d44;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #a1a1aa;
 }
 
-.settings-row:last-child {
-  border-bottom: none;
-}
-
-.settings-label {
-  font-weight: 500;
-}
-
-.settings-sub {
-  font-size: 0.7rem;
-  color: #6b7280;
-  margin-top: 0.25rem;
-}
-
-/* Toggle Switch */
-.toggle {
-  width: 44px;
-  height: 24px;
-  background: #3f3f5e;
-  border-radius: 12px;
-  position: relative;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.toggle.active {
-  background: #8b5cf6;
-}
-
-.toggle::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  top: 2px;
-  left: 2px;
-  transition: 0.2s;
-}
-
-.toggle.active::after {
-  left: 22px;
-}
-
-/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -598,7 +516,6 @@ body {
   cursor: pointer;
 }
 
-/* Toast */
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -632,67 +549,25 @@ body {
   }
 }
 
-/* Responsive */
 @media (max-width: 900px) {
   .room-dashboard {
     grid-template-columns: 1fr;
   }
-  
   .hero-title {
     font-size: 2.5rem;
   }
-  
   .navbar {
     padding: 0.75rem 1rem;
   }
-  
   .nav-links {
     gap: 1rem;
   }
-}
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.live-badge {
-  animation: pulse 2s infinite;
-}
-
-/* Room Info */
-.room-info-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem;
-  background: #0f0f14;
-  border-bottom: 1px solid #2d2d44;
-}
-
-.room-id {
-  font-family: monospace;
-  font-size: 0.75rem;
-  color: #8b5cf6;
-  background: rgba(139, 92, 246, 0.1);
-  padding: 0.25rem 0.75rem;
-  border-radius: 100px;
-}
-
-.viewer-count {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  color: #a1a1aa;
 }
 </style>
 </head>
 <body>
 <div class="gradient-bg"></div>
 
-<!-- Navigation -->
 <nav class="navbar">
   <div class="nav-container">
     <div class="logo">
@@ -706,7 +581,6 @@ body {
   </div>
 </nav>
 
-<!-- Landing Page -->
 <div id="landingPage">
   <section class="hero-section">
     <div class="hero-content">
@@ -764,10 +638,8 @@ body {
   </section>
 </div>
 
-<!-- App Container -->
 <div id="appContainer" class="app-container">
   <div class="room-dashboard">
-    <!-- Video Section -->
     <div class="video-section">
       <div class="video-wrapper">
         <iframe id="videoPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -778,20 +650,17 @@ body {
       </div>
     </div>
 
-    <!-- Sidebar -->
     <div class="room-sidebar">
-      <!-- Room Info Card -->
       <div class="room-card">
         <div class="room-header">
           <h3>🔐 Private Room</h3>
           <span class="room-status" id="roomStatus">Active</span>
         </div>
-        <div class="room-info-bar" style="margin: -0.5rem -0.5rem 1rem -0.5rem; border-radius: 0.5rem;">
+        <div class="room-info-bar">
           <span class="room-id" id="roomIdDisplay">loading...</span>
           <span class="viewer-count">👁 <span id="viewerCount">1</span> watching</span>
         </div>
         
-        <!-- Invite Section -->
         <div class="invite-section">
           <strong>📧 Invite Friends</strong>
           <div class="invite-input-group">
@@ -818,14 +687,12 @@ body {
         </div>
       </div>
 
-      <!-- Browse Content Card -->
       <div class="room-card">
         <h3>🎬 Browse Content</h3>
         <div class="platforms-grid" id="platformsGrid"></div>
         <div class="content-list" id="contentList"></div>
       </div>
 
-      <!-- Chat Card -->
       <div class="room-card">
         <h3>💬 Room Chat</h3>
         <div class="chat-container">
@@ -842,66 +709,6 @@ body {
   </div>
 </div>
 
-<!-- Settings Page -->
-<div id="settingsPage" style="display: none;">
-  <div style="max-width: 700px; margin: 5rem auto 2rem; padding: 0 1rem;">
-    <button class="btn-secondary" onclick="showLanding()" style="margin-bottom: 1rem;">← Back to Home</button>
-    
-    <div class="settings-card">
-      <div class="settings-header">Account</div>
-      <div class="settings-row">
-        <div>
-          <div class="settings-label">Email</div>
-          <div class="settings-sub" id="settingsEmail">user@zoum.app</div>
-        </div>
-        <button class="btn-secondary" style="padding: 0.25rem 1rem; font-size: 0.7rem;">Change</button>
-      </div>
-      <div class="settings-row">
-        <div>
-          <div class="settings-label">Display Name</div>
-          <div class="settings-sub" id="settingsName">Guest User</div>
-        </div>
-        <button class="btn-secondary" style="padding: 0.25rem 1rem; font-size: 0.7rem;">Edit</button>
-      </div>
-    </div>
-
-    <div class="settings-card">
-      <div class="settings-header">Privacy & Security</div>
-      <div class="settings-row">
-        <div>
-          <div class="settings-label">End-to-End Encryption</div>
-          <div class="settings-sub">AES-256-GCM — Always on</div>
-        </div>
-        <div class="toggle active"></div>
-      </div>
-      <div class="settings-row">
-        <div>
-          <div class="settings-label">Auto-delete Chat History</div>
-          <div class="settings-sub">Wipe messages when room closes</div>
-        </div>
-        <div class="toggle active" onclick="toggleSetting(this)"></div>
-      </div>
-      <div class="settings-row">
-        <div>
-          <div class="settings-label">Private Profile</div>
-          <div class="settings-sub">Hide from public search</div>
-        </div>
-        <div class="toggle" onclick="toggleSetting(this)"></div>
-      </div>
-    </div>
-
-    <div class="settings-card">
-      <div class="settings-header">Connected Services</div>
-      <div id="connectedServicesList">
-        <div style="color: #6b7280; text-align: center; padding: 1rem;">No services connected yet</div>
-      </div>
-    </div>
-
-    <button class="btn-secondary" onclick="logout()" style="width: 100%; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3); color: #f87171;">Sign Out</button>
-  </div>
-</div>
-
-<!-- Create Room Modal -->
 <div id="createRoomModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -910,7 +717,7 @@ body {
     </div>
     <div style="margin-bottom: 1rem;">
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">ROOM NAME</label>
-      <input type="text" id="newRoomName" class="chat-input-area" style="width: 100%;" placeholder="Movie Night 🍿">
+      <input type="text" id="newRoomName" style="width: 100%; background: #2d2d44; border: none; padding: 0.7rem; border-radius: 0.75rem; color: white;" placeholder="Movie Night 🍿">
     </div>
     <div style="margin-bottom: 1rem;">
       <label style="display: block; font-size: 0.75rem; color: #8b5cf6; margin-bottom: 0.25rem;">PLATFORM</label>
@@ -922,18 +729,10 @@ body {
         <option value="prime">Prime Video</option>
       </select>
     </div>
-    <div class="settings-row">
-      <div>
-        <div class="settings-label">Private Room</div>
-        <div class="settings-sub">Invite-only access</div>
-      </div>
-      <div class="toggle active" id="privateRoomToggle"></div>
-    </div>
     <button class="btn-primary" onclick="createRoom()" style="width: 100%; margin-top: 1rem;">Create Room →</button>
   </div>
 </div>
 
-<!-- Toast Container -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -944,8 +743,7 @@ let currentRoom = {
   invitees: [],
   messages: [],
   platform: 'youtube',
-  videoId: 'dQw4w9WgXcQ',
-  isPlaying: false
+  videoId: 'dQw4w9WgXcQ'
 };
 
 let currentUser = {
@@ -953,8 +751,6 @@ let currentUser = {
   email: 'guest@zoum.app',
   initials: 'GU'
 };
-
-let connectedServices = {};
 
 // Platforms & Content
 const platforms = [
@@ -1019,29 +815,281 @@ const contentLibrary = {
 };
 
 // ============ HELPER FUNCTIONS ============
-function showToast(message, isError = false) {
+function showToast(message, isError) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.style.borderLeftColor = isError ? '#ef4444' : '#10b981';
+  if (isError) toast.style.borderLeftColor = '#ef4444';
   toast.textContent = message;
   container.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
+  setTimeout(function() { toast.remove(); }, 3000);
 }
 
 function showLanding() {
   document.getElementById('landingPage').style.display = 'block';
   document.getElementById('appContainer').classList.remove('active');
-  document.getElementById('settingsPage').style.display = 'none';
 }
 
 function showApp() {
   document.getElementById('landingPage').style.display = 'none';
   document.getElementById('appContainer').classList.add('active');
-  document.getElementById('settingsPage').style.display = 'none';
 }
 
-function showSettings() {
-  document.getElementById('landingPage').style.display = 'none';
-  document.getElementById('appContainer').classList.remove('active');
-  document.getElementById('
+function showCreateRoomModal() {
+  document.getElementById('createRoomModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+function showJoinPrompt() {
+  const roomId = prompt('Enter room ID to join:');
+  if (roomId) {
+    joinRoom(roomId);
+  }
+}
+
+// ============ ROOM MANAGEMENT ============
+function createRoom() {
+  const roomName = document.getElementById('newRoomName').value.trim() || 'Watch Party';
+  const platform = document.getElementById('newRoomPlatform').value;
+  
+  currentRoom = {
+    id: 'room_' + Math.random().toString(36).substr(2, 8),
+    name: roomName,
+    invitees: [{ name: currentUser.name, contact: currentUser.email, type: 'host' }],
+    messages: [],
+    platform: platform,
+    videoId: 'dQw4w9WgXcQ'
+  };
+  
+  document.getElementById('roomIdDisplay').textContent = currentRoom.id;
+  document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
+  updateInviteLink();
+  renderPlatforms();
+  renderContent(platform);
+  renderChat();
+  updateInvitedList();
+  
+  closeModal('createRoomModal');
+  showApp();
+  showToast('🎉 Room "' + roomName + '" created! Invite friends to join.');
+}
+
+function joinRoom(roomId) {
+  currentRoom.id = roomId;
+  currentRoom.name = 'Joined Room';
+  currentRoom.invitees = [{ name: currentUser.name, contact: currentUser.email, type: 'guest' }];
+  currentRoom.messages = [];
+  currentRoom.platform = 'youtube';
+  
+  document.getElementById('roomIdDisplay').textContent = roomId;
+  document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
+  updateInviteLink();
+  renderPlatforms();
+  renderContent('youtube');
+  renderChat();
+  updateInvitedList();
+  
+  showApp();
+  showToast('🔗 Joined room: ' + roomId);
+}
+
+// ============ INVITE SYSTEM ============
+function updateInviteLink() {
+  const link = window.location.href.split('?')[0] + '?join=' + currentRoom.id;
+  document.getElementById('inviteLink').value = link;
+}
+
+function sendInviteEmail() {
+  const email = document.getElementById('inviteEmail').value.trim();
+  if (!email || !email.includes('@')) {
+    showToast('Please enter a valid email address', true);
+    return;
+  }
+  
+  const name = email.split('@')[0];
+  addInvitee(name, email, 'email');
+  document.getElementById('inviteEmail').value = '';
+  showToast('📧 Invite sent to ' + email);
+}
+
+function sendInviteSMS() {
+  const phone = document.getElementById('invitePhone').value.trim();
+  if (phone.replace(/[\s\-+()]/g, '').length < 7) {
+    showToast('Please enter a valid phone number', true);
+    return;
+  }
+  
+  addInvitee(phone, phone, 'phone');
+  document.getElementById('invitePhone').value = '';
+  showToast('📱 SMS invite sent to ' + phone);
+}
+
+function addInvitee(name, contact, type) {
+  const exists = currentRoom.invitees.some(function(i) { return i.contact === contact; });
+  if (!exists) {
+    currentRoom.invitees.push({ name: name, contact: contact, type: type });
+    updateInvitedList();
+    document.getElementById('viewerCount').textContent = currentRoom.invitees.length;
+    addSystemMessage(name + ' joined the room!');
+  }
+}
+
+function updateInvitedList() {
+  const list = document.getElementById('invitedList');
+  list.innerHTML = '';
+  for (var i = 0; i < currentRoom.invitees.length; i++) {
+    var inv = currentRoom.invitees[i];
+    var li = document.createElement('li');
+    var icon = (inv.type === 'host') ? '👑' : ((inv.type === 'email') ? '📧' : '📱');
+    li.innerHTML = icon + ' ' + inv.name + (inv.type === 'host' ? ' (Host)' : '');
+    list.appendChild(li);
+  }
+}
+
+function copyInviteLink() {
+  const link = document.getElementById('inviteLink');
+  link.select();
+  navigator.clipboard.writeText(link.value);
+  showToast('Invite link copied!');
+}
+
+// ============ CHAT SYSTEM ============
+function addChatMessage(text, sender) {
+  sender = sender || 'You';
+  currentRoom.messages.push({ text: text, sender: sender, time: Date.now() });
+  renderChat();
+}
+
+function addSystemMessage(text) {
+  currentRoom.messages.push({ text: text, sender: 'System', time: Date.now() });
+  renderChat();
+}
+
+function renderChat() {
+  const chatDiv = document.getElementById('chatMessages');
+  chatDiv.innerHTML = '';
+  
+  var start = Math.max(0, currentRoom.messages.length - 50);
+  for (var i = start; i < currentRoom.messages.length; i++) {
+    var msg = currentRoom.messages[i];
+    var msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-message';
+    if (msg.sender === 'You') msgDiv.classList.add('own');
+    msgDiv.innerHTML = '<strong>' + escapeHtml(msg.sender) + '</strong> ' + escapeHtml(msg.text);
+    chatDiv.appendChild(msgDiv);
+  }
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chatInput');
+  if (input.value.trim()) {
+    addChatMessage(input.value);
+    input.value = '';
+  }
+}
+
+// ============ CONTENT BROWSING ============
+function renderPlatforms() {
+  const grid = document.getElementById('platformsGrid');
+  var html = '';
+  for (var i = 0; i < platforms.length; i++) {
+    var plat = platforms[i];
+    html += '<div class="platform-item" data-platform="' + plat.type + '" style="border-left: 2px solid ' + plat.color + '">' + plat.icon + ' ' + plat.name + '</div>';
+  }
+  grid.innerHTML = html;
+  
+  var items = document.querySelectorAll('.platform-item');
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener('click', function() {
+      var platform = this.dataset.platform;
+      renderContent(platform);
+    });
+  }
+}
+
+function renderContent(platformType) {
+  const contentDiv = document.getElementById('contentList');
+  var contents = contentLibrary[platformType] || contentLibrary.youtube;
+  
+  var html = '';
+  for (var i = 0; i < contents.length; i++) {
+    var content = contents[i];
+    html += '<div class="content-item" data-id="' + (content.id || '') + '" data-embed="' + (content.embed || '') + '">🎥 ' + content.title + '</div>';
+  }
+  contentDiv.innerHTML = html;
+  
+  var items = document.querySelectorAll('.content-item');
+  for (var i = 0; i < items.length; i++) {
+    items[i].addEventListener('click', function() {
+      var videoId = this.dataset.id;
+      var embedUrl = this.dataset.embed;
+      
+      if (videoId) {
+        playVideo(videoId);
+        addChatMessage('started watching "' + this.textContent.trim() + '"');
+      } else if (embedUrl) {
+        document.getElementById('videoPlayer').src = embedUrl;
+        addChatMessage('started watching "' + this.textContent.trim() + '"');
+      }
+    });
+  }
+}
+
+function playVideo(videoId) {
+  if (!videoId) return;
+  var youtubeUrl = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&enablejsapi=1';
+  document.getElementById('videoPlayer').src = youtubeUrl;
+  currentRoom.videoId = videoId;
+}
+
+// ============ SYNC CONTROLS ============
+function syncPlay() {
+  addChatMessage('▶️ synced play for everyone', 'Host');
+  var iframe = document.getElementById('videoPlayer');
+  if (iframe.contentWindow) {
+    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+  }
+  showToast('▶️ Playback synced');
+}
+
+function syncPause() {
+  addChatMessage('⏸️ synced pause for everyone', 'Host');
+  var iframe = document.getElementById('videoPlayer');
+  if (iframe.contentWindow) {
+    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+  }
+  showToast('⏸️ Pause synced');
+}
+
+// ============ UTILITIES ============
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// ============ INITIALIZATION ============
+document.getElementById('syncPlayBtn').addEventListener('click', syncPlay);
+document.getElementById('syncPauseBtn').addEventListener('click', syncPause);
+
+renderPlatforms();
+renderContent('youtube');
+
+// Check for invite in URL
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('join')) {
+  setTimeout(function() {
+    joinRoom(urlParams.get('join'));
+  }, 500);
+}
+</script>
+</body>
+</html>
